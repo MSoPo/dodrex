@@ -1,0 +1,41 @@
+form {
+    margin: auto;
+    width: 80%;
+    max-width: 400px;
+    min-width: 200px;
+}
+
+.card-size {
+    width: 80%;
+    max-width: 500px;
+    margin: 10vh auto;
+    text-align: center;
+}
+
+.inputs-product {
+    width: 100%;
+}
+
+.inputs-withHin {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.mat-card- {
+    margin-bottom: 0;
+}
+.button_float {
+    text-align: right;
+    padding-right: 10vh;
+}
+.mat-card>.mat-card-actions:last-child {
+    margin-bottom: 0;
+}
+
+mat-card-title{
+    margin: 30px;
+}
+
+.social{
+    margin-left: 5vh;
+}

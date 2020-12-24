@@ -1,0 +1,25 @@
+<form class="example-form">
+    <mat-form-field class="label-venta">
+        <mat-label>Clave</mat-label>
+        <input (keyup)="buscarCodigo($event.keyCode)" [formControl]="clave" matInput placeholder="Ej. 0000001">
+    </mat-form-field>
+
+    <mat-form-field class="label-venta">
+        <mat-label>Nombre</mat-label>
+        <input [formControl]="nombre" (keyup)="buscarNombre($event.keyCode)" matInput placeholder="Ej. Nombre del producto">
+    </mat-form-field>
+
+    <mat-form-field class="label-venta">
+        <mat-label>Buscaqueda especial </mat-label>
+                <mat-select [formControl]="listas">
+                    <mat-option (click)="getFavs()" value="1">Favoritos</mat-option>
+                    <mat-option (click)="getStockBajo()" value="2">Stock bajo</mat-option>
+                    <mat-option (click)="getAgotados()" value="3">Agotados</mat-option>
+                    <mat-option  (click)="getCancelado()" value="4">Deshabilitados</mat-option>
+                </mat-select>
+    </mat-form-field>
+
+    <button type="button" class="autorenew" (click)="openDialog()" mat-mini-fab>
+        <mat-icon>add</mat-icon>
+    </button>
+</form>

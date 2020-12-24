@@ -1,0 +1,60 @@
+form {
+    margin: auto;
+    width: 100%;
+    font-size: 12px;
+    max-width: 500px;
+    min-width: 280px;
+}
+
+
+.title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.inputs-product {
+    width: 100%;
+}
+
+.inputs-withHin {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.example-right-align{
+    text-align: right;
+}
+
+.button_float {
+    text-align: right;
+}
+
+.div_mayoreo {
+    overflow: hidden;
+}
+
+.buton_actions {
+    margin: 0 5px;
+}
+
+section.button {
+    text-align: right;
+    margin: 0;
+}
+
+.field {
+    width: 45%;
+    display: inline;
+}
+
+.autorenew {
+ position: absolute;
+ right: 2px;
+ top: -3px;
+}
+
+.mat-dialog-content {
+    height: 100%;
+    min-height: 50vh;
+}

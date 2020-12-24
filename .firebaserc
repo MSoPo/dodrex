@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "dodrex-23b5b": {
+      "hosting": {
+        "dodrex": [
+          "dodrex-23b5b"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "dodrex-23b5b"
+  }
+}

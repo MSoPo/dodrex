@@ -1,0 +1,18 @@
+<form class="example-form">
+  <mat-form-field class="label-venta">
+    <mat-label>Clave</mat-label>
+    <input (keyup)="agregarClave($event.keyCode)" [formControl]="clave" matInput placeholder="Ex. AA00000">
+  </mat-form-field>
+
+  <mat-form-field class="label-venta">
+    <mat-label>Nombre del producto</mat-label>
+    <input (keyup)="agregarNombre($event.keyCode)" [formControl]="nombre" [matAutocomplete]="auto" matInput
+      placeholder="Ex. Producto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>La busqueda por codigo es más efeciente</mat-hint>
+  </mat-form-field>
+</form>

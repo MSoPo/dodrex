@@ -1,0 +1,11 @@
+<h3 mat-dialog-title>Ingresa tú correo</h3>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Corre Electrónico</mat-label>
+    <input matInput [(ngModel)]="data.email">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-button [mat-dialog-close]="data.email" cdkFocusInitial>Enviar</button>
+</div>

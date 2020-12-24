@@ -1,0 +1,43 @@
+<div *ngIf="!cancelar"> 
+    <div class="title"><span class="nobold">Venta :</span> {{idVenta}}</div>
+    <mat-dialog-content>
+        <table>
+            <tr>
+                <th>Prodcutos</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+
+            <tr *ngFor="let prod of productos">
+                <td>{{prod.nombre}}</td>
+                <td class="example-right-align">{{prod.cantidad}}</td>
+                <td class="example-right-align">{{prod.subtotal | currency}}</td>
+            </tr>
+        </table>
+    </mat-dialog-content>
+    <section class="button">
+        <button (click)="cancelarVenta()" matTooltip="Cancelar venta" class="buton_actions" mat-mini-fab color="primary">
+            <mat-icon>delete_sweep</mat-icon>
+        </button>
+        <!--<button matTooltip="Enviar por correo" class="buton_actions" mat-mini-fab color="primary" >
+        <mat-icon>email</mat-icon>
+    </button>-->
+        <button (click)="imprimir()" matTooltip="Imprimir nota" class="buton_actions" mat-mini-fab color="primary">
+            <mat-icon>print</mat-icon>
+        </button>
+    </section>
+</div>
+<div *ngIf="cancelar">
+    <mat-dialog-content class="center">
+        <p class="title ">¿Seguro que deseas cancelar la venta?</p>
+        <p>Al cancelar una venta los productos se regresan al inventario, y esta venta ya no aparecerá en ningun reporte</p>
+    </mat-dialog-content>
+    <section class="button">
+        <button (click)="regresardetalle()" matTooltip="Cancelar venta" class="buton_actions" mat-button color="primary">
+            Regresar
+        </button>
+        <button (click)="borrar()" matTooltip="Imprimir nota" class="buton_actions" mat-button color="primary">
+            Borrar
+        </button>
+    </section>
+</div>

@@ -1,0 +1,60 @@
+form {
+    margin: auto;
+    width: 80%;
+    max-width: 400px;
+    min-width: 200px;
+}
+
+.card-size {
+    margin: auto;
+    width: 90%;
+    margin-top: 2vh;
+    text-align: center;
+}
+
+.inputs-product {
+    width: 100%;
+}
+
+.inputs-withHin {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.example-right-align{
+    text-align: right;
+}
+
+.button_float {
+    text-align: right;
+}
+
+.div_mayoreo {
+    overflow: hidden;
+}
+
+.buton_actions {
+    margin: 0 5px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.datosempresa {
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+  }
+
+table {
+    width: 100%;
+}
+
+.autorenew {
+    position: absolute;
+    right: 2px;
+    top: -3px;
+   }

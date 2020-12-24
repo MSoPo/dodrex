@@ -1,0 +1,137 @@
+<form [formGroup]="form" (ngSubmit)="add($event)">
+  <div class="title">Datos del cliente</div>
+  <mat-dialog-content>
+    <mat-form-field
+      *ngIf="!data.operacion"
+      appearance="outline"
+      class="inputs-withHin"
+    >
+      <mat-label>Número de cliente</mat-label>
+      <input
+        formControlName="clave"
+        required
+        maxlength="30"
+        minlength="1"
+        matInput
+        placeholder="Ej. 1"
+      />
+      <mat-hint>Número que identifica al cliente</mat-hint>
+      <button
+        type="button"
+        (click)="generateClave()"
+        matTooltip="Autogenerar clave de cliente"
+        class="autorenew"
+        mat-button
+        color="primary"
+      >
+        <mat-icon matSuffix>autorenew</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field
+      *ngIf="data.operacion === 'update'"
+      appearance="outline"
+      class="inputs-withHin"
+    >
+      <mat-label>Número de cliente</mat-label>
+      <input formControlName="clave" readonly matInput />
+      <mat-hint>El número de cliente no se puede modificar</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="inputs-withHin">
+      <mat-label>Nombres</mat-label>
+      <input
+        formControlName="nombre"
+        required
+        maxlength="50"
+        minlength="3"
+        matInput
+        placeholder="Ej. Juan Jose Lopez Lopez"
+      />
+      <mat-hint>El nombre siempre se tranformara a mayusculas.</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="inputs-withHin">
+      <mat-label>Correo Electrónico</mat-label>
+      <input
+        formControlName="correo"
+        maxlength="50"
+        minlength="3"
+        type="email"
+        matInput
+        placeholder="Ej. ejemplo@ejemplo.com"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="inputs-withHin">
+      <mat-label>Dirección</mat-label>
+      <input
+        formControlName="direccion"
+        maxlength="250"
+        minlength="3"
+        matInput
+        placeholder="Ej. Calle #, Colonia, Ciudad, Estado, C.P."
+      />
+      <textarea matInput></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="inputs-product">
+      <mat-label>Tipo de precio</mat-label>
+      <mat-select formControlName="tipo_descuento">
+        <mat-option value="0">Sin descuento</mat-option>
+        <mat-option value="1">Precio Especial</mat-option>
+        <mat-option value="2">Descuento Exclusivo</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div
+      class="div_mayoreo"
+      [@openClose]="form.value.tipo_descuento === '2' ? 'open' : 'closed'"
+    >
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>Descuento</mat-label>
+        <input
+          matInput
+          formControlName="descuento"
+          type="number"
+          min="0"
+          max="100"
+          class="example-right-align"
+        />
+        <mat-hint
+          >El descuento se aplicará sobre el precio de venta ( unitario/mayoreo
+          )</mat-hint
+        >
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <section>
+    <button
+      type="submit"
+      matTooltip="Agregar cliente"
+      class="buton_actions"
+      mat-mini-fab
+      color="primary"
+      aria-label="Agregar producto"
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+    <button
+      matTooltip="Marcar como favorito"
+      (click)="isFavo()"
+      type="button"
+      color="accent"
+      *ngIf="form.value.favorito"
+      mat-icon-button
+      aria-label="Botón quitar"
+    >
+      <mat-icon>favorite</mat-icon>
+    </button>
+
+    <button
+      matTooltip="Marcar como favorito"
+      (click)="isFavo()"
+      type="button"
+      *ngIf="!form.value.favorito"
+      mat-icon-button
+      aria-label="Botón favoritos"
+    >
+      <mat-icon>favorite_outline</mat-icon>
+    </button>
+  </section>
+</form>

@@ -1,0 +1,72 @@
+<mat-card class="card-size">
+    <mat-card-title>Datos del Producto</mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="options">
+
+            <mat-form-field appearance="outline" class="inputs-withHin ">
+                <mat-label>Clave del producto</mat-label>
+                <input matInput placeholder="Ej. ABC12345678">
+                <mat-hint>Clave o código de barras del producto</mat-hint>
+                <button class="autorenew" mat-mini-fab>
+                    <mat-icon matSuffix>autorenew</mat-icon>
+                </button>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="inputs-withHin">
+                <mat-label>Nombre del producto</mat-label>
+                <input matInput placeholder="Ej. Producto">
+                <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                <mat-hint>El nombre debe ser único por producto</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="inputs-withHin">
+                <mat-label>Cantidad</mat-label>
+                <input matInput type="number" class="example-right-align">
+                <mat-hint>Cantidad en existencia</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="inputs-product">
+                <mat-label>Precio Únitario</mat-label>
+                <input matInput type="number" class="example-right-align">
+                <span matPrefix>$&nbsp;</span>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="inputs-product">
+                <mat-label>Precio Compra</mat-label>
+                <input matInput type="number" class="example-right-align">
+                <span matPrefix>$&nbsp;</span>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="inputs-withHin">
+                <mat-label>Descripción del producto</mat-label>
+                <input matInput placeholder="Ej. Producto grande color rojo">
+                <textarea matInput></textarea>
+                <mat-hint>Descripción para la identificación del producto</mat-hint>
+            </mat-form-field>
+            <mat-checkbox [formControl]="hideMayoreoControl">Activar venta de mayoreo</mat-checkbox>
+            <div class="div_mayoreo" [@openClose]="hideMayoreoControl.value ? 'open' : 'closed'">
+                <mat-form-field appearance="outline" class="inputs-withHin">
+                    <mat-label>Cantidad para mayoreo</mat-label>
+                    <input matInput type="number" class="example-right-align">
+                    <mat-hint>Cantidad mínima para aplicar el precio de mayoreo</mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="inputs-product">
+                    <mat-label>Precio Meyoreo</mat-label>
+                    <input matInput type="number" class="example-right-align">
+                    <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="inputs-product">
+                    <mat-label>Precio Cliente Especial</mat-label>
+                    <input matInput type="number" class="example-right-align">
+                    <span matPrefix>$&nbsp;</span>
+                    <mat-hint>Precio aplicado a clientes específicos</mat-hint>
+                </mat-form-field>
+            </div>
+        </form>
+    </mat-card-content>
+    <mat-card-actions class="button_float">
+        <button class="buton_actions" mat-fab color="primary" aria-label="Agregar producto">
+            <mat-icon>save</mat-icon>
+        </button>
+        <button class="buton_actions" mat-fab disabled aria-label="Example icon button with a heart icon">
+            <mat-icon>favorite</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

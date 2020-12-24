@@ -1,0 +1,42 @@
+<form class="example-form">
+    <mat-form-field appearance="fill">
+        <mat-label>Fechas</mat-label>
+        <mat-date-range-input required [formGroup]="range" [rangePicker]="picker">
+          <input required formControlName="start" matStartDate placeholder="Fecha Inicial">
+          <input required formControlName="end" matEndDate placeholder="Fecha Final">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="label-venta">
+        <mat-label>Cliente</mat-label>
+        <mat-select [value]="0" [formControl]="cliente">
+            <mat-option [value]="-1">Todos</mat-option>
+            <mat-option [value]="-2">Sin cliente</mat-option>
+            <mat-option *ngFor="let cl of lstCliente" [value]="cl.clave">{{cl.nombre}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="label-venta">
+        <mat-label>Usuario</mat-label>
+        <mat-select [value]="0" [formControl]="usuario">
+            <mat-option [value]="-1">Todos</mat-option>
+            <mat-option *ngFor="let us of lstUsuario" [value]="us.id">{{us.nombre}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="label-venta">
+        <mat-label>Busquedas especiales</mat-label>
+        <mat-select [formControl]="especial" >
+            <mat-option value="0"></mat-option>
+            <mat-option value="1">Canceladas</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button (click)="buscar()"  type="button" class="autorenew" mat-mini-fab>
+        <mat-icon>search</mat-icon>
+    </button>
+</form>

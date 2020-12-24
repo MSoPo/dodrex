@@ -1,0 +1,86 @@
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { EMPRESA } from '../Constantes';
+import { Producto } from '../../models/Producto';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ProductService {
+  constructor(private afs: AngularFirestore) {}
+
+  add(producto: Partial<Producto>): Promise<void> {
+    return this.afs
+      .doc('empresa/' + EMPRESA.id)
+      .collection('productos')
+      .doc(producto.clave)
+      .set(producto, { merge: true });
+  }
+
+  activate(producto: Partial<Producto>): Promise<void> {
+    return this.afs
+      .doc('empresa/' + EMPRESA.id)
+      .collection('productos')
+      .doc(producto.clave)
+      .set({
+        activo : producto.activo,
+        operacion : 'update'
+      }, { merge: true });
+  }
+
+  fav(producto: Partial<Producto>): Promise<void> {
+    return this.afs
+      .doc('empresa/' + EMPRESA.id)
+      .collection('productos')
+      .doc(producto.clave)
+      .set({
+        favorito : producto.favorito,
+        operacion : 'update'
+      }, { merge: true });
+  }
+
+  getClave(clave: string): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    return ref.where('clave', '==', clave).where('activo', '==', true).get();
+  }
+
+  getClaveAll(clave: string): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    return ref.where('clave', '==', clave).get();
+  }
+
+  getNombre(nombre: string): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    console.log('filtro' + nombre);
+    const name = nombre ? nombre.toLowerCase() : ''; 
+    return ref.where('nombre', '>=', name).
+    where('nombre', '<', name + '\uf8ff').where('activo', '==', true).get();
+  }
+
+  getFavorite(): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    return ref.where('favorito', '==', true).where('activo', '==', true).get();
+  }
+
+  getStockBajo(): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    return ref.where('cantidad', '<=', 10).where('activo', '==', true).get();
+  }
+
+  getAgotado(): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    return ref.where('cantidad', '<=', 0).where('activo', '==', true).get();
+  }
+
+  getCancelado(): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    return ref.where('activo', '==', false).get();
+  }
+}

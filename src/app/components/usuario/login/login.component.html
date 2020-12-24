@@ -1,0 +1,32 @@
+<mat-card class="card-size">
+    <form [formGroup]="form" (ngSubmit)="login($event)">
+        <mat-card-title>Iniciar Sesión</mat-card-title>
+        <mat-card-content>
+            <mat-form-field appearance="outline" class="inputs-withHin ">
+                <mat-label>Correo Electrónico</mat-label>
+                <input formControlName="email" required matInput placeholder="Ej. user@dodrex.com">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="inputs-withHin">
+                <mat-label>Contraseña</mat-label>
+                <input required formControlName="password" type="password" matInput placeholder="Ej. ASC#W*12">
+                <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+            <button matTooltip='Iniciar sesión' class="buton_actions" type="submit" mat-icon-button color="primary" aria-label="Iniciar Sesion">
+                <mat-icon svgIcon="loginlogo"></mat-icon>
+            </button>
+            <button matTooltip='Iniciar sesión con gmail' (click)="loginGmail()" type="button" class="buton_actions social" mat-icon-button aria-label="Iniciar Gmail">
+                <mat-icon svgIcon="gmlogo"></mat-icon>
+            </button>
+            <!--<button class="buton_actions social" type="button" mat-icon-button color="primary" aria-label="Iniciar FB">
+                <mat-icon svgIcon="fblogo"></mat-icon>
+            </button>-->
+            <button matTooltip='Registrar usuario nuevo' class="buton_actions social" type="button" (click)="addUser()" mat-icon-button color="primary" aria-label="Iniciar FB">
+                <mat-icon svgIcon="adduser"></mat-icon>
+            </button>
+        </mat-card-actions>
+        <button mat-button color="primary" type="button" (click)="openDialog()">Recuperar contraseña</button>
+    </form>
+</mat-card>
