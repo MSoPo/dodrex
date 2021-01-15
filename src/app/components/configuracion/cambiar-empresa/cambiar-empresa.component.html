@@ -1,35 +1,56 @@
 <mat-card>
   <form [formGroup]="form">
-    <mat-card-title>Datos de la empresa</mat-card-title>
+    <mat-card-title>{{ "DATOS_EMPRESA" | translate }}</mat-card-title>
     <mat-card-content>
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>Identificador de la empersa</mat-label>
+        <mat-label>{{ "ID_EMPRESA" | translate }}</mat-label>
         <input readonly matInput formControlName="id" />
-        <mat-hint>El identificador no puede modificar</mat-hint>
+        <mat-hint>{{ "CLAVE_NO_EDIT" | translate }}</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>Razon Social</mat-label>
-        <input maxlength="100" formControlName="razonSocial" required matInput placeholder="Razon Social" />
+        <mat-label>{{ "NOMBRE_EMPRESA" | translate }}</mat-label>
+        <input maxlength="100" formControlName="razonSocial" required matInput
+          [placeholder]="'PLH_NOMBRE_EMP' | translate" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>RFC</mat-label>
-        <input maxlength="13" matInput formControlName="rfc" placeholder="Ej. ASDF112233A11" (keyup)="mayus($event)" />
+        <mat-label>{{ "RFC" | translate }}</mat-label>
+        <input maxlength="13" matInput formControlName="rfc" [placeholder]="'PLH_RFC' | translate"
+          (keyup)="mayus($event)" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>Dirección</mat-label>
-        <input maxlength="250" formControlName="direccion" matInput value="Domicilio Concoido Tlamanca" />
+        <mat-label>{{ "DIRECCION" | translate }}</mat-label>
+        <input maxlength="250" formControlName="direccion" matInput />
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>Teléfono</mat-label>
-        <input maxlength="10" minlength="7" formControlName="telefono" matInput placeholder="Ej. 5544900729">
+        <mat-label>{{ "TELEFONO" | translate }}</mat-label>
+        <input maxlength="10" minlength="7" formControlName="telefono" matInput [placeholder]="'PLH_TEL' | translate" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>Correo Electrónico</mat-label>
+        <mat-label>{{ "CORREO_ELECTRONICO" | translate }}</mat-label>
         <input maxlength="50" minlength="3" type="email" formControlName="correo" matInput
-          placeholder="Correo de la empresa">
+          [placeholder]="'PLH_CORREO' | translate" />
       </mat-form-field>
+      <mat-form-field appearance="outline" class="inputs-product">
+        <mat-label>{{ 'IMPRESION_TIPO' | translate}}</mat-label>
+        <mat-select formControlName="impresion">
+          <mat-option value="1">{{ 'IMPRESION_NOTA' | translate}}</mat-option>
+          <mat-option value="2">{{ 'IMPRESION_TICKET80' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ "HEAD_IMPRESION" | translate }}</mat-label>
+        <textarea maxlength="200" formControlName="head" matInput
+          [placeholder]="'PLH_HEAD' | translate" ></textarea>
+      </mat-form-field>
+      <div class="inputs-withHin">
+        <mat-label>{{ "LOGO_EMREPSA" | translate }}</mat-label>
+        <input type="file" (change)="uploadChange($event)" />
+      </div>
+      <div *ngIf="urlFile">
+        <img width="150px" height="150px" [src]="urlFile" alt="lOGO DE LA EMPRESA">
+      </div>
       <button (click)="createEmpresa($event)" mat-button color="primary">
-        Actualizar
+        {{ "ACTUALIZAR" | translate }}
       </button>
     </mat-card-content>
   </form>

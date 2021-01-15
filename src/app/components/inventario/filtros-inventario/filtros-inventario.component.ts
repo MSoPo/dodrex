@@ -1,7 +1,15 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
 import { ProductService } from 'src/app/core/services/product.service';
 import { Venta } from 'src/app/models/Venta';
@@ -21,8 +29,11 @@ export class FiltrosInventarioComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private productService: ProductService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    public translate: TranslateService
+  ) {
+    translate.setDefaultLang('es');
+  }
 
   ngOnInit(): void {}
 
@@ -48,11 +59,7 @@ export class FiltrosInventarioComponent implements OnInit {
           ACTIVE_BLOCK.value = false;
           switch (querySnapshot.size) {
             case 0:
-              this.snackBar.open(
-                `No existe la clave ${this.clave.value}`,
-                undefined,
-                DEFAULT_DURATION
-              );
+              this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
               return;
             case 1:
               this.getProducto.emit([querySnapshot.docs[0].data()]);
@@ -60,17 +67,13 @@ export class FiltrosInventarioComponent implements OnInit {
               console.log(querySnapshot.docs[0].data());
               return;
             default:
-              this.snackBar.open(
-                `El producto ${this.clave.value} tiene algún problema.`,
-                undefined,
-                DEFAULT_DURATION
-              );
+              this.SNACK('ERROR_DATOS', 'ACEPTAR');
               return;
           }
         })
         .catch((err) => {
           ACTIVE_BLOCK.value = false;
-          this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+          this.SNACK('ERROR_GRAL', 'ACEPTAR');
         });
     }
   }
@@ -88,7 +91,7 @@ export class FiltrosInventarioComponent implements OnInit {
         })
         .catch((err) => {
           ACTIVE_BLOCK.value = false;
-          this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+          this.SNACK('ERROR_GRAL', 'ACEPTAR');
         });
     }
   }
@@ -105,7 +108,7 @@ export class FiltrosInventarioComponent implements OnInit {
       })
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
-        this.snackBar.open(err.message, undefined, DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
       });
   }
 
@@ -121,7 +124,7 @@ export class FiltrosInventarioComponent implements OnInit {
       })
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
-        this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
       });
   }
 
@@ -137,7 +140,7 @@ export class FiltrosInventarioComponent implements OnInit {
       })
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
-        this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
       });
   }
 
@@ -153,7 +156,7 @@ export class FiltrosInventarioComponent implements OnInit {
       })
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
-        this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
       });
   }
 
@@ -166,18 +169,22 @@ export class FiltrosInventarioComponent implements OnInit {
       if (lstProd.length > 0) {
         this.getProducto.emit(lstProd);
       } else {
-        this.snackBar.open(
-          'No se encontraron productos.',
-          'Aceptar',
-          DEFAULT_DURATION
-        );
+        this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
       }
     } else {
-      this.snackBar.open(
-        'No se encontraron productos.',
-        'Aceptar',
-        DEFAULT_DURATION
-      );
+      this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
     }
+  }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
   }
 }

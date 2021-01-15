@@ -1,0 +1,20 @@
+<form>
+    <div class="title">{{ 'RESUMEN_COMPRA' | translate }}</div>
+    <div>  
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ 'TOTAL' | translate }}: </mat-label>
+        <input
+          class="right"
+          readonly
+          matInput
+          value="{{ carga.total | currency }}"
+        />
+      </mat-form-field>
+    </div>
+    <div class="center">
+      <button mat-raised-button (click)="onNoClick()" color="primary">
+        {{ 'CARGAR' | translate }}
+      </button>
+    </div>
+  </form>
+  

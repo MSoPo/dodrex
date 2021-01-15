@@ -1,11 +1,13 @@
-<div *ngIf="!cancelar"> 
-    <div class="title"><span class="nobold">Venta :</span> {{idVenta}}</div>
+<div *ngIf="!cancelar">
+    <div class="title"><span class="nobold">{{ 'VENTA' | translate }}</span> {{numeroVenta}}</div>
+    <div class="title" ><span class="nobold">{{ 'USUARIO' | translate }}:</span> {{usuario}}</div>
+    <div class="title only_cell" *ngIf="cliente"><span class="nobold">{{ 'CLIENTE' | translate }}:</span> {{cliente}}</div>
     <mat-dialog-content>
         <table>
             <tr>
-                <th>Prodcutos</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
+                <th>{{ 'PRODUCTOS' | translate }}</th>
+                <th>{{ 'CANTIDAD' | translate }}</th>
+                <th>{{ 'SUBTOTAL' | translate }}</th>
             </tr>
 
             <tr *ngFor="let prod of productos">
@@ -16,28 +18,30 @@
         </table>
     </mat-dialog-content>
     <section class="button">
-        <button (click)="cancelarVenta()" matTooltip="Cancelar venta" class="buton_actions" mat-mini-fab color="primary">
+        <button (click)="cancelarVenta()" [matTooltip]="'VENTA_CANCELAR' | translate" class="buton_actions"
+            mat-mini-fab color="primary">
             <mat-icon>delete_sweep</mat-icon>
         </button>
         <!--<button matTooltip="Enviar por correo" class="buton_actions" mat-mini-fab color="primary" >
         <mat-icon>email</mat-icon>
     </button>-->
-        <button (click)="imprimir()" matTooltip="Imprimir nota" class="buton_actions" mat-mini-fab color="primary">
+        <button (click)="imprimir()" [matTooltip]="'IMPRIMIR' | translate" class="buton_actions" mat-mini-fab color="primary">
             <mat-icon>print</mat-icon>
         </button>
     </section>
 </div>
 <div *ngIf="cancelar">
     <mat-dialog-content class="center">
-        <p class="title ">¿Seguro que deseas cancelar la venta?</p>
-        <p>Al cancelar una venta los productos se regresan al inventario, y esta venta ya no aparecerá en ningun reporte</p>
+        <p class="title ">{{ 'VENTA_POP_CANCEL' | translate}}</p>
+        <p>{{ 'VENTA_POP_CENCEL_MSJ' | translate }}</p>
     </mat-dialog-content>
     <section class="button">
-        <button (click)="regresardetalle()" matTooltip="Cancelar venta" class="buton_actions" mat-button color="primary">
-            Regresar
+        <button (click)="regresardetalle()" [matTooltip]="'REGRESAR' | translate" class="buton_actions" mat-button
+            color="primary">
+            {{ 'REGRESAR' | translate }}
         </button>
-        <button (click)="borrar()" matTooltip="Imprimir nota" class="buton_actions" mat-button color="primary">
-            Borrar
+        <button (click)="borrar()" [matTooltip]="'VENTA_CANCELAR' | translate" class="buton_actions" mat-button color="primary">
+            {{ 'ELIMINAR' | translate }}
         </button>
     </section>
 </div>

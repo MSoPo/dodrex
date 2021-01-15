@@ -1,25 +1,33 @@
-<h1 mat-dialog-title class="title">Datos del producto</h1>
+<h1 mat-dialog-title class="title">{{'DATOS_PRODUCTO' | translate }}</h1>
 <div mat-dialog-content>
   <form>
     <mat-form-field>
-      <mat-label>Nombre</mat-label>
+      <mat-label>{{ 'NOMBRE' | translate }}</mat-label>
       <input readonly matInput value="{{producto.nombre}}" />
     </mat-form-field>
+    <mat-form-field  *ngIf="producto.precio_unitario">
+      <mat-label>{{ 'PRECIO_UNITARIO' | translate }}</mat-label>
+      <input readonly matInput value="{{producto.precio_unitario | currency}}" />
+    </mat-form-field>
+    <mat-form-field  *ngIf="producto.precio_compra">
+      <mat-label>{{ 'PRECIO_COMPRA' | translate }}</mat-label>
+      <input readonly matInput value="{{producto.precio_compra | currency}}" />
+    </mat-form-field>
     <mat-form-field *ngIf="producto.cantidad_mayoreo">
-      <mat-label>Cantidad Mayoreo</mat-label>
+      <mat-label>{{ 'CANTIDAD_MAY' | translate }}</mat-label>
       <input readonly matInput value="{{producto.cantidad_mayoreo | number: '0.0-0' }}" />
     </mat-form-field>
     <mat-form-field  *ngIf="producto.precio_mayoreo">
-      <mat-label>Precio Mayoreo</mat-label>
+      <mat-label>{{ 'PRECIO_MAYOREO' | translate }}</mat-label>
       <input readonly matInput value="{{producto.precio_mayoreo | currency}}" />
     </mat-form-field>
     <mat-form-field  *ngIf="producto.precio_especial">
-      <mat-label>Precio Especial</mat-label>
+      <mat-label>{{ 'PRECIO_ESPECIAL' | translate }}</mat-label>
       <input readonly matInput value="{{producto.precio_especial | currency}}" />
     </mat-form-field>
     <div class="description" *ngIf="producto.descripcion">
       <mat-form-field class="description">
-        <mat-label>Descripción</mat-label>
+        <mat-label>{{ 'DESCRIPCION' | translate }}</mat-label>
         <input
           matInput
           readonly

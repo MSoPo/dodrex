@@ -1,39 +1,37 @@
 <div *ngIf="data.activo">
-    <h3 mat-dialog-title>
-      ¿Seguro que deseas borrar el cliente {{ data.nombre }}({{ data.clave }})?
-    </h3>
-    <div mat-dialog-content>
-      <p>
-        Al borrar un cliente esté permanecerá inactivo por un periodo de tiempo y
-        puedes encontrarlo solo buscándolo por clave, despúes de ese tiempo el
-        producto se borra definitivamente.
-      </p>
-    </div>
-    <div mat-dialog-actions>
-      <div class="center">
-        <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-        <button mat-button color="primary" (click)="borrar()" cdkFocusInitial>
-          Eliminar
-        </button>
-      </div>
+  <h3 mat-dialog-title>
+    {{ 'POP_BORRAR' | translate : {nombre: data.nombre, clave: data.clave } }}
+  </h3>
+  <div mat-dialog-content>
+    <p>
+      {{ 'POP_BORRAR_CL' | translate }}
+    </p>
+  </div>
+  <div mat-dialog-actions>
+    <div class="center">
+      <button mat-button color="primary" (click)="onNoClick()">{{ 'CANCELAR' | translate }}</button>
+      <button mat-button color="primary" (click)="borrar()" cdkFocusInitial>
+        {{ 'ELIMINAR' | translate }}
+      </button>
     </div>
   </div>
-  
-  <div *ngIf="!data.activo">
-    <h3 mat-dialog-title>
-      ¿Seguro que deseas habilitar el cliente {{ data.nombre }}({{ data.clave }})?
-    </h3>
-    <div mat-dialog-content>
-      <p>
-        El cliente volverá a estar disponible para todas las operaciones dentro del sistema.
-      </p>
-    </div>
-    <div mat-dialog-actions>
-      <div class="center">
-        <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-        <button mat-button color="primary" (click)="borrar()" cdkFocusInitial>
-          Activar
-        </button>
-      </div>
+</div>
+
+<div *ngIf="!data.activo">
+  <h3 mat-dialog-title>
+    {{ 'POP_ACTIVAR' | translate : {nombre: data.nombre, clave: data.clave } }}
+  </h3>
+  <div mat-dialog-content>
+    <p>
+      {{ 'POP_ACTIVAR_CL' | translate }}
+    </p>
+  </div>
+  <div mat-dialog-actions>
+    <div class="center">
+      <button mat-button color="primary" (click)="onNoClick()">{{ 'CANCELAR' | translate }}</button>
+      <button mat-button color="primary" (click)="borrar()" cdkFocusInitial>
+        {{ 'ACTIVAR' | translate }}
+      </button>
     </div>
   </div>
+</div>

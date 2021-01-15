@@ -1,188 +1,89 @@
 <form [formGroup]="form" (ngSubmit)="add($event)">
-  <div class="title">Datos del Producto</div>
+  <div class="title">{{ 'DATOS_PRODUCTO' | translate }}</div>
   <mat-dialog-content>
-    <mat-form-field
-      *ngIf="!data.operacion"
-      appearance="outline"
-      class="inputs-withHin"
-    >
-      <mat-label>Clave del producto</mat-label>
-      <input
-        formControlName="clave"
-        required
-        maxlength="50"
-        minlength="1"
-        matInput
-        placeholder="Ej. ABC12345678"
-      />
-      <mat-hint>Clave o código de barras del producto</mat-hint>
-      <button
-        type="button"
-        (click)="generateClave()"
-        class="autorenew"
-        matTooltip="Autogenerar clave del producto"
-        mat-button
-        color="primary"
-      >
+    <mat-form-field *ngIf="!data.operacion" appearance="outline" class="inputs-withHin">
+      <mat-label>{{ 'CLAVE_PRODUCTO' | translate }}</mat-label>
+      <input formControlName="clave" required maxlength="50" minlength="1" matInput
+        [placeholder]="'PLH_CLAVE' | translate" />
+      <mat-hint>{{ 'CLAVE_HINT' | translate }}</mat-hint>
+      <button type="button" (click)="generateClave()" class="autorenew" [matTooltip]="'CLAVE_AUTO' | translate"
+        mat-button color="primary">
         <mat-icon matSuffix>autorenew</mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field
-      *ngIf="data.operacion === 'update'"
-      appearance="outline"
-      class="inputs-withHin"
-    >
-      <mat-label>Clave del producto</mat-label>
+    <mat-form-field *ngIf="data.operacion === 'update'" appearance="outline" class="inputs-withHin">
+      <mat-label>{{ 'CLAVE_PRODUCTO' | translate }}</mat-label>
       <input formControlName="clave" readonly matInput />
-      <mat-hint>La clave no se puede modificar.</mat-hint>
+      <mat-hint>{{ 'CLAVE_NO_EDIT' | translate }}</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>Nombre del producto</mat-label>
-      <input
-        formControlName="nombre"
-        required
-        maxlength="100"
-        minlength="3"
-        matInput
-        placeholder="Ej. Producto"
-      />
-      <mat-hint>El nombre siempre se tranformara a minúscula.</mat-hint>
+      <mat-label>{{ 'NOMBRE' | translate}}</mat-label>
+      <input formControlName="nombre" required maxlength="100" minlength="3" matInput />
+      <mat-hint>{{ 'NOMBRE_LOWERCASE' | translate}}</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>Cantidad</mat-label>
-      <input
-        formControlName="cantidad"
-        required
-        max="999999"
-        min="0"
-        matInput
-        type="number"
-        class="example-right-align"
-      />
-      <mat-hint>Cantidad en existencia</mat-hint>
+      <mat-label>{{ 'CANTIDAD' | translate }}</mat-label>
+      <input formControlName="cantidad" required max="999999" min="0" matInput type="number"
+        class="example-right-align" />
+      <mat-hint>{{ 'CANTIDAD_STOCK' | translate }}</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>Precio Únitario</mat-label>
-      <input
-        matInput
-        formControlName="precio_unitario"
-        required
-        max="999999"
-        min="0"
-        type="number"
-        placeholder="00.00"
-        class="example-right-align"
-      />
+      <mat-label>{{ 'PRECIO_UNITARIO' | translate }}</mat-label>
+      <input matInput formControlName="precio_unitario" required max="999999" min="0" type="number" placeholder="00.00"
+        class="example-right-align" />
       <span matPrefix>$&nbsp;</span>
-      <mat-hint>El precio se debe de colocar con 2 decimales 99.00</mat-hint>
+      <mat-hint>{{ 'PRECIO_HINT' | translate }}</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>Precio Compra</mat-label>
-      <input
-        matInput
-        formControlName="precio_compra"
-        required
-        max="999999"
-        min="0"
-        placeholder="00.00"
-        type="number"
-        class="example-right-align"
-      />
+      <mat-label>{{ 'PRECIO_COMPRA' | translate }}</mat-label>
+      <input matInput formControlName="precio_compra" required max="999999" min="0"
+        [placeholder]="'PLH_PRECIO' | translate" type="number" class="example-right-align" />
       <span matPrefix>$&nbsp;</span>
-      <mat-hint>El precio se debe de colocar con 2 decimales 99.00</mat-hint>
+      <mat-hint>{{ 'PRECIO_HINT' | translate }}</mat-hint>
     </mat-form-field>
-    <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>Descripción del producto</mat-label>
-      <input
-        matInput
-        formControlName="descripcion"
-        placeholder="Ej. Producto grande color rojo"
-      />
+    <!--<mat-form-field appearance="outline" class="inputs-withHin">
+      <mat-label>{{ 'DESCRIPCION' | translate }}</mat-label>
+      <input matInput formControlName="descripcion" />
       <textarea matInput></textarea>
-      <mat-hint>Descripción para la identificación del producto</mat-hint>
-    </mat-form-field>
-    <mat-checkbox [formControl]="hideMayoreoControl"
-      >Agregar precios especiales</mat-checkbox
-    >
-    <div
-      class="div_mayoreo"
-      [@openClose]="hideMayoreoControl.value ? 'open' : 'closed'"
-    >
+      <mat-hint>{{ 'DESCRIPCION_HINT' | translate }}</mat-hint>
+    </mat-form-field>-->
+    <mat-checkbox [formControl]="hideMayoreoControl">{{ 'PRECIOS_ESPECIA_BAN' | translate }}</mat-checkbox>
+    <div class="div_mayoreo" [@openClose]="hideMayoreoControl.value ? 'open' : 'closed'">
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>Cantidad para mayoreo</mat-label>
-        <input
-          matInput
-          formControlName="cantidad_mayoreo"
-          max="999999"
-          min="0"
-          type="number"
-          class="example-right-align"
-        />
-        <mat-hint>Cantidad mínima para aplicar el precio de mayoreo</mat-hint>
+        <mat-label>{{ 'CANTIDAD_MAY' | translate }}</mat-label>
+        <input matInput formControlName="cantidad_mayoreo" max="999999" min="0" type="number"
+          class="example-right-align" />
+        <mat-hint>{{ 'CANTIDAD_MAY_HINT' | translate }}</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
-        <mat-label>Precio Meyoreo</mat-label>
-        <input
-          matInput
-          formControlName="precio_mayoreo"
-          max="999999"
-          min="0"
-          placeholder="00.00"
-          type="number"
-          class="example-right-align"
-        />
+        <mat-label>{{ 'PRECIO_MAYOREO' | translate }}</mat-label>
+        <input matInput formControlName="precio_mayoreo" max="999999" min="0" [placeholder]="'PLH_PRECIO' | translate"
+          type="number" class="example-right-align" />
         <span matPrefix>$&nbsp;</span>
-        <mat-hint>El precio se debe de colocar con 2 decimales 99.00</mat-hint>
+        <mat-hint>{{ 'PRECIO_HINT' | translate }}</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-product">
-        <mat-label>Precio Cliente Especial</mat-label>
-        <input
-          matInput
-          formControlName="precio_especial"
-          max="999999"
-          min="0"
-          placeholder="00.00"
-          type="number"
-          class="example-right-align"
-        />
+        <mat-label>{{ 'PRECIO_ESPECIAL' | translate }}</mat-label>
+        <input matInput formControlName="precio_especial" max="999999" min="0" [placeholder]="'PLH_PRECIO' | translate"
+          type="number" class="example-right-align" />
         <span matPrefix>$&nbsp;</span>
-        <mat-hint>Precio aplicado a clientes específicos 99.00</mat-hint>
+        <mat-hint>{{ 'PRECIO_HINT' | translate }}</mat-hint>
       </mat-form-field>
       <input type="hidden" formControlName="favorito" />
       <input type="hidden" formControlName="operacion" />
     </div>
   </mat-dialog-content>
   <section class="button">
-    <button
-      matTooltip="Agregar el producto"
-      type="submit"
-      class="buton_actions"
-      mat-mini-fab
-      color="primary"
-      aria-label="Agregar producto"
-    >
+    <button [matTooltip]="'AGREGAR' | translate" type="submit" class="buton_actions" mat-mini-fab color="primary">
       <mat-icon>save</mat-icon>
     </button>
-    <button
-      matTooltip="Marcar como favorito"
-      (click)="isFavo()"
-      type="button"
-      color="accent"
-      *ngIf="form.value.favorito"
-      mat-icon-button
-      aria-label="Botón quitar"
-    >
+    <button [matTooltip]="'FAVORITO' | translate" (click)="isFavo()" type="button" color="accent"
+      *ngIf="form.value.favorito" mat-icon-button aria-label="Botón quitar">
       <mat-icon>favorite</mat-icon>
     </button>
 
-    <button
-      matTooltip="Marcar como favorito"
-      (click)="isFavo()"
-      type="button"
-      *ngIf="!form.value.favorito"
-      mat-icon-button
-      aria-label="Botón favoritos"
-    >
+    <button [matTooltip]="'FAVORITO' | translate" (click)="isFavo()" type="button" *ngIf="!form.value.favorito"
+      mat-icon-button aria-label="Botón favoritos">
       <mat-icon>favorite_outline</mat-icon>
     </button>
   </section>

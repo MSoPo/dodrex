@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -6,6 +6,8 @@ import {
   ACTIVE_BLOCK,
   DEFAULT_DURATION,
   EMPRESA,
+  MENU,
+  ROL_ADMINISTRADO,
   USER_ACTIVE,
 } from 'src/app/core/Constantes';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -13,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProductService } from 'src/app/core/services/product.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-nav',
@@ -21,8 +24,11 @@ import { ProductService } from 'src/app/core/services/product.service';
 })
 export class NavComponent {
   username = USER_ACTIVE.nombre;
+  rol = USER_ACTIVE.id_rol;
+  rolAdmin = ROL_ADMINISTRADO.valor;
   id_empresa = USER_ACTIVE.id_empresa;
   rutaActual = '';
+  menu;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -36,13 +42,22 @@ export class NavComponent {
     private auth: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private userService: UsersService
+    private userService: UsersService,
+    private cdRef:ChangeDetectorRef,
+    private translate: TranslateService,
+    private authService: AuthService
   ) {
     this.rutaActual = this.router.url;
+    this.menu = MENU;
     this.cargarFavs();
   }
 
+  ngAfterViewChecked(): void{
+    this.cdRef.detectChanges();
+  }
+
   logout(): void {
+    clearLogout();
     this.auth
       .logout()
       .then(() => {
@@ -72,6 +87,7 @@ export class NavComponent {
             .subscribe((resp) => {
               const dataEmpresa: any = resp.data();
               if (!dataEmpresa) {
+                ACTIVE_BLOCK.value = false;
                 this.snackBar.open(
                   '¡Error al iniciar sesión!',
                   'Aceptar',
@@ -87,4 +103,33 @@ export class NavComponent {
       });
     }
   }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
+  }
+}
+
+function clearLogout(){
+  delete USER_ACTIVE.activo;
+  delete USER_ACTIVE.correo;
+  delete USER_ACTIVE.id;
+  delete USER_ACTIVE.id_empresa;
+  delete USER_ACTIVE.id_rol;
+  delete USER_ACTIVE.nombre;
+  delete EMPRESA.correo;
+  delete EMPRESA.direccion;
+  delete EMPRESA.id;
+  delete EMPRESA.id_usuario;
+  delete EMPRESA.operacion;
+  delete EMPRESA.razon_social;
+  delete EMPRESA.rfc;
+  delete EMPRESA.telefono;
 }

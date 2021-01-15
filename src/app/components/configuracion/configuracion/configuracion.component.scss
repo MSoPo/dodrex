@@ -58,3 +58,20 @@ table {
     right: 2px;
     top: -3px;
    }
+
+
+   @media only screen and (max-width: 600px) {
+       .card-size {
+           width: 100%;
+           margin-bottom: 20px;
+       }
+
+       form {
+           width: 100%;
+       }
+
+       .grid-container {
+           display: block;
+       }
+
+   }

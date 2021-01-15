@@ -1,19 +1,17 @@
 <div *ngIf="data.activo">
   <h3 mat-dialog-title>
-    ¿Seguro que deseas borrar el producto {{ data.nombre }}({{ data.clave }})?
+    {{ 'POP_BORRAR' | translate : {nombre: data.nombre, clave: data.clave } }}
   </h3>
   <div mat-dialog-content>
     <p>
-      Al borrar un producto esté permanecerá inactivo por un periodo de tiempo y
-      puedes encontrarlo solo buscándolo por clave, despúes de ese tiempo el
-      producto se borra definitivamente.
+      {{ 'POP_BORRAR_PROD' | translate }}
     </p>
   </div>
   <div mat-dialog-actions>
     <div class="center">
-      <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
+      <button mat-button color="primary" (click)="onNoClick()">{{ 'CANCELAR' | translate }}</button>
       <button mat-button color="primary" (click)="borrar()" cdkFocusInitial>
-        Eliminar
+        {{ 'ELIMINAR' | translate }}
       </button>
     </div>
   </div>
@@ -21,18 +19,18 @@
 
 <div *ngIf="!data.activo">
   <h3 mat-dialog-title>
-    ¿Seguro que deseas habilitar el producto {{ data.nombre }}({{ data.clave }})?
+    {{ 'POP_ACTIVAR' | translate : {nombre: data.nombre, clave: data.clave } }}
   </h3>
   <div mat-dialog-content>
     <p>
-      El producto volverá a estar disponible para todas las operaciones dentro del sistema.
+      {{ 'POP_ACTIVAR_PROD' | translate }}
     </p>
   </div>
   <div mat-dialog-actions>
     <div class="center">
-      <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
+      <button mat-button color="primary" (click)="onNoClick()">{{ 'CANCELAR' | translate }}</button>
       <button mat-button color="primary" (click)="borrar()" cdkFocusInitial>
-        Activar
+        {{ 'ACTIVAR' | translate }}
       </button>
     </div>
   </div>

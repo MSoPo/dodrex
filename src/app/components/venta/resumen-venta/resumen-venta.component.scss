@@ -16,8 +16,8 @@ form {
     text-align: right;
 }
 
-.recibido {
-    width: 50%;
+.rightCambio{
+    padding-left: 50%;
 }
 
 .center {
@@ -27,4 +27,8 @@ form {
 .center > button {
     margin-right: 5px;
     margin-left: 5px;
+}
+
+.mat-form-field {
+    display: block;
 }

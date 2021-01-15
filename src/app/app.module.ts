@@ -23,7 +23,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { TableVentasComponent } from './components/venta/table-ventas/table-ventas.component';
-import { AutocompleteClienteComponent } from './components/inventario/autocomplete-cliente/autocomplete-cliente.component';
 import { ProductoVentaComponent } from './components/venta/producto-venta/producto-venta.component';
 import { AgregarProductoComponent } from './components/inventario/agregar-producto/agregar-producto.component';
 import { ListaInventarioComponent } from './components/inventario/lista-inventario/lista-inventario.component';
@@ -51,7 +50,6 @@ import { NotfoundComponent } from './commons/notfound/notfound.component';
 import { MenuComponent } from './commons/menu/menu.component';
 import { LayoutComponent } from './components/cliente/layout/layout.component';
 import { LayoutGuessComponent } from './components/layout/layout-guess/layout-guess.component';
-import { VentaComponent } from './components/venta/venta/venta.component';
 import { InventarioComponent } from './components/inventario/inventario/inventario.component';
 import { NavComponent } from './commons/nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -76,7 +74,27 @@ import { FiltrosComponent } from './components/reporte/filtros/filtros.component
 import { TablaComponent } from './components/reporte/tabla/tabla.component';
 import { DetallesComponent } from './components/reporte/detalles/detalles.component';
 import { ImpresionComponent } from './components/impresion/impresion.component';
-import { NuevaEmpresaComponent } from './components/configuracion/nueva-empresa/nueva-empresa.component';
+import { LayoutCargaComponent } from './components/carga/layout-carga/layout-carga.component';
+import { ProductoCargaComponent } from './components/carga/producto-carga/producto-carga.component';
+import { ResumenCargaComponent } from './components/carga/resumen-carga/resumen-carga.component';
+import { TablaCargaComponent } from './components/carga/tabla-carga/tabla-carga.component';
+import { ReporteCargaComponent } from './components/reporte-carga/reporte-carga/reporte-carga.component';
+import { TablaReporteCargaComponent } from './components/reporte-carga/tabla-reporte-carga/tabla-reporte-carga.component';
+import { DetallesReporteCargaComponent } from './components/reporte-carga/detalles-reporte-carga/detalles-reporte-carga.component';
+import { FiltrosReporteCargaComponent } from './components/reporte-carga/filtros-reporte-carga/filtros-reporte-carga.component';
+import { TableCotizacionComponent } from './components/cotuzacion/table-cotizacion/table-cotizacion.component';
+import { ProductoCotizacionComponent } from './components/cotuzacion/producto-cotizacion/producto-cotizacion.component';
+import { LayoutCotizacionComponent } from './components/cotuzacion/layout-cotizacion/layout-cotizacion.component';
+import { ResumenCotizacionComponent } from './components/cotuzacion/resumen-cotizacion/resumen-cotizacion.component';
+import { PedidoComponent } from './components/pedido/pedido.component';
+import { DetallePedidoComponent } from './components/pedido/detalle-pedido/detalle-pedido.component';
+import { ReportePagosComponent } from './components/pagos/reporte-pagos/reporte-pagos.component';
+import { FiltrosReportePagosComponent } from './components/pagos/filtros-reporte-pagos/filtros-reporte-pagos.component';
+import { DetallesPagoComponent } from './components/pagos/detalles-pago/detalles-pago.component';
+import { TablaPagoComponent } from './components/pagos/tabla-pago/tabla-pago.component';
+import { DetalleAbonoComponent } from './components/pagos/detalle-abono/detalle-abono.component';
+import { FormaPagoPipe } from './core/pipe/forma-pago.pipe';
+import { CargamasivaComponent } from './components/masivo/cargamasiva/cargamasiva.component';
 
 export function TranslationLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -86,8 +104,9 @@ export function TranslationLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     TableVentasComponent,
-    AutocompleteClienteComponent,
+    TableCotizacionComponent,
     ProductoVentaComponent,
+    ProductoCotizacionComponent,
     AgregarProductoComponent,
     ListaInventarioComponent,
     AgregarClienteComponent,
@@ -104,12 +123,13 @@ export function TranslationLoaderFactory(http: HttpClient) {
     LayoutComponent,
     LayoutGuessComponent,
     DialogOverviewExampleDialogComponent,
-    VentaComponent,
     InventarioComponent,
     NavComponent,
     TipoNominaPipe,
     LayoutVentaComponent,
+    LayoutCotizacionComponent,
     ResumenVentaComponent,
+    ResumenCotizacionComponent,
     EliminarProductoComponent,
     EliminarClienteComponent,
     ConfiguracionComponent,
@@ -123,7 +143,23 @@ export function TranslationLoaderFactory(http: HttpClient) {
     TablaComponent,
     DetallesComponent,
     ImpresionComponent,
-    NuevaEmpresaComponent
+    LayoutCargaComponent,
+    ProductoCargaComponent,
+    ResumenCargaComponent,
+    TablaCargaComponent,
+    ReporteCargaComponent,
+    TablaReporteCargaComponent,
+    DetallesReporteCargaComponent,
+    FiltrosReporteCargaComponent,
+    PedidoComponent,
+    DetallePedidoComponent,
+    ReportePagosComponent,
+    FiltrosReportePagosComponent,
+    DetallesPagoComponent,
+    TablaPagoComponent,
+    DetalleAbonoComponent,
+    FormaPagoPipe,
+    CargamasivaComponent
   ],
   imports: [
     BrowserModule,

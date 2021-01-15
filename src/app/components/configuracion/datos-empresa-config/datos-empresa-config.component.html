@@ -1,14 +1,14 @@
 <mat-card>
     <form>
-      <mat-card-title>Datos de la empresa</mat-card-title>
+      <mat-card-title>{{ 'DATOS_EMPRESA' | translate }}</mat-card-title>
       <mat-card-content>
         <mat-form-field appearance="outline" class="inputs-withHin">
-          <mat-label>Identificador de la empersa</mat-label>
+          <mat-label>{{ 'ID_EMPRESA' | translate }}</mat-label>
           <input [formControl]="id_empresa" readonly matInput />
         </mat-form-field>
         <mat-form-field appearance="outline" class="inputs-withHin">
-          <mat-label>Razon Social</mat-label>
-          <input [formControl]="razon_social" readonly matInput placeholder="Razon Social" />
+          <mat-label>{{ 'NOMBRE_EMPRESA' | translate }}</mat-label>
+          <input [formControl]="razon_social" readonly matInput [placeholder]="'PLH_NOMBRE_EMP' | translate" />
         </mat-form-field>
       </mat-card-content>
     </form>

@@ -1,29 +1,27 @@
-import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { ACTIVE_BLOCK, DEFAULT_DURATION, ROL_ADMINISTRADO, USER_ACTIVE } from 'src/app/core/Constantes';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { Usuario } from 'src/app/models/Usuario';
-import { CambiarPasswordComponent } from '../cambiar-password/cambiar-password.component';
+import { AfterContentChecked, Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { ignoreElements } from 'rxjs/operators';
+import { EMPRESA, MENU, ROL_ADMINISTRADO, USER_ACTIVE } from 'src/app/core/Constantes';
 
 @Component({
   selector: 'app-configuracion',
   templateUrl: './configuracion.component.html',
   styleUrls: ['./configuracion.component.scss']
 })
-export class ConfiguracionComponent {
+export class ConfiguracionComponent implements AfterContentChecked {
 
   user = USER_ACTIVE
   rol_admin  = ROL_ADMINISTRADO.valor
+  empresa = EMPRESA;
   
-  constructor() { 
-    console.log(this.user);
-    console.log(this.rol_admin);
+  constructor(private translate: TranslateService) { 
   }
 
-  ngOnInit(): void {
+  ngAfterContentChecked(): void {
+    if(MENU.value !== this.translate.instant('NAV_CONF')){
+      console.log( MENU.value );
+      MENU.value = this.translate.instant('NAV_CONF');
+    }
   }
 
 }

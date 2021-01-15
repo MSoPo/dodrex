@@ -1,0 +1,16 @@
+<div>
+    <div class="title"><span class="nobold">{{ 'FECHA' | translate }}</span> {{idVenta | date: 'short'}}</div>
+    <mat-dialog-content>
+        <table>
+            <tr>
+                <th>{{ 'FECHA' | translate }}</th>
+                <th>{{ 'PAGO' | translate }}</th>
+            </tr>
+
+            <tr *ngFor="let pago of pagos">
+                <td>{{pago.fecha.toDate() | date: 'short'}}</td>
+                <td class="example-right-align">{{pago.pago | currency}}</td>
+            </tr>
+        </table>
+    </mat-dialog-content>
+</div>

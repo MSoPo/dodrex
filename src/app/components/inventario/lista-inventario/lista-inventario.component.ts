@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from '@ngx-translate/core';
 import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
 import { ProductService } from 'src/app/core/services/product.service';
 import { Producto } from 'src/app/models/Producto';
@@ -38,8 +39,10 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
   constructor(
     public dialog: MatDialog,
     private productoService: ProductService,
-    public snackBar: MatSnackBar
-  ) {}
+    public snackBar: MatSnackBar,
+    public translate: TranslateService
+    ) {
+      translate.setDefaultLang('es');}
 
   ngOnInit(): void {
     this.getFavs();
@@ -65,7 +68,6 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
   }
 
   handleProductAddToVenta(product: Producto[]): void {
-    console.log('product -> ', product);
     this.dataSource.data = product;
   }
 
@@ -74,7 +76,7 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
     ACTIVE_BLOCK.value = true;
     this.productoService.fav(el).then(result => ACTIVE_BLOCK.value = false)
     .catch((err) => {
-      this.snackBar.open(err.messagees, 'Aceptar', DEFAULT_DURATION);
+      console.log(err);
       ACTIVE_BLOCK.value = false;
     });
   }

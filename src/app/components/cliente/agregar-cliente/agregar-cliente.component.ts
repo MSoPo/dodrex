@@ -9,6 +9,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import {
   ACTIVE_BLOCK,
   DEFAULT_DURATION,
@@ -55,8 +56,9 @@ export class AgregarClienteComponent implements OnInit {
     private clienteService: ClienteService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<AgregarClienteComponent>,
+    public translate: TranslateService
   ) {
-    
+    translate.setDefaultLang('es');
     this.form = fb.group({
       clave: [
         data.clave ? data.clave : '',
@@ -109,12 +111,7 @@ export class AgregarClienteComponent implements OnInit {
       this.form.value.nombre = this.form.value.nombre.toUpperCase();
       this.formToUser();
     }else {
-      console.log(this.form.errors);
-      this.snackBar.open(
-        'Algún dato no es válido.',
-        'Aceptar',
-        DEFAULT_DURATION
-      );
+      this.SNACK('ERROR_DATOS', 'ACEPTAR')
     }
   }
 
@@ -128,33 +125,22 @@ export class AgregarClienteComponent implements OnInit {
     if(this.data.tipo_descuento !== TIPO_DESCUENTO.DESCUENTO) {
       this.data.descuento = 0;
     }
-    console.log(cliente);
     ACTIVE_BLOCK.value = true;
     this.clienteService
       .add(cliente)
       .then((result) => {
         ACTIVE_BLOCK.value = false;
-        console.log(result);
         if(this.data.operacion === 'update') {
           this.cargarPantallaLista(cliente);
-          this.snackBar.open(
-            `Cliente ${cliente.clave} actualizado.`,
-            '',
-            DEFAULT_DURATION
-          );
+          this.SNACK('ACTUALIZACION_OK', '');
         }else{
-          this.snackBar.open(
-            `Cliente ${cliente.clave} agregado.`,
-            '',
-            DEFAULT_DURATION
-          );
+          this.SNACK('REGISTRO_OK', '');
         }
         this.dialogRef.close();
       })
-      .catch((error) => {
+      .catch(() => {
         ACTIVE_BLOCK.value = false;
-        console.log(error);
-        this.snackBar.open(error.message, 'Aceptar', DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', '');
       });
   }
 
@@ -171,5 +157,17 @@ export class AgregarClienteComponent implements OnInit {
     this.data.nombre = prod.nombre;
     this.data.tipo_descuento = prod.tipo_descuento;
     this.data.usuario = prod.usuario;
+  }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
   }
 }

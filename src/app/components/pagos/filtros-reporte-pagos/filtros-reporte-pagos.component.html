@@ -1,0 +1,21 @@
+<form class="example-form">
+    <mat-form-field class="label-venta">
+        <mat-label>{{ 'CLIENTE' | translate }}</mat-label>
+        <mat-select [value]="0" [formControl]="cliente">
+            <mat-option [value]="-1">{{ 'TODOS' | translate }}</mat-option>
+            <mat-option *ngFor="let cl of lstCliente" [value]="cl.clave">{{cl.nombre}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="label-venta">
+        <mat-label>{{ 'BUSQUEDA_ESPECIAL' | translate }}</mat-label>
+        <mat-select [formControl]="especial" >
+            <mat-option value="0"></mat-option>
+            <mat-option value="1">{{ 'LiQUIDADAS' | translate }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button (click)="buscar()"  type="button" class="autorenew" mat-mini-fab>
+        <mat-icon>search</mat-icon>
+    </button>
+</form>

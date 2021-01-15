@@ -12,5 +12,6 @@ export interface Venta{
     nombre_cliente?: string;
     descuento?: number;
     tipo_descuento?: number;
-    numero?: any;
+    numero?: number;
+    formaPago?: number;
 }

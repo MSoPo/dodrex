@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { MENU } from 'src/app/core/Constantes';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements AfterViewChecked {
 
-  constructor() { }
+  constructor(private translate: TranslateService) { 
+  }
 
-  ngOnInit(): void {
+  ngAfterViewChecked(): void {
+    if(MENU.value !== this.translate.instant('NAV_CLIENTES')){
+      MENU.value = this.translate.instant('NAV_CLIENTES');
+    }
   }
 
 }

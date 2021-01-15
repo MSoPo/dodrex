@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component } from '@angular/core';
 import { ACTIVE_BLOCK } from './core/Constantes';
 
 @Component({
@@ -6,7 +6,15 @@ import { ACTIVE_BLOCK } from './core/Constantes';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewChecked{
   title = 'dodrex';
   active = ACTIVE_BLOCK;
+
+  constructor(
+    private cdRef:ChangeDetectorRef
+    ){}
+
+  ngAfterViewChecked(): void{
+    this.cdRef.detectChanges();
+  }
 }

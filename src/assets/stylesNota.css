@@ -1,0 +1,131 @@
+.encabezado {
+  color: black;
+  margin-bottom: 10px;
+}
+
+img {
+  position: absolute; 
+  top: 30px; 
+  left: 30px
+}
+
+.titulo {
+  text-align: center;
+  margin: 40px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  color: #1632cc;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-weight: bolder;
+}
+
+.direccion {
+  text-align: center;
+  margin: 40px;
+  margin-top: 5px; 
+  margin-bottom: 5px;
+}
+
+.datos {
+  margin-left: 10vh;
+}
+
+.datos > div{
+  margin: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.bold {
+  color: rgb(69, 69, 71);
+}
+
+.nobold {
+  font-weight: normal;
+  color: rgb(69, 69, 71);
+}
+
+.total {
+  font-weight: bold;
+}
+
+.folio {
+  border-bottom: 2px solid;
+  text-align: right;
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
+.textleft {
+  text-align: left;
+}
+
+.textrigth {
+  text-align: right;
+}
+
+table {
+  margin: 50px;
+  margin-top: 10px;
+  width: 100%; 
+  border: 1px solid;
+  border-spacing: 0px;
+  min-width: 500px;
+}
+
+table > tr > th {
+  background-color: gray;
+  padding: 7px;
+}
+
+table > tr > td{
+  padding: 5px;
+}
+
+tfoot > td {
+  padding: 10px;
+}
+
+.footer {
+  text-align: right;
+  padding: 40 px;
+}
+
+  #ticket {
+    font-family: 'Times New Roman', Times, serif;
+    width: 300px;
+  }
+
+  #ticket>.titulo {
+    font-weight: bold;
+    color: #3f51b5;
+    margin: 2px;
+  }
+  
+  #ticket>.direccion {
+    margin: 2px;
+    margin-top: 2px; 
+    font-size: 14px;
+    border-bottom: 1px solid;
+  }
+  
+  #ticket>.bold {
+    font-weight: bold;
+  }
+  
+  #ticket>.folio {
+    border-bottom: 2px solid;
+    text-align: right;
+    margin-right: 2px;
+    margin-left: 2px;
+  }
+  
+  .right {
+    text-align: right;
+  }

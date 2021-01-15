@@ -1,0 +1,25 @@
+<form class="example-form">
+    <mat-form-field appearance="fill">
+        <mat-label>{{ 'FECHAS' | translate}}</mat-label>
+        <mat-date-range-input required [formGroup]="range" [rangePicker]="picker">
+          <input required formControlName="start" matStartDate [placeholder]="'FECHA_I' | translate">
+          <input required formControlName="end" matEndDate [placeholder]="'FECHA_F' | translate">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">{{ 'FECHA_I_VAL' | translate }}</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">{{ 'FECHA_F_VAL' | translate }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="label-venta">
+        <mat-label>{{ 'USUARIO' | translate }}</mat-label>
+        <mat-select [value]="0" [formControl]="usuario">
+            <mat-option [value]="-1">{{ 'TODOS' | translate }}</mat-option>
+            <mat-option *ngFor="let us of lstUsuario" [value]="us.id">{{us.nombre}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button (click)="buscar()"  type="button" class="autorenew" mat-mini-fab>
+        <mat-icon>search</mat-icon>
+    </button>
+</form>

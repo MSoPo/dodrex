@@ -1,0 +1,45 @@
+<div *ngIf="!cancelar">
+    <div class="title"><span class="nobold">{{ 'PEDIDO_NUM' | translate }}</span> {{idVenta}}</div>
+    <mat-dialog-content>
+        <table>
+            <tr>
+                <th>{{ 'PRODUCTOS' | translate }}</th>
+                <th>{{ 'CANTIDAD' | translate }}</th>
+                <th>{{ 'SUBTOTAL' | translate }}</th>
+            </tr>
+
+            <tr *ngFor="let prod of productos">
+                <td>{{prod.nombre}}</td>
+                <td class="example-right-align">{{prod.cantidad}}</td>
+                <td class="example-right-align">{{prod.subtotal | currency}}</td>
+            </tr>
+        </table>
+    </mat-dialog-content>
+    <section class="button">
+        <button (click)="cancelarVenta()" [matTooltip]="'PEDIDO_CANCELAR' | translate" class="buton_actions"
+            mat-mini-fab color="primary">
+            <mat-icon>delete_sweep</mat-icon>
+        </button>
+        <!--<button matTooltip="Enviar por correo" class="buton_actions" mat-mini-fab color="primary" >
+        <mat-icon>email</mat-icon>
+    </button>-->
+        <button [matTooltip]="'PEDIDO_VENTA' | translate" class="buton_actions" mat-mini-fab color="primary">
+            <mat-icon>payment</mat-icon>
+        </button>
+    </section>
+</div>
+<div *ngIf="cancelar">
+    <mat-dialog-content class="center">
+        <p class="title ">{{ 'PEDIDO_POP_CANCEL' | translate}}</p>
+        <p>{{ 'PEDIDO_POP_CANCEL_MSJ' | translate }}</p>
+    </mat-dialog-content>
+    <section class="button">
+        <button (click)="regresardetalle()" [matTooltip]="'REGRESAR' | translate" class="buton_actions" mat-button
+            color="primary">
+            {{ 'REGRESAR' | translate }}
+        </button>
+        <button (click)="borrar()" [matTooltip]="'VENTA_CANCELAR' | translate" class="buton_actions" mat-button color="primary">
+            {{ 'ELIMINAR' | translate }}
+        </button>
+    </section>
+</div>

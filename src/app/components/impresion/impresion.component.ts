@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import * as print from 'print-js';
-import { iif } from 'rxjs';
 import { CLIENTEACTUAL, EMPRESA, ESTILO_NOTA, ESTILO_TICKET, VENTAACTUAL } from 'src/app/core/Constantes';
 
 @Component({
@@ -27,8 +26,8 @@ export class ImpresionComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    //this.imprimir();
-    this.imprimirTicket();
+    if(this.empresa.impresion == 1) { this.imprimir(); }
+    if(this.empresa.impresion == 2) { this.imprimirTicket(); }
   }
 
   ngOnInit(): void {
@@ -40,7 +39,10 @@ export class ImpresionComponent implements OnInit {
     print({
       printable: 'nota',
       type: 'html',
-      style: ESTILO_NOTA
+      css: [
+        "assets/stylesNota.css",
+        
+      ]
       })
   }
 
@@ -48,7 +50,10 @@ export class ImpresionComponent implements OnInit {
     print({
       printable: 'ticket',
       type: 'html',
-      style: ESTILO_TICKET
+      css: [
+        "assets/stylesNota.css",
+        
+      ]
       })
   }
 

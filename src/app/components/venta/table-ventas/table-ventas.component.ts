@@ -13,10 +13,10 @@ import { FormControl } from '@angular/forms';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { Cliente } from 'src/app/models/Cliente';
 import { Venta } from 'src/app/models/Venta';
-import { VentaService } from 'src/app/core/services/venta.service';
 import { DetalleVenta } from 'src/app/models/DetalleVenta';
 import { MatDialog } from '@angular/material/dialog';
 import { ResumenVentaComponent } from '../resumen-venta/resumen-venta.component';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -44,8 +44,11 @@ export class TableVentasComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private clienteService: ClienteService
-  ) {}
+    private clienteService: ClienteService,
+    public translate: TranslateService
+  ) {
+    translate.setDefaultLang('es');
+  }
 
   ngOnInit(): void {
     this.nombreCliente.valueChanges.subscribe((value) => {
@@ -54,7 +57,6 @@ export class TableVentasComponent implements OnInit {
       if (val.length !== 4 || this.lastSearch === val) {
         return;
       } else {
-        console.log(val);
         this.clienteService
           .getNombre(val)
           .then((res) => {
@@ -63,8 +65,6 @@ export class TableVentasComponent implements OnInit {
             this.options = res.docs.map((m: { data: () => Producto }) => {
               return m.data().nombre + '(' + m.data().clave + ')';
             });
-            console.log(value);
-            console.log(this.options);
             this.filter(value);
           })
           .catch((error) => console.log(error));
@@ -83,33 +83,20 @@ export class TableVentasComponent implements OnInit {
   addCantidad(event: any, element: VentaElement): void {
     let valor = event.target.value;
     if (isNaN(valor)) {
-      this.snackBar.open(
-        `Cantiad del producto ${element.clave} no váida`,
-        'Aceptar',
-        DEFAULT_DURATION
-      );
+      this.SNACK('ERROR_CANTIDAD', 'ACEPTAR');
       element.cantidad = 1;
     } else {
       valor = Number(valor);
       if (valor > element.stock) {
-        this.snackBar.open(
-          `Cantidad insuficiente en inventario.`,
-          'Aceptar',
-          DEFAULT_DURATION
-        );
+        this.SNACK('ERROR_CANT_INV', 'ACEPTAR');
         element.cantidad = element.stock;
       } else if (Number.isInteger(valor) && valor > 0) {
         element.cantidad = valor;
       } else {
-        this.snackBar.open(
-          `Solo se aceptan cantidades enteras y mayores a 0`,
-          'Aceptar',
-          DEFAULT_DURATION
-        );
+        this.SNACK('ERROR_VAL_CANT', 'ACEPTAR');
         element.cantidad = valor >= 1 ? Math.trunc(valor) : 1;
       }
       element.subtotal = element.precio * element.cantidad;
-      console.log(`${element.subtotal} => ${element.cantidad}`);
       this.dataSource.data = this.ELEMENT_DATA;
     }
   }
@@ -117,22 +104,15 @@ export class TableVentasComponent implements OnInit {
   handleProductAddToVenta(product: Producto): void {
     console.log('product -> ', product);
     if (product.cantidad < 1) {
-      this.snackBar.open(
-        `El producto ${product.clave} está agotado`,
-        'Aceptar',
-        DEFAULT_DURATION
-      );
+      this.snackBar.open(this.translate.instant('ERROR_AGOTADO', { clave : product.clave }), 
+      this.translate.instant('ACEPTAR'), DEFAULT_DURATION);
       return;
     }
 
     const valEx = this.ELEMENT_DATA.find((val) => val.clave === product.clave);
     if (valEx) {
       if (valEx.cantidad >= product.cantidad) {
-        this.snackBar.open(
-          `Cantidad insuficiente en inventario.`,
-          'Aceptar',
-          DEFAULT_DURATION
-        );
+        this.SNACK('ERROR_CANT_INV', 'ACEPTAR');
         return;
       }
       valEx.cantidad++;
@@ -196,9 +176,9 @@ export class TableVentasComponent implements OnInit {
     if (Number(cliente.tipo_descuento) === TIPO_DESCUENTO.PRECIO_ESPECIAL) {
       this.ELEMENT_DATA.forEach((val) => {
         val.precio =
-          val.precio_especial < val.precio_unitario
-            ? val.precio_unitario
-            : val.precio_especial;
+          val.precio_especial > 0
+            ? val.precio_especial
+            : val.precio_unitario;
         val.subtotal = val.precio * val.cantidad;
       });
     } else if (Number(cliente.tipo_descuento) === TIPO_DESCUENTO.DESCUENTO) {
@@ -251,6 +231,10 @@ export class TableVentasComponent implements OnInit {
       venta.nombre_cliente = '';
       venta.tipo_descuento = 0;
       venta.descuento = 0;
+      if(this.nombreCliente.value){
+        this.SNACK('CLIENTE_NOEXISTE', '');
+        venta.nombre_cliente = this.nombreCliente.value;
+      }
     }
     //Limpiamos esos valores que son los que se muestran por si venian cargados de otra venta
     CLIENTEACTUAL.correo = '';
@@ -276,5 +260,17 @@ export class TableVentasComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
     });
+  }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
   }
 }

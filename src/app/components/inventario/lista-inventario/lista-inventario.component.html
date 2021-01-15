@@ -1,63 +1,59 @@
-<app-filtros-inventario
-  (getProducto)="handleProductAddToVenta($event)"
-></app-filtros-inventario>
+<app-filtros-inventario (getProducto)="handleProductAddToVenta($event)"></app-filtros-inventario>
 
-<table *ngIf="dataSource.data.length > 0" mat-table matSort  (matSortChange)="sortDataMetod($event)" [dataSource]="dataSource" class="mat-elevation-z8">
-
+<table *ngIf="dataSource.data.length > 0" mat-table matSort (matSortChange)="sortDataMetod($event)"
+    [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="editar">
-        <th mat-header-cell *matHeaderCellDef> Editar </th>
-        <td class="td_first" mat-cell *matCellDef="let element">
-            <button (click)="fav(element)" color="accent" *ngIf="element.favorito" mat-icon-button aria-label="Botón quitar">
+        <th class="cell_hidde" mat-header-cell *matHeaderCellDef></th>
+        <td class="cell_hidde" mat-cell *matCellDef="let element">
+            <button (click)="fav(element)" color="accent" *ngIf="element.favorito" mat-icon-button>
                 <mat-icon>favorite</mat-icon>
             </button>
-
-            <button (click)="fav(element)" *ngIf="!element.favorito" mat-icon-button aria-label="Botón favoritos">
+            <button (click)="fav(element)" *ngIf="!element.favorito" mat-icon-button>
                 <mat-icon>favorite_outline</mat-icon>
             </button>
-            <button  (click) = "edit(element)" mat-icon-button aria-label="Botón editar">
+            <button (click)="edit(element)" mat-icon-button>
                 <mat-icon>edit_outline</mat-icon>
-            </button>
-            <button *ngIf="element.descripcion || element.precio_mayoreo || element.precio_especial" matTooltip="Detalles" (click)="openDialog(element)" mat-icon-button aria-label="Botón mas detalles">
-                <mat-icon>expand_more</mat-icon>
             </button>
         </td>
     </ng-container>
 
     <ng-container matColumnDef="clave">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Código de producto </th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> {{ 'CLAVE_PRODUCTO' | translate }} </th>
         <td mat-cell *matCellDef="let element">
-            {{element.clave}}
+            <span class="cell_ce">{{element.clave}}</span>
+            <button class="button_icon_cell" matTooltip="Detalles" (click)="openDialog(element)" mat-icon-button>
+                <mat-icon>expand_more</mat-icon>
+            </button>
         </td>
     </ng-container>
     <ng-container matColumnDef="nombre">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Nombre </th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> {{ 'NOMBRE' | translate }} </th>
         <td mat-cell *matCellDef="let element">
             {{element.nombre}}
         </td>
     </ng-container>
     <ng-container matColumnDef="existencia">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Existencia </th>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef> {{ 'EXISTENCIA' | translate }} </th>
         <td mat-cell *matCellDef="let element" class="column-price"> {{ element.cantidad | number: '0.0-0' }} </td>
     </ng-container>
     <ng-container matColumnDef="precio_unitario">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef> Precio Unitario </th>
-        <td mat-cell *matCellDef="let element" class="column-price"> {{ element.precio_unitario | currency }} </td>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef class="cell_hidde"> {{ 'PRECIO_UNITARIO' | translate }} </th>
+        <td mat-cell *matCellDef="let element" class="cell_hidde column-price"> {{ element.precio_unitario | currency }} </td>
     </ng-container>
     <ng-container matColumnDef="precio_compra">
-        <th mat-sort-header mat-header-cell *matHeaderCellDef > Precio Compra </th>
-        <td mat-cell *matCellDef="let element" class="column-price"> {{element.precio_compra | currency }}</td>
+        <th mat-sort-header mat-header-cell *matHeaderCellDef class="cell_hidde"> {{'PRECIO_COMPRA' | translate }} </th>
+        <td mat-cell *matCellDef="let element" class="cell_hidde column-price"> {{element.precio_compra | currency }}</td>
     </ng-container>
 
     <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef class="column-price"></th>
-        <td mat-cell *matCellDef="let element" class="column-price">
-            <button color="primary" (click)="delete(element)" mat-icon-button aria-label="Botón quitar">
+        <th mat-header-cell *matHeaderCellDef class="column-price cell_hidde"></th>
+        <td mat-cell *matCellDef="let element" class="column-price cell_hidde">
+            <button color="primary" (click)="delete(element)" mat-icon-button>
                 <mat-icon matTooltip="Dar de baja el producto" *ngIf="element.activo">remove_circle_outline</mat-icon>
                 <mat-icon matTooltip="Habilitar el producto" *ngIf="!element.activo">check_circle</mat-icon>
-            </button> </td>
+            </button>
+        </td>
     </ng-container>
-
-
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>

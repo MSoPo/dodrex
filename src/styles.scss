@@ -2,3 +2,44 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.only_cell { visibility: hidden; }
+
+@media only screen and (max-width: 600px) {
+    .mat-typography {
+        font: 400 12px Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    .mat-cell {
+        font-size: 12px !important;
+    }
+
+    .only_cell {
+        visibility: visible;
+    }
+
+    .cell_hidde{
+        display: none;
+    }
+
+    .cell_ce{
+        padding-left: 5px;
+    }
+
+    .button_icon_cell{
+        width: 20px !important;
+    }
+
+    .cdk-overlay-pane {
+        width: 100% !important;
+        left: 0 !important;
+    }
+
+    .cdk-overlay-pane>div{
+        max-width: 80% !important;
+    }
+
+    .mat-option, .mat-select-panel {
+        text-align: center !important;
+        padding: 0px !important;
+    }
+  }

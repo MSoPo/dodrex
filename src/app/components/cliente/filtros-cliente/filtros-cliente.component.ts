@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { Cliente } from 'src/app/models/Cliente';
@@ -21,8 +22,11 @@ export class FiltrosClienteComponent {
   constructor(
     public dialog: MatDialog,
     private clienteService: ClienteService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    public translate: TranslateService
+  ) {
+    translate.setDefaultLang('es');
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AgregarClienteComponent, {
@@ -46,11 +50,7 @@ export class FiltrosClienteComponent {
           ACTIVE_BLOCK.value = false;
           switch (querySnapshot.size) {
             case 0:
-              this.snackBar.open(
-                `No existe la clave ${this.clave.value}`,
-                undefined,
-                DEFAULT_DURATION
-              );
+              this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
               return;
             case 1:
               this.getCliente.emit([querySnapshot.docs[0].data()]);
@@ -58,17 +58,13 @@ export class FiltrosClienteComponent {
               console.log(querySnapshot.docs[0].data());
               return;
             default:
-              this.snackBar.open(
-                `El cliemte ${this.clave.value} tiene algún problema.`,
-                undefined,
-                DEFAULT_DURATION
-              );
+              this.SNACK('ERROR_DATOS', 'ACEPTAR');
               return;
           }
         })
         .catch((err) => {
           ACTIVE_BLOCK.value = false;
-          this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+          this.SNACK('ERROR_GRAL', 'ACEPTAR');
         });
     }
   }
@@ -86,7 +82,7 @@ export class FiltrosClienteComponent {
         })
         .catch((err) => {
           ACTIVE_BLOCK.value = false;
-          this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+          this.SNACK('ERROR_GRAL', 'ACEPTAR');
         });
     }
   }
@@ -103,7 +99,7 @@ export class FiltrosClienteComponent {
       })
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
-        this.snackBar.open(err.message, undefined, DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
       });
   }
 
@@ -119,7 +115,7 @@ export class FiltrosClienteComponent {
       })
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
-        this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
       });
   }
 
@@ -132,18 +128,22 @@ export class FiltrosClienteComponent {
       if (lst.length > 0) {
         this.getCliente.emit(lst);
       } else {
-        this.snackBar.open(
-          'No se encontraron clientes.',
-          'Aceptar',
-          DEFAULT_DURATION
-        );
+        this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
       }
     } else {
-      this.snackBar.open(
-        'No se encontraron clientes.',
-        'Aceptar',
-        DEFAULT_DURATION
-      );
+      this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
     }
+  }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
   }
 }

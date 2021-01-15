@@ -1,0 +1,101 @@
+<app-producto-cotizacion
+  [products]="ELEMENT_DATA"
+  (getProducto)="handleProductAddToVenta($event)"
+></app-producto-cotizacion>
+
+<table
+  *ngIf="dataSource.data.length > 0"
+  mat-table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8"
+  id="printtable"
+>
+  <!-- Position Column -->
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef>{{ 'PRODUCTO' | translate }}</th>
+    <td mat-cell *matCellDef="let element">
+      <button (click)="quitar(element)" class="only_cell button_icon_cell" mat-icon-button [matTooltip]="'ELIMINAR' | translate">
+        <mat-icon>remove_circle_outline</mat-icon>
+      </button>
+      {{ element.nombre }}</td>
+    <td mat-footer-cell *matFooterCellDef>
+      <form class="example-form">
+        <mat-form-field class="example-full-width nameCliente">
+          <mat-label>{{ 'NOMBRE_CLIENTE' | translate }}</mat-label>
+          <input class="nameClienteText"
+            (keyup)="chanceCliente($event.keyCode)"
+            (blur)="cambiarCliente()"
+            [formControl]="nombreCliente"
+            [matAutocomplete]="auto"
+            matInput
+          />
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option (click)="cambiarCliente()" class="nameClienteText" *ngFor="let option of filteredOptions" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </td>
+  </ng-container>
+
+  <!-- Name Column payment -->
+  <ng-container matColumnDef="cantidad">
+    <th mat-header-cell *matHeaderCellDef class="column-price">{{ 'CANTIDAD' | translate }}</th>
+    <td mat-cell *matCellDef="let element" class="column-price">
+      <input
+        matInput
+        type="number"
+        (blur)="addCantidad($event, element)"
+        value="{{ element.cantidad }}"
+      />
+    </td>
+    <td mat-footer-cell *matFooterCellDef class="center">
+      <button class="cotizacion cell_hidde" (click)="pagar(true)" mat-mini-fab color="accent" [matTooltip]="'COTIZACION' | translate">
+        <mat-icon>note</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="precio">
+    <th mat-header-cell *matHeaderCellDef class="cell_hidde column-price">Precio</th>
+    <td mat-cell *matCellDef="let element" class=" cell_hidde column-price">
+      {{ element.precio | currency }}
+    </td>
+    <td class="cell_hidde" mat-footer-cell *matFooterCellDef>{{'TOTAL' |  translate}}</td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="subtotal">
+    <th mat-header-cell *matHeaderCellDef class="column-price">{{ 'SUBTOTAL' | translate }}</th>
+    <td mat-cell *matCellDef="let element" class="column-price">
+      {{ element.subtotal | currency }}
+    </td>
+    <td mat-footer-cell *matFooterCellDef class="column-price">
+      {{ getTotalCost() | currency }}
+    </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="quitar">
+    <th mat-header-cell *matHeaderCellDef class="cell_hidde column-price">{{ 'ELIMINAR' | translate }}</th>
+    <td mat-cell *matCellDef="let element" class="cell_hidde column-price">
+      <button (click)="quitar(element)" mat-icon-button [matTooltip]="'ELIMINAR' | translate">
+        <mat-icon>remove_circle_outline</mat-icon>
+      </button>
+    </td>
+    <td mat-footer-cell *matFooterCellDef  class="column-price cell_hidde">
+      <button class="cotizacion" (click)="pagar(true)" mat-mini-fab color="accent" [matTooltip]="'COTIZACION' | translate">
+        <mat-icon>note</mat-icon>
+      </button>
+      <!--<button (click)="pagar(false)" mat-mini-fab color="accent" [matTooltip]="'PEDIDO' | translate">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>-->
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+</table>

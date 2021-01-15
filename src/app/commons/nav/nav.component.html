@@ -1,13 +1,17 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'">
-    <mat-toolbar>Menu</mat-toolbar>
+    <mat-toolbar>{{ 'NAV' | translate }}</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/inventario" routerLinkActive>Inventario</a>
-      <a mat-list-item routerLink="/ventas" routerLinkActive>Ventas</a>
-      <a mat-list-item routerLink="/clientes" routerLinkActive>Clientes</a>
-      <a mat-list-item routerLink="/reporte" routerLinkActive>Reporte</a>
-      <a mat-list-item routerLink="/configuracion" routerLinkActive>Configuración</a>
+      <a mat-list-item routerLink="/ventas" routerLinkActive>{{ 'NAV_VENTA' | translate }}</a>
+      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/inventario" routerLinkActive>{{ 'NAV_INVENTARIO' | translate }}</a>
+      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/carga" routerLinkActive>{{ 'NAV_CARGA' | translate}}</a>
+      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/clientes" routerLinkActive>{{ 'NAV_CLIENTES' | translate }}</a>
+      <a mat-list-item routerLink="/cotizacion" routerLinkActive>{{ 'NAV_COTIZACION' | translate }}</a>
+      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/reporte" routerLinkActive>{{ 'NAV_REPORTE' | translate }}</a>
+      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/pagos" routerLinkActive>{{ 'NAV_PAGO' | translate }}</a>
+      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/reporteCarga" routerLinkActive>{{ 'NAV_REPORTE_CARGA' | translate }}</a>
+      <a mat-list-item routerLink="/configuracion" routerLinkActive>{{ 'NAV_CONF' | translate }}</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -15,8 +19,8 @@
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span class="example-spacer">DoDrex</span>
-      <span class="username">{{username}}</span>
+      <span class="example-spacer">{{ menu.value }}</span>
+      <span class="username cell_hidde">{{username}}</span>
       <button (click)="logout()" mat-icon-button class="example-icon account-circle">
         <mat-icon matTooltip="Cerrar sesión">exit_to_app</mat-icon>
       </button>

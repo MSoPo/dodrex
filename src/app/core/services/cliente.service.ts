@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference, QueryGroupFn } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 import { Cliente } from 'src/app/models/Cliente';
+import { Venta } from 'src/app/models/Venta';
 import { EMPRESA } from '../Constantes';
 
 @Injectable({
@@ -12,6 +14,48 @@ export class ClienteService {
   add(cliente: Partial<Cliente>): Promise<void> {
     return this.afs.doc('empresa/' + EMPRESA.id).collection('clientes')
       .doc(cliente.clave).set(cliente, { merge: true });
+  }
+  
+  addVentaPagos(venta: Venta, pagoInicial: number):Promise<void>{
+    return this.afs.doc('empresa/' + EMPRESA.id).collection('ventasPago')
+    .doc(venta.id).set({
+        'pagoInicial' : pagoInicial,
+        'pagoTotal' : venta.total,
+        'deuda' : venta.total - pagoInicial,
+        'fecha' : venta.fecha,
+        'cliente' : venta.nombre_cliente,
+        'id_cliente' : venta.id_cliente
+      }, { merge: true });
+  }
+
+  addPago(idVentaPago: string, monto: number):Promise<any>{
+    return this.afs.doc('empresa/' + EMPRESA.id).collection('ventasPago')
+    .doc(idVentaPago).collection('pagos').add({
+        'fecha' : new Date(),
+        'pago' : monto
+      });
+  }
+
+  getPagoDeuda(): Promise<any>{
+    const vantaPagos = this.afs.doc('empresa/' + EMPRESA.id).collection('ventasPago').ref;
+    return vantaPagos.where('deuda', '>', 0)
+    .get();
+  }
+  getPagoLiquidado(): Promise<any>{
+    const vantaPagos = this.afs.doc('empresa/' + EMPRESA.id).collection('ventasPago').ref;
+    return vantaPagos.where('deuda', '<=', 0)
+    .get();
+  }
+
+  getPagoCliente(idCliente: string): Promise<any>{
+    const vantaPagos = this.afs.doc('empresa/' + EMPRESA.id).collection('ventasPago').ref;
+    return vantaPagos.where('id_cliente', '==', idCliente)
+    .get();
+  }
+  
+  getLstPago(idVentaPago: string): Promise<any>{
+    const vantaPagos = this.afs.doc(`empresa/${EMPRESA.id}/ventasPago/${idVentaPago}`).collection('pagos').ref;
+    return vantaPagos.get();
   }
 
   activate(cliente: Partial<Cliente>): Promise<void> {

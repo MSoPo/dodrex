@@ -9,4 +9,7 @@ export interface Empresa{
     operacion: string;
     telefono?: string;
     correo?: string;
+    impresion?: number;
+    head?: string;
+    urlImage?: string;
 }

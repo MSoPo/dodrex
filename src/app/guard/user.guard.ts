@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { EMPRESA, ROL_ADMINISTRADO, USER_ACTIVE } from '../core/Constantes';
+import { USER_ACTIVE } from '../core/Constantes';
 import { UsersService } from '../core/services/users.service';
 import { AuthService } from '../core/services/auth.service';
 
@@ -11,7 +11,7 @@ import { AuthService } from '../core/services/auth.service';
 })
 export class UserGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private usersService: UsersService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,

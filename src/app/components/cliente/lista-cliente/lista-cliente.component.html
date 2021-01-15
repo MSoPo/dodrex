@@ -1,68 +1,93 @@
-<app-filtros-cliente (getCliente)="handleClienteAddToList($event)"></app-filtros-cliente>
+<app-filtros-cliente
+  (getCliente)="handleClienteAddToList($event)"
+></app-filtros-cliente>
 
-<table *ngIf="dataSource.data.length > 0" (matSortChange)="sortDataMetod($event)" matSort mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table
+  *ngIf="dataSource.data.length > 0"
+  (matSortChange)="sortDataMetod($event)"
+  matSort
+  mat-table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8 catalog"
+>
   <ng-container matColumnDef="editar">
-    <th mat-header-cell *matHeaderCellDef>Editar</th>
-    <td mat-cell *matCellDef="let element">
-      <button (click)="fav(element)" color="accent" *ngIf="element.favorito" mat-icon-button aria-label="Botón quitar">
+    <th class="cell_hidde" mat-header-cell *matHeaderCellDef></th>
+    <td class="cell_hidde" mat-cell *matCellDef="let element">
+      <button
+        (click)="fav(element)"
+        color="accent"
+        *ngIf="element.favorito"
+        mat-icon-button
+      >
         <mat-icon>favorite</mat-icon>
       </button>
-      <button (click)="fav(element)" *ngIf="!element.favorito" mat-icon-button aria-label="Botón favoritos">
+      <button (click)="fav(element)" *ngIf="!element.favorito" mat-icon-button>
         <mat-icon>favorite_outline</mat-icon>
       </button>
-      <button (click)="edit(element)" mat-icon-button aria-label="Botón editar">
+      <button (click)="edit(element)" mat-icon-button>
         <mat-icon>edit_outline</mat-icon>
       </button>
     </td>
   </ng-container>
 
-  <!-- Symbol Column -->
   <ng-container matColumnDef="clave">
-    <th mat-sort-header mat-header-cell *matHeaderCellDef>Clave de cliente</th>
+    <th mat-sort-header mat-header-cell *matHeaderCellDef>
+      {{ "CLAVE_CLIENTE" | translate }}
+    </th>
     <td mat-cell *matCellDef="let element">
-      {{ element.clave }}
+      <span  class="cell_ce">{{ element.clave }}</span>
     </td>
   </ng-container>
-  <!-- Symbol Column -->
   <ng-container matColumnDef="nombre">
-    <th mat-sort-header mat-header-cell *matHeaderCellDef>Nombre</th>
+    <th mat-sort-header mat-header-cell *matHeaderCellDef>
+      {{ "NOMBRE" | translate }}
+    </th>
     <td mat-cell *matCellDef="let element">
       {{ element.nombre }}
     </td>
   </ng-container>
-
-  <!-- Name Column -->
   <ng-container matColumnDef="descuento">
     <th mat-sort-header mat-header-cell *matHeaderCellDef class="column-price">
-      Tipo de Descuento
+      {{ "TIPO_DESCUENTO" | translate }}
     </th>
     <td mat-cell *matCellDef="let element" class="column-price">
       <span *ngIf="element.tipo_descuento !== '2'">{{
         element.tipo_descuento | tipoNomina
-        }}</span>
-      <span *ngIf="element.tipo_descuento === '2'">{{ element.descuento }}%</span>
+      }}</span>
+      <span *ngIf="element.tipo_descuento === '2'"
+        >{{ element.descuento }}%</span
+      >
     </td>
   </ng-container>
-
-  <!-- Weight Column -->
   <ng-container matColumnDef="direccion">
-    <th mat-sort-header mat-header-cell *matHeaderCellDef>Direccion</th>
-    <td mat-cell *matCellDef="let element" class="direction">{{ element.direccion }}</td>
+    <th class="cell_hidde" mat-sort-header mat-header-cell *matHeaderCellDef>
+      {{ "DIRECCION" | translate }}
+    </th>
+    <td class="cell_hidde" mat-cell *matCellDef="let element" class="direction">
+      {{ element.direccion }}
+    </td>
   </ng-container>
-
-  <!-- Weight Column -->
   <ng-container matColumnDef="correo">
-    <th mat-sort-header mat-header-cell *matHeaderCellDef>Correo</th>
-    <td mat-cell *matCellDef="let element">{{ element.correo }}</td>
+    <th class="cell_hidde" mat-sort-header mat-header-cell *matHeaderCellDef>
+      {{ "CORREO_ELECTRONICO" | translate }}
+    </th>
+    <td class="cell_hidde" mat-cell *matCellDef="let element">{{ element.correo }}</td>
   </ng-container>
-
-  <!-- Weight Column -->
   <ng-container matColumnDef="acciones">
-    <th mat-header-cell *matHeaderCellDef class="column-price"></th>
-    <td mat-cell *matCellDef="let element" class="column-price">
-      <button color="primary" (click)="delete(element)" mat-icon-button aria-label="Botón quitar">
-        <mat-icon matTooltip="Dar de baja el producto" *ngIf="element.activo">remove_circle_outline</mat-icon>
-        <mat-icon matTooltip="Habilitar el producto" *ngIf="!element.activo">check_circle</mat-icon>
+    <th mat-header-cell *matHeaderCellDef class="column-price cell_hidde"></th>
+    <td mat-cell *matCellDef="let element" class="column-price cell_hidde">
+      <button
+        color="primary"
+        (click)="delete(element)"
+        mat-icon-button
+        aria-label="Botón quitar"
+      >
+        <mat-icon matTooltip="Dar de baja el producto" *ngIf="element.activo"
+          >remove_circle_outline</mat-icon
+        >
+        <mat-icon matTooltip="Habilitar el producto" *ngIf="!element.activo"
+          >check_circle</mat-icon
+        >
       </button>
     </td>
   </ng-container>

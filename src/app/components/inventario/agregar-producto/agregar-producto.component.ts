@@ -14,6 +14,7 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import {
   ACTIVE_BLOCK,
   DEFAULT_DURATION,
@@ -50,7 +51,7 @@ import { Producto } from 'src/app/models/Producto';
   templateUrl: './agregar-producto.component.html',
   styleUrls: ['./agregar-producto.component.scss'],
 })
-export class AgregarProductoComponent implements OnInit {
+export class AgregarProductoComponent {
   form: FormGroup;
   hideMayoreoControl = new FormControl(false);
 
@@ -59,8 +60,10 @@ export class AgregarProductoComponent implements OnInit {
     private productoService: ProductService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<AgregarProductoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Partial<Producto>
+    @Inject(MAT_DIALOG_DATA) public data: Partial<Producto>,
+    public translate: TranslateService
   ) {
+    translate.setDefaultLang('es');
     console.log(data);
     this.hideMayoreoControl.setValue(
       data.cantidad_mayoreo || data.precio_mayoreo || data.precio_especial
@@ -86,7 +89,7 @@ export class AgregarProductoComponent implements OnInit {
         ],
       ],
       cantidad: [
-        data.cantidad ? Math.round(data.cantidad) : '',
+        data.cantidad ? Math.round(data.cantidad) : 0,
         [
           Validators.required,
           Validators.max(99999),
@@ -147,8 +150,6 @@ export class AgregarProductoComponent implements OnInit {
     });
   }
 
-  ngOnInit(): any {}
-
   add(e: Event): void {
     e.preventDefault();
     if (this.form.valid) {
@@ -177,24 +178,15 @@ export class AgregarProductoComponent implements OnInit {
         console.log(result);
         if (prod.operacion === 'update') {
           this.cargarPantallaLista(prod);
-          this.snackBar.open(
-            `Producto ${prod.clave} actualizado.`,
-            '',
-            DEFAULT_DURATION
-          );
+          this.SNACK('ACTUALIZACION_OK', '');
         } else {
-          this.snackBar.open(
-            `Producto ${prod.clave} agregado al inventario.`,
-            '',
-            DEFAULT_DURATION
-          );
+          this.SNACK('REGISTRO_OK','');
         }
         ACTIVE_BLOCK.value = false;
         this.dialogRef.close();
       })
       .catch((error) => {
-        console.log(error);
-        this.snackBar.open(error.message, 'Aceptar', DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
         ACTIVE_BLOCK.value = false;
       });
   }
@@ -207,7 +199,7 @@ export class AgregarProductoComponent implements OnInit {
     this.form.controls['clave'].setValue('DDR' + new Date().getTime());
   }
 
-  cargarPantallaLista(prod: Partial<Producto>){
+  cargarPantallaLista(prod: Partial<Producto>) {
     this.data.cantidad = prod.cantidad;
     this.data.cantidad_mayoreo = prod.cantidad_mayoreo;
     this.data.descripcion = prod.descripcion;
@@ -217,5 +209,17 @@ export class AgregarProductoComponent implements OnInit {
     this.data.precio_especial = prod.precio_especial;
     this.data.precio_mayoreo = prod.precio_mayoreo;
     this.data.precio_unitario = prod.precio_unitario;
+  }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
   }
 }

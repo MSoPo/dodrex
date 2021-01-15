@@ -1,69 +1,63 @@
 <form>
-  <div class="title">Resumen de la venta</div>
+  <div class="title">{{ 'RESUMEN' | translate }}</div>
   <div>
+    <mat-form-field class="label-venta">
+      <mat-label>{{ 'FORMA_PAGO' | translate }}</mat-label>
+      <mat-select (selectionChange)="resetValor($event)" [value]="1" [formControl]="formaPago">
+          <mat-option [value]="1">{{ 'EFECTIVO' | translate }}</mat-option>
+          <mat-option [value]="2">{{ 'TRANSFERENCIA' | translate }}</mat-option>
+          <mat-option [value]="3">{{ 'PAGO_PENDIENTE' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field *ngIf="venta.id_cliente" appearance="outline">
-      <mat-label>Cliente</mat-label>
-      <input
-        matInput
-        disabled
-        value="{{ venta.id_cliente }} |  {{ venta.nombre_cliente }}"
-      />
+      <mat-label>{{ 'CLIENTE' | translate }}</mat-label>
+      <input matInput readonly value="{{ venta.id_cliente }} |  {{ venta.nombre_cliente }}" />
     </mat-form-field>
 
-    <mat-form-field
-      *ngIf="venta.id_cliente && venta.tipo_descuento != 0"
-      appearance="outline"
-    >
-      <mat-label>Descuento</mat-label>
-      <input
-        class="right"
-        *ngIf="venta.tipo_descuento == 2"
-        matInput
-        disabled
-        value="{{ venta.descuento }} %"
-      />
-      <input
-        *ngIf="venta.tipo_descuento == 1"
-        matInput
-        disabled
-        value="Precio Especial"
-      />
+    <mat-form-field *ngIf="!venta.id_cliente && venta.nombre_cliente" appearance="outline">
+      <mat-label>{{ 'CLIENTE' | translate }}</mat-label>
+      <input matInput readonly value="{{ venta.nombre_cliente }}" />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="venta.id_cliente && venta.tipo_descuento != 0" appearance="outline">
+      <mat-label>{{ 'DESCUENTO' | translate }}</mat-label>
+      <input class="right" *ngIf="venta.tipo_descuento == 2" matInput readonly value="{{ venta.descuento }} %" />
+      <input *ngIf="venta.tipo_descuento == 1" matInput readonly [value]="'PRECIO_ESPECIAL' | translate" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>Total: </mat-label>
-      <input
-        class="right"
-        disabled
-        matInput
-        value="{{ venta.total | currency }}"
-      />
+      <mat-label>{{ 'TOTAL' | translate }}: </mat-label>
+      <input class="right" readonly matInput value="{{ venta.total | currency }}" />
     </mat-form-field>
-    <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>Cambio: </mat-label>
-      <input class="right" disabled matInput value="{{ cambio | currency }}" />
+    <mat-form-field *ngIf="formaPago.value === 1" appearance="outline" class="inputs-withHin">
+      <mat-label>{{ 'CAMBIO' | translate}}</mat-label>
+      <input class="right" readonly matInput value="{{ cambio | currency }}" />
     </mat-form-field>
-    <div class="right">
+    <div *ngIf="formaPago.value === 1" class="rightCambio">
       <mat-form-field class="recibido" appearance="outline">
-        <mat-label>Recibido: </mat-label>
-        <input
-          class="right"
-          type="number"
-          (keyup)="calcularCambio()"
-          (blur)="calcularCambio()"
-          matInput
-          [formControl]="recibido"
-        />
+        <mat-label>{{ 'DEUDA_CANTIDAD' | translate }} </mat-label>
+        <input class="right" type="number" (keyup)="calcularCambio()" (blur)="calcularCambio()" matInput
+          [formControl]="recibido" />
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
     </div>
+    <div *ngIf="formaPago.value === 3" class="rightCambio">
+      <mat-form-field class="recibido" appearance="outline">
+        <mat-label>{{ 'PAGO_INICIAL' | translate }} </mat-label>
+        <input class="right" type="number" (keyup)="validarPagoInicial()" (blur)="validarPagoInicial()" matInput
+          [formControl]="pagoInicial" />
+        <span matPrefix>$&nbsp;</span>
+      </mat-form-field>
+    </div>
+    
   </div>
   <div class="center">
     <button mat-raised-button (click)="onNoClick(false)" color="primary">
-      Pagar
+      {{ 'PAGAR' | translate }}
     </button>
     <button mat-raised-button (click)="onNoClick(true)" color="primary">
-      Pagar  <mat-icon>print</mat-icon>
+      {{ 'PAGAR' | translate}} <mat-icon>print</mat-icon>
     </button>
   </div>
 </form>

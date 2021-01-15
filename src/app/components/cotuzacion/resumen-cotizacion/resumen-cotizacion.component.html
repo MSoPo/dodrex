@@ -1,0 +1,55 @@
+<form>
+  <div *ngIf="!cotizacion" class="title">{{ 'RESUMEN_PEDIDO' | translate }}</div>
+  <div *ngIf="cotizacion" class="title">{{ 'RESUMEN_COT' | translate }}</div>
+  <div>
+    <mat-form-field *ngIf="venta.id_cliente" appearance="outline">
+      <mat-label>{{ 'CLIENTE'  | translate }}</mat-label>
+      <input
+        matInput
+        readonly
+        value="{{ venta.id_cliente }} |  {{ venta.nombre_cliente }}"
+      />
+    </mat-form-field>
+
+    <mat-form-field
+      *ngIf="venta.id_cliente && venta.tipo_descuento != 0"
+      appearance="outline"
+    >
+      <mat-label>{{ 'DESCUENTO' | translate }}</mat-label>
+      <input
+        class="right"
+        *ngIf="venta.tipo_descuento == 2"
+        matInput
+        readonly
+        value="{{ venta.descuento }} %"
+      />
+      <input
+        *ngIf="venta.tipo_descuento == 1"
+        matInput
+        readonly
+        [value]="'PRECIO_ESPECIAL' | translate"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="inputs-withHin">
+      <mat-label>{{ 'TOTAL' | translate }}: </mat-label>
+      <input
+        class="right"
+        readonly
+        matInput
+        value="{{ venta.total | currency }}"
+      />
+    </mat-form-field>
+  </div>
+  <div class="center">
+    <button *ngIf="!cotizacion" mat-raised-button (click)="onClickPedido(false)" color="primary">
+      {{ 'PEDIDO_OK' | translate }}
+    </button>
+    <button *ngIf="!cotizacion" mat-raised-button (click)="onClickPedido(true)" color="primary">
+      {{ 'PEDIDO_OK' | translate}}  <mat-icon>print</mat-icon>
+    </button>
+    <button *ngIf="cotizacion" mat-raised-button (click)="onCotizacion()" color="primary">
+      {{ 'IMPRIMIR_COT' | translate}}  <mat-icon>print</mat-icon>
+    </button>
+  </div>
+</form>

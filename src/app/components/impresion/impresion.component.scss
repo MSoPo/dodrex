@@ -1,125 +1,134 @@
+.encabezado {
+  color: black;
+  margin-bottom: 10px;
+}
+
+img {
+  position: absolute; 
+  top: 30px; 
+  left: 30px
+}
+
 .titulo {
-    font-weight: bold;
-    text-align: center;
-    margin: 40px;
-    margin-bottom: 0;
-    color: #3f51b5;
-  }
-  
-  .direccion {
-    text-align: center;
-    margin: 40px;
-    margin-top: 10px; 
-    font-size: 13px;
-  }
-  
-  .datos {
-    margin-left: 10vh;
-    font-size: 16px;
-  }
-  
-  .datos > div{
-    margin: 20px;
-  }
-  
-  .bold {
-    font-weight: bold;
-  }
-  
-  .folio {
-    border-bottom: 2px solid;
-    text-align: right;
-    margin-right: 30px;
-    margin-left: 30px;
-  }
-  
-  .textleft {
-    text-align: left;
-  }
-  
-  .textrigth {
-    text-align: right;
-  }
-  
-  table {
-    margin: 50px;
-    width: 100%; 
-    border: 1px solid;
-    border-spacing: 0px;
-    min-width: 500px;
-  }
-  
-  table > tr > th {
-    background-color: gray;
-    padding: 7px;
-  }
-  
-  table > tr > td{
-    padding: 5px;
-  }
-  
-  tfoot > td {
-    padding: 10px;
-  }
-  
-  .footer {
-    text-align: right;
-    padding: 40 px;
-  }
-
-
-#ticlet>.titulo {
-  font-weight: bold;
+  font-family: "Tangerine", serif;
+  font-size: xx-large;
   text-align: center;
-  color: #3f51b5;
-  margin: 5px;
+  margin: 40px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  color: #1632cc;
 }
 
-#ticlet>.direccion {
-  text-align: center;
-  margin: 5px;
-  margin-top: 5px; 
-  font-size: 13px;
+.razon {
+  font-weight: 900;
+  margin: 0px;
+  padding: 0px;
 }
 
-#ticlet>.bold {
+.direccion {
+  text-align: center;
+  margin: 40px;
+  margin-top: 0px; 
+  margin-bottom: 5px;
+}
+
+.datos {
+  margin-left: 10vh;
+}
+
+.datos > div{
+  margin: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.bold {
+  color: rgb(69, 69, 71);
+}
+
+.nobold {
+  font-weight: normal;
+  color: rgb(69, 69, 71);
+}
+
+.total {
   font-weight: bold;
 }
 
-#ticlet>.folio {
+.folio {
   border-bottom: 2px solid;
   text-align: right;
-  margin-right: 5px;
-  margin-left: 5px;
+  margin-right: 30px;
+  margin-left: 30px;
 }
 
-#ticlet>.textleft {
+.textleft {
   text-align: left;
 }
 
-#ticlet>.textrigth {
+.textrigth {
   text-align: right;
 }
 
-#ticlet>table {
-  margin: 5px;
+table {
+  margin: 50px;
+  margin-top: 10px;
+  width: 100%; 
   border: 1px solid;
   border-spacing: 0px;
+  min-width: 500px;
 }
 
-#ticlet>table > tr > th {
+table > tr > th {
+  background-color: gray;
   padding: 7px;
 }
 
-#ticlet>table > tr > td{
-  padding: 2px;
+table > tr > td{
+  padding: 5px;
 }
 
-#ticlet>tfoot > td {
-  padding: 2px;
+tfoot > td {
+  padding: 10px;
 }
 
-#ticlet>.footer {
-  padding: 5 px;
-  overflow-wrap: break-word;
+.footer {
+  text-align: right;
+  padding: 40 px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
+
+
+  #ticket {
+    font-family: 'Times New Roman', Times, serif;
+    width: 300px;
+  }
+
+  #ticket>.titulo {
+    font-weight: bold;
+    color: #3f51b5;
+    margin: 2px;
+  }
+  
+  #ticket>.direccion {
+    margin: 2px;
+    margin-top: 2px; 
+    font-size: 14px;
+    border-bottom: 1px solid;
+  }
+  
+  #ticket>.bold {
+    font-weight: bold;
+  }
+  
+  #ticket>.folio {
+    border-bottom: 2px solid;
+    text-align: right;
+    margin-right: 2px;
+    margin-left: 2px;
+  }
+  
+  .right {
+    text-align: right;
+  }

@@ -8,6 +8,7 @@ export const DEFAULT_DURATION = {
   };
 
 export const ACTIVE_BLOCK = { value : false };
+export const MENU = { value : 'DoDrex' };
 
 // Patrones
 export const SOLO_NUMERO_ENTERO = /^[0-9]{1,5}$/;
@@ -25,6 +26,13 @@ export enum TIPO_DESCUENTO {
   DESCUENTO
 }
 
+// Forma de pago
+export enum FORMA_PAGO {
+  EFECTIVO = 1,
+  TRANSFERENCIA = 2,
+  ABONOS = 3
+}
+
 // Roles
 export const ROL_ADMINISTRADO = { id: 1, valor: 'OFfyLKAk8fquG3aPFQ0n'};
 export const ROL_INVENTARIO = {id:2, valor: '2vTiHk0ne3XTAoZK15d1'};
@@ -36,34 +44,59 @@ export let CLIENTEACTUAL: Partial<Cliente> = {};
 
 // Estilos notas
 export const ESTILO_NOTA = `
+.encabezado {
+  color: black;
+  margin-bottom: 10px;
+}
+
+img {
+  position: absolute; 
+  top: 30px; 
+  left: 30px
+}
+
 .titulo {
-  font-weight: bold;
+  font-size: xx-large;
   text-align: center;
   margin: 40px;
-  margin-bottom: 0;
-  color: #3f51b5;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  color: #1632cc;
+}
+
+h1 {
+  font-weight: bolder;
 }
 
 .direccion {
   text-align: center;
   margin: 40px;
-  margin-top: 10px; 
-  font-size: 13px;
+  margin-top: 5px; 
+  margin-bottom: 5px;
 }
 
 .datos {
   margin-left: 10vh;
-  font-size: 16px;
 }
 
 .datos > div{
   margin: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .bold {
-  font-weight: bold;
+  color: rgb(69, 69, 71);
 }
 
+.nobold {
+  font-weight: normal;
+  color: rgb(69, 69, 71);
+}
+
+.total {
+  font-weight: bold;
+}
 .folio {
   border-bottom: 2px solid;
   text-align: right;
@@ -81,6 +114,7 @@ export const ESTILO_NOTA = `
 
 table {
   margin: 50px;
+  margin-top: 0px;
   width: 100%; 
   border: 1px solid;
   border-spacing: 0px;
@@ -103,56 +137,27 @@ tfoot > td {
 .footer {
   text-align: right;
   padding: 40 px;
-}`;
+}
+`;
 
-export const ESTILO_TICKET = `#ticlet>.titulo {
+export const ESTILO_TICKET = `#ticket>.titulo {
+  font-family: 'Times New Roman', Times, serif;
   font-weight: bold;
-  text-align: center;
   color: #3f51b5;
-  margin: 5px;
 }
 
-#ticlet>.direccion {
-  text-align: center;
-  margin: 5px;
-  margin-top: 5px; 
-  font-size: 13px;
+#ticket>.direccion {
+  margin-top: 2px; 
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 1px solid;
 }
 
-#ticlet>.bold {
+#ticket>.bold {
   font-weight: bold;
 }
 
-#ticlet>.folio {
-  border-bottom: 2px solid;
-  text-align: right;
-  margin-right: 5px;
-  margin-left: 5px;
-}
-
-#ticlet>.textleft {
-  text-align: left;
-}
-
-#ticlet>.textrigth {
-  text-align: right;
-}
-
-#ticlet>table {
-  margin: 5px;
-  border: 1px solid;
-  border-spacing: 0px;
-}
-
-#ticlet>table > tr > td{
-  padding: 2px;
-}
-
-#ticlet>tfoot > td {
-  padding: 2px;
-}
-
-#ticlet>.footer {
-  padding: 5 px;
-  overflow-wrap: break-word;
+.right {
+    display: block;
+    float: right;
 }`;

@@ -1,39 +1,43 @@
 <form class="example-form">
     <mat-form-field appearance="fill">
-        <mat-label>Fechas</mat-label>
+        <mat-label>{{ 'FECHAS' | translate}}</mat-label>
         <mat-date-range-input required [formGroup]="range" [rangePicker]="picker">
-          <input required formControlName="start" matStartDate placeholder="Fecha Inicial">
-          <input required formControlName="end" matEndDate placeholder="Fecha Final">
+          <input required formControlName="start" matStartDate [placeholder]="'FECHA_I' | translate">
+          <input required formControlName="end" matEndDate [placeholder]="'FECHA_F' | translate">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
-      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">{{ 'FECHA_I_VAL' | translate }}</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">{{ 'FECHA_F_VAL' | translate }}</mat-error>
     </mat-form-field>
 
     <mat-form-field class="label-venta">
-        <mat-label>Cliente</mat-label>
+        <mat-label>{{ 'CLIENTE' | translate }}</mat-label>
         <mat-select [value]="0" [formControl]="cliente">
-            <mat-option [value]="-1">Todos</mat-option>
-            <mat-option [value]="-2">Sin cliente</mat-option>
+            <mat-option [value]="-1">{{ 'TODOS' | translate }}</mat-option>
+            <mat-option [value]="-2">{{ 'SIN_CLIENTE' | translate }}</mat-option>
             <mat-option *ngFor="let cl of lstCliente" [value]="cl.clave">{{cl.nombre}}</mat-option>
         </mat-select>
     </mat-form-field>
 
     <mat-form-field class="label-venta">
-        <mat-label>Usuario</mat-label>
+        <mat-label>{{ 'USUARIO' | translate }}</mat-label>
         <mat-select [value]="0" [formControl]="usuario">
-            <mat-option [value]="-1">Todos</mat-option>
+            <mat-option [value]="-1">{{ 'TODOS' | translate }}</mat-option>
             <mat-option *ngFor="let us of lstUsuario" [value]="us.id">{{us.nombre}}</mat-option>
         </mat-select>
     </mat-form-field>
 
     <mat-form-field class="label-venta">
-        <mat-label>Busquedas especiales</mat-label>
+        <mat-label>{{ 'BUSQUEDA_ESPECIAL' | translate }}</mat-label>
         <mat-select [formControl]="especial" >
             <mat-option value="0"></mat-option>
-            <mat-option value="1">Canceladas</mat-option>
+            <mat-option value="1">{{ 'CANCELADAS' | translate }}</mat-option>
+            <mat-option value="2">{{ 'EFECTIVO' | translate }}</mat-option>
+            <mat-option value="3">{{ 'TRANSFERENCIA' | translate }}</mat-option>
+            <mat-option value="4">{{ 'PAGO_PENDIENTE' | translate }}</mat-option>
         </mat-select>
+        <mat-hint>{{ 'BUSQUEDA_ESP_HINT' | translate}}</mat-hint>
     </mat-form-field>
 
     <button (click)="buscar()"  type="button" class="autorenew" mat-mini-fab>

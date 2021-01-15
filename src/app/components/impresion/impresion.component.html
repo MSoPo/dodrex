@@ -1,25 +1,32 @@
 <div id="nota">
     <div class="titulo">
+        <div class="center" *ngIf="empresa.head">
+            <div class="encabezado" *ngIf="empresa.head.length <= 56">{{empresa.head}}</div>
+            <div class="encabezado" *ngIf="empresa.head.length > 56">{{empresa.head.substring(0,56) }}<br>{{empresa.head.substring(56) }}<</div>
+        </div>
         <h1>{{empresa.razon_social | uppercase}}</h1>
     </div>
-    <div class="bold direccion">{{empresa.direccion}}
-        <br> {{empresa.correo}}
-        <br> Tel. {{empresa.telefono}}
+    <div class="bold direccion">
+        <span *ngIf="empresa.rfc" >{{empresa.rfc}}</span>
+        <span *ngIf="empresa.direccion"><br>{{empresa.direccion}}</span>
+        <span *ngIf="empresa.correo" ><br> {{empresa.correo}}</span>
+        <span *ngIf="empresa.telefono"><br> Tel. {{empresa.telefono}}</span>
     </div>
+    <img width="100px" height="100px" [src]="empresa.urlImage" alt="lOGO DE LA EMPRESA">
     <div class="folio">
-        FOLIO: <span class="bold">{{venta.id}}</span>
+        FOLIO: <span class="bold">{{venta.numero}}</span>
     </div>
     <div class="datos">
         <div><span class="bold">Fecha y hora:</span> {{fecha | date: 'short' }} </div>
-        <div *ngIf="venta.nombre_cliente"><span class="bold">Nombre:</span> {{cliente.nombre}} </div>
+        <div *ngIf="venta.nombre_cliente"><span class="bold">Cliente:</span> {{venta.nombre_cliente | uppercase}} </div>
         <div *ngIf="cliente.correo"><span class="bold">Correo:</span> {{cliente.correo}}</div>
     </div>
 
     <table>
         <tr>
-            <th class="textleft">Producto</th>
-            <th>Cantidad</th>
-            <th>Subtotal</th>
+            <th class="textleft nobold">Producto</th>
+            <th class="nobold">Cantidad</th>
+            <th class="nobold">Subtotal</th>
         </tr>
         <tr *ngFor="let prod of venta.productos">
             <td>{{prod.nombre}}</td>
@@ -28,14 +35,14 @@
         </tr>
         <tfoot>
             <td></td>
-            <td class="bold textrigth">Total</td>
-            <td class="bold textrigth">{{venta.total | currency}}</td>
+            <td class="textrigth total">Total</td>
+            <td class="textrigth total">{{venta.total | currency}}</td>
         </tfoot>
 
     </table>
 
     <div class="footer">
-        <p>GRACIAS POR SU PREFERENCIA. LO ATENDIÓ <span class="bold">{{venta.nombre_usuario | uppercase}}</span></p>
+        <p>Gracias por su preferencia. Le atendió <span class="bold">{{venta.nombre_usuario }}</span></p>
     </div>
 </div>
 
@@ -43,37 +50,35 @@
     <div class="titulo">
         <h1>{{empresa.razon_social | uppercase}}</h1>
     </div>
-    <div class="bold direccion">{{empresa.direccion}}
+    <div class="direccion">{{empresa.direccion}}
         <br> {{empresa.correo}}
         <br> Tel. {{empresa.telefono}}
     </div>
-    <div class="folio">
-        FOLIO: <span class="bold">{{venta.id}}</span>
+    <div>
+        FOLIO: <span>{{venta.numero}}</span>
     </div>
-    <div class="datos">
-        <div><span class="bold">Fecha y hora:</span> {{fecha | date: 'short' }} </div>
-        <div *ngIf="venta.nombre_cliente"><span class="bold">Nombre:</span> {{cliente.nombre}} </div>
-        <div *ngIf="cliente.correo"><span class="bold">Correo:</span> {{cliente.correo}}</div>
+    <div>
+        <div><span>Fecha y hora:</span> {{fecha | date: 'short' }} </div>
+        <div *ngIf="venta.nombre_cliente"><span>Cliente:</span> {{cliente.nombre}} </div>
+        <div *ngIf="cliente.correo"><span>Correo:</span> {{cliente.correo}}</div>
     </div>
-
-    <table>
-        <tr>
-            <th class="textleft" colspan="2">Productos</th>
-        </tr>
-        <tr *ngFor="let prod of venta.productos">
-            <td>{{prod.nombre}}</td>
-            <td class="textrigth">{{prod.cantidad}}</td>
-            <td class="textrigth">{{prod.subtotal | currency}}</td>
-        </tr>
-        <tfoot>
-            <td></td>
-            <td class="bold textrigth">Total</td>
-            <td class="bold textrigth">{{venta.total | currency}}</td>
-        </tfoot>
-
-    </table>
-
-    <div class="footer">
-        <p>GRACIAS POR SU PREFERENCIA. LO ATENDIÓ <span class="bold">{{venta.nombre_usuario | uppercase}}</span></p>
+    <div>
+        <br>
+        ====================================
+    </div>
+    <div>
+        <div *ngFor="let prod of venta.productos">
+            {{prod.cantidad}}  {{prod.nombre}}<span class="right">{{prod.subtotal | currency}}</span>
+        </div>
+        <div>
+            Total <span class="right">{{venta.total | currency}}</span>
+        </div>
+    </div>
+    <div>
+        ====================================
+        <p>Gracias por su preferencia.<br> Le atendió: <br>
+             <span>{{venta.nombre_usuario }}</span>
+            <br>
+        ====================================</p>
     </div>
 </div>

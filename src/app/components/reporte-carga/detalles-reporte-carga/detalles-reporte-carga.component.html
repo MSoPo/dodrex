@@ -1,0 +1,23 @@
+<div>
+    <div class="title"><span class="nobold"></span> {{fecha.toDate() | date: 'short' }}</div>
+    <mat-dialog-content>
+        <table>
+            <tr>
+                <th>{{ 'PRODUCTOS' | translate }}</th>
+                <th>{{ 'CANTIDAD' | translate }}</th>
+                <th>{{ 'SUBTOTAL' | translate }}</th>
+            </tr>
+
+            <tr *ngFor="let prod of productos">
+                <td>{{prod.nombre}}</td>
+                <td class="example-right-align">{{prod.cantidad}}</td>
+                <td class="example-right-align">{{prod.subtotal | currency}}</td>
+            </tr>
+        </table>
+    </mat-dialog-content>
+    <section class="button">
+        <button mat-button (click)="cerrar()" class="buton_actions" color="primary">
+            Cerrar
+        </button>
+    </section>
+</div>

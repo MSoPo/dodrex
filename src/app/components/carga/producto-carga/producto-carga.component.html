@@ -1,0 +1,40 @@
+<form class="example-form">
+  <mat-form-field class="label-venta">
+    <mat-label>{{ "CLAVE_PRODUCTO" | translate }}</mat-label>
+    <input (keyup)="agregarClave($event.keyCode)" [formControl]="clave" matInput
+      [placeholder]="'PLH_CLAVE' | translate" />
+      <button
+        type="button"
+        [matTooltip]="'BUSCAR' | translate"
+        class="autorenew"
+        mat-icon-button
+        color="primary"
+      >
+        <mat-icon matSuffix (click)="agregarClave(13)">search</mat-icon>
+      </button>
+  </mat-form-field>
+
+  <mat-form-field class="label-venta">
+    <mat-label>{{ "NOMBRE_PRODUCTO" | translate }}</mat-label>
+    <input (keyup)="agregarNombre($event.keyCode)" [formControl]="nombre" [matAutocomplete]="auto" matInput />
+    <button
+        type="button"
+        [matTooltip]="'BUSCAR' | translate"
+        class="autorenew"
+        mat-icon-button
+        color="primary"
+      >
+        <mat-icon matSuffix (click)="agregarNombre(13)">search</mat-icon>
+      </button>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>{{ "BUSQUEDA_PROD_HINT" | translate }}</mat-hint>
+  </mat-form-field>
+
+  <button [matTooltip]="'ADD_PRODUCTO' | translate" type="button" (click)="openDialog()" mat-mini-fab>
+    <mat-icon>add</mat-icon>
+  </button>
+</form>

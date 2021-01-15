@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from '@ngx-translate/core';
 import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { Cliente } from 'src/app/models/Cliente';
@@ -12,26 +13,42 @@ import { EliminarClienteComponent } from '../eliminar-cliente/eliminar-cliente.c
 @Component({
   selector: 'app-lista-cliente',
   templateUrl: './lista-cliente.component.html',
-  styleUrls: ['./lista-cliente.component.scss']
+  styleUrls: ['./lista-cliente.component.scss'],
 })
 export class ListaClienteComponent implements OnInit {
-
-  displayedColumns: string[] = ['editar', 'clave', 'nombre', 'descuento' ,'correo', 'direccion', 'acciones'];
+  displayedColumns: string[] = [
+    'editar',
+    'clave',
+    'nombre',
+    'descuento',
+    'correo',
+    'direccion',
+    'acciones',
+  ];
   dataSource = new MatTableDataSource<Cliente>([]);
   sortData!: Cliente[];
 
-  constructor(private clienteService: ClienteService, public snackBar: MatSnackBar, public dialog: MatDialog) {
+  constructor(
+    private clienteService: ClienteService,
+    public snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    public translate: TranslateService
+  ) {
+    translate.setDefaultLang('es');
   }
 
   ngOnInit(): void {
-    this.clienteService.getFavorite().then((querySnapshot) => {
-      querySnapshot.forEach((doc: any) => {
+    this.clienteService
+      .getFavorite()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc: any) => {
           console.log(doc.id, ' => ', doc.data());
           this.dataSource.data.push(doc.data());
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    }).catch(error => {
-      console.log(error);
-    });
   }
 
   delete(element: Cliente): void {
@@ -55,14 +72,16 @@ export class ListaClienteComponent implements OnInit {
   fav(el: Cliente): void {
     el.favorito = !el.favorito;
     ACTIVE_BLOCK.value = true;
-    this.clienteService.fav(el).then(result => ACTIVE_BLOCK.value = false)
-    .catch((err) => {
-      this.snackBar.open(err.message, 'Aceptar', DEFAULT_DURATION);
-      ACTIVE_BLOCK.value = false;
-    });
+    this.clienteService
+      .fav(el)
+      .then((result) => (ACTIVE_BLOCK.value = false))
+      .catch((err) => {
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
+        ACTIVE_BLOCK.value = false;
+      });
   }
 
-  sortDataMetod(sort: Sort){
+  sortDataMetod(sort: Sort) {
     const data = this.dataSource.data.slice();
     if (!sort.active || sort.direction == '') {
       this.sortData = data;
@@ -72,15 +91,30 @@ export class ListaClienteComponent implements OnInit {
     this.sortData = data.sort((a, b) => {
       let isAsc = sort.direction == 'asc';
       switch (sort.active) {
-        case 'nombre': return compare(a.nombre, b.nombre, isAsc);
-        case 'descuento': return compare(+a.tipo_descuento, +b.tipo_descuento, isAsc);
-        case 'clave': return compare(a.clave, b.clave, isAsc);
-        default: return 0;
+        case 'nombre':
+          return compare(a.nombre, b.nombre, isAsc);
+        case 'descuento':
+          return compare(+a.tipo_descuento, +b.tipo_descuento, isAsc);
+        case 'clave':
+          return compare(a.clave, b.clave, isAsc);
+        default:
+          return 0;
       }
     });
     this.dataSource.data = this.sortData;
   }
-  
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
+  }
 }
 
 function compare(a: any, b: any, isAsc: boolean) {

@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from 'src/app/core/services/product.service';
 import { VentaElement } from 'src/app/models/ElementoVenta';
 import { Producto } from 'src/app/models/Producto';
@@ -26,8 +25,11 @@ export class ProductoVentaComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    public translate: TranslateService
+    ) {
+      translate.setDefaultLang('es');
+    }
 
   ngOnInit(): void {
     this.nombre.valueChanges.subscribe((value) => {
@@ -36,7 +38,6 @@ export class ProductoVentaComponent implements OnInit {
       if (val.length !== 4 || this.lastSearch === val) {
         return;
       } else {
-        console.log(value);
         this.productService
           .getNombre(value)
           .then((res) => {
@@ -45,8 +46,6 @@ export class ProductoVentaComponent implements OnInit {
             this.options = res.docs.map((m: { data: () => Producto }) => {
               return m.data().clave + ' | ' + m.data().nombre;
             });
-            console.log(value);
-            console.log(this.options);
             this.filter(value);
           })
           .catch((error) => {
@@ -68,7 +67,6 @@ export class ProductoVentaComponent implements OnInit {
       if (val) {
         this.lstproductos.forEach((el: any) => {
           if (el && el.data().clave === val) {
-            console.log(el.data().clave + '...' + val);
             this.getProducto.emit(el.data());
             this.nombre.setValue('');
           }
@@ -99,11 +97,7 @@ export class ProductoVentaComponent implements OnInit {
         ACTIVE_BLOCK.value = false;
         switch (querySnapshot.size) {
           case 0:
-            this.snackBar.open(
-              `No existe la clave ${this.clave.value}`,
-              undefined,
-              DEFAULT_DURATION
-            );
+            this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
             return;
           case 1:
             this.getProducto.emit(querySnapshot.docs[0].data());
@@ -111,17 +105,26 @@ export class ProductoVentaComponent implements OnInit {
             console.log(querySnapshot.docs[0].data());
             return;
           default:
-            this.snackBar.open(
-              `El producto ${this.clave.value} tiene algún problema.`,
-              undefined,
-              DEFAULT_DURATION
-            );
+            this.SNACK('ERROR_DATOS', 'ACEPTAR');
             return;
         }
       })
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
-        this.snackBar.open(err.message, undefined, DEFAULT_DURATION);
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
       });
   }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
+  }
+   
 }

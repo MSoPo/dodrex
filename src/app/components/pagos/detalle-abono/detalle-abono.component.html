@@ -1,0 +1,34 @@
+<form>
+    <div>
+        <div class="title">{{ 'PAGO_REAL' | translate}}</div>
+        <mat-dialog-content>
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'DEUDA_ACT' | translate }}</mat-label>
+                <input class="right" matInput readonly value="{{ venta.deuda }}" />
+                <span matPrefix>$&nbsp;</span>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'FALTANTE' | translate }}</mat-label>
+                <input class="right" *ngIf="resto.value > 0" [formControl]="resto" matInput readonly value="{{ venta.deuda }}" />
+                <input *ngIf="resto.value == 0" matInput readonly [value]="'LIQUIDADO' | translate" />
+                <span *ngIf="resto.value > 0" matPrefix>$&nbsp;</span>
+            </mat-form-field>
+            <div class="rightCambio">
+                <span></span>
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ 'DEUDA_CANTIDAD' | translate }} </mat-label>
+                    <input class="right" type="number" (keyup)="calcularCambio()" (blur)="calcularCambio()" matInput
+                        [formControl]="recibido" />
+                    <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+            </div>
+            <div class="center">
+                <section class="button">
+                    <button mat-button (click)="pagar()" [matTooltip]="'PAGAR' | translate" class="buton_actions" color="primary">
+                        Pagar
+                    </button>
+                </section>
+            </div>
+        </mat-dialog-content>
+    </div>
+</form>
