@@ -1,5 +1,6 @@
 import { Cliente } from '../models/Cliente';
 import { Empresa } from '../models/Empresa';
+import { Producto } from '../models/Producto';
 import { Usuario } from '../models/Usuario';
 import { Venta } from '../models/Venta';
 
@@ -8,6 +9,7 @@ export const DEFAULT_DURATION = {
   };
 
 export const ACTIVE_BLOCK = { value : false };
+export const SINCRONIZANDO = { value : false };
 export const MENU = { value : 'DoDrex' };
 
 // Patrones
@@ -26,6 +28,13 @@ export enum TIPO_DESCUENTO {
   DESCUENTO
 }
 
+// Entrega
+export enum ENTREGA {
+  ENTRAGADO = 1,
+  ENVIO,
+  RECOGER
+}
+
 // Forma de pago
 export enum FORMA_PAGO {
   EFECTIVO = 1,
@@ -41,123 +50,20 @@ export const ROL_VENTAS = {id:3, valor: 'e7vD2BtuFrg9J6iEKFff'};
 //Venta Actual
 export let VENTAACTUAL: Venta = {fecha: new Date(), total: 0, productos: []};
 export let CLIENTEACTUAL: Partial<Cliente> = {};
+export const PRODUCTOS: Producto[] = [];
+export const CLIENTES: Cliente[] = []; 
+export const PRODUCTOS_PENDIENTES: Partial<Producto>[] = [];
+export const VENTA_PENDIENTE: Venta[] = [];
+export const CLIENTE_PENDIENTE: Cliente[] = [];
+export const FOLIO_VENTA = { value : 0 };
+export const FOLIO_ANTETRIO = { value : 0 };
+export const CONFIG = { 
+  reload : false,
+  impresion: false,
+  rutaRetorno: '',
+  primeraCarga: true,
+};
 
-// Estilos notas
-export const ESTILO_NOTA = `
-.encabezado {
-  color: black;
-  margin-bottom: 10px;
-}
-
-img {
-  position: absolute; 
-  top: 30px; 
-  left: 30px
-}
-
-.titulo {
-  font-size: xx-large;
-  text-align: center;
-  margin: 40px;
-  margin-top: 20px;
-  margin-bottom: 0px;
-  color: #1632cc;
-}
-
-h1 {
-  font-weight: bolder;
-}
-
-.direccion {
-  text-align: center;
-  margin: 40px;
-  margin-top: 5px; 
-  margin-bottom: 5px;
-}
-
-.datos {
-  margin-left: 10vh;
-}
-
-.datos > div{
-  margin: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.bold {
-  color: rgb(69, 69, 71);
-}
-
-.nobold {
-  font-weight: normal;
-  color: rgb(69, 69, 71);
-}
-
-.total {
-  font-weight: bold;
-}
-.folio {
-  border-bottom: 2px solid;
-  text-align: right;
-  margin-right: 30px;
-  margin-left: 30px;
-}
-
-.textleft {
-  text-align: left;
-}
-
-.textrigth {
-  text-align: right;
-}
-
-table {
-  margin: 50px;
-  margin-top: 0px;
-  width: 100%; 
-  border: 1px solid;
-  border-spacing: 0px;
-  min-width: 500px;
-}
-
-table > tr > th {
-  background-color: gray;
-  padding: 7px;
-}
-
-table > tr > td{
-  padding: 5px;
-}
-
-tfoot > td {
-  padding: 10px;
-}
-
-.footer {
-  text-align: right;
-  padding: 40 px;
-}
-`;
-
-export const ESTILO_TICKET = `#ticket>.titulo {
-  font-family: 'Times New Roman', Times, serif;
-  font-weight: bold;
-  color: #3f51b5;
-}
-
-#ticket>.direccion {
-  margin-top: 2px; 
-  font-size: 14px;
-  font-weight: bold;
-  border-bottom: 1px solid;
-}
-
-#ticket>.bold {
-  font-weight: bold;
-}
-
-.right {
-    display: block;
-    float: right;
-}`;
+//URL's
+export const URL_NUM_VENTA = 'https://us-central1-dodrex-23b5b.cloudfunctions.net/numVenta/V1';
+export const URL_CARGA_INICIAL = 'https://us-central1-dodrex-23b5b.cloudfunctions.net/cargaInicial/V1';

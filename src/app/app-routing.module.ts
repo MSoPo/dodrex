@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NavComponent } from './commons/nav/nav.component';
 import { NotfoundComponent } from './commons/notfound/notfound.component';
@@ -23,6 +23,7 @@ import { PedidoComponent } from './components/pedido/pedido.component';
 import { UserActiveGuard } from './guard/user-active.guard';
 import { ReportePagosComponent } from './components/pagos/reporte-pagos/reporte-pagos.component';
 import { CargamasivaComponent } from './components/masivo/cargamasiva/cargamasiva.component';
+import { LayoutLoginComponent } from './components/layout/layout-login/layout-login.component';
 
 const routes: Routes = [
   {
@@ -36,9 +37,14 @@ const routes: Routes = [
       },
     ]
   },
+  
+  {
+    path: 'cargaMasiva',
+    component: CargamasivaComponent
+  },
   {
     path: 'user',
-    component: LayoutGuessComponent,
+    component: LayoutLoginComponent,
     children: [
       {
         path: '',
@@ -65,62 +71,66 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: '/inventario',
+        redirectTo: '/inicio',
+      },
+      {
+        path: 'inicio',
+        component: LayoutGuessComponent,
+        canActivate: [ UserActiveGuard ]
       },
       {
         path: 'inventario',
         component: InventarioComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        canActivate: [ AdminGuard ]
       },
       {
         path: 'clientes',
         component: LayoutComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        canActivate: [ AdminGuard ]
       },
       {
         path: 'ventas',
         component: LayoutVentaComponent,
-        canActivate: [ VentaGuard, UserActiveGuard ]
+        canActivate: [ VentaGuard ]
       },
       {
         path: 'carga',
         component: LayoutCargaComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        canActivate: [ AdminGuard ]
       },
       {
         path: 'configuracion',
         component: ConfiguracionComponent,
-        canActivate: [ VentaGuard, UserActiveGuard ]
+        canActivate: [ VentaGuard ]
       },
       {
         path: 'reporte',
         component: ReporteComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        canActivate: [ AdminGuard ]
       },
       {
         path: 'reporteCarga',
         component: ReporteCargaComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        canActivate: [ AdminGuard ]
       },
       {
         path: 'cotizacion',
         component: LayoutCotizacionComponent,
-        canActivate: [ VentaGuard, UserActiveGuard ]
+        canActivate: [ VentaGuard ]
       },
       {
         path: 'pedidos',
         component: PedidoComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        canActivate: [ AdminGuard ]
       },
       {
         path: 'pagos',
         component: ReportePagosComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        canActivate: [ AdminGuard ]
       },
       {
-        path: 'cargaMasiva',
-        component: CargamasivaComponent,
-        canActivate: [ AdminGuard, UserActiveGuard ]
+        path: 'impresion',
+        component: ImpresionComponent
       }
     ]
   },

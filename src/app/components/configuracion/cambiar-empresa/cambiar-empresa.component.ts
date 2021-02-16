@@ -9,6 +9,7 @@ import {
   RFC,
   TELEFONO,
   USER_ACTIVE,
+  SOLO_NUMERO_ENTERO
 } from 'src/app/core/Constantes';
 import { UsersService } from 'src/app/core/services/users.service';
 import { Empresa } from 'src/app/models/Empresa';
@@ -44,9 +45,13 @@ export class CambiarEmpresaComponent implements OnInit {
       rfc: ['', [Validators.pattern(RFC)]],
       direccion: ['', Validators.maxLength(250)],
       correo: ['', [Validators.email]],
-      telefono: ['', [Validators.pattern(TELEFONO)]],
+      telefono: [''],
       impresion: ['1'],
-      head: ['', [Validators.maxLength(200)]]
+      head: ['', [Validators.maxLength(200)]],
+      porc_unitario: [0, Validators.pattern(SOLO_NUMERO_ENTERO)],
+      porc_mayoreo: [0, Validators.pattern(SOLO_NUMERO_ENTERO)],
+      porc_especial: [0, Validators.pattern(SOLO_NUMERO_ENTERO)],
+      cant_mayoreo: [0, Validators.pattern(SOLO_NUMERO_ENTERO)],
     });
   }
 
@@ -66,7 +71,11 @@ export class CambiarEmpresaComponent implements OnInit {
               correo: empresa.correo,
               telefono: empresa.telefono,
               impresion: empresa.impresion + '',
-              head: empresa.head ? empresa.head : ''
+              head: empresa.head ? empresa.head : '',
+              porc_especial: empresa.porc_especial ? empresa.porc_especial : 0,
+              porc_unitario: empresa.porc_unitario ? empresa.porc_unitario : 0,
+              porc_mayoreo: empresa.porc_mayoreo ? empresa.porc_mayoreo : 0,
+              cant_mayoreo: empresa.cant_mayoreo ? empresa.cant_mayoreo : 0,
             });
           }
         });
@@ -119,7 +128,11 @@ export class CambiarEmpresaComponent implements OnInit {
       correo: form.correo,
       impresion: form.impresion,
       head: form.head,
-      urlImage: this.urlFile
+      urlImage: this.urlFile,
+      porc_unitario: form.porc_unitario,
+      porc_mayoreo: form.porc_mayoreo,
+      porc_especial: form.porc_especial,
+      cant_mayoreo: form.cant_mayoreo
     };
     ACTIVE_BLOCK.value = true;
     if (!USER_ACTIVE.id) {
@@ -140,7 +153,7 @@ export class CambiarEmpresaComponent implements OnInit {
         .updateEmpresa(empresa, USER_ACTIVE.id_empresa)
         .then((res) => {
           ACTIVE_BLOCK.value = false;
-          EMPRESA.impresion = empresa.impresion;
+          Object.assign(EMPRESA, empresa);
           this.SNACK('ACTUALIZACION_OK', '');
         })
         .catch((er) => {

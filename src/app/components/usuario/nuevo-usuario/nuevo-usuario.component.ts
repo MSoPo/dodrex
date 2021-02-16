@@ -21,6 +21,7 @@ import { Empresa } from 'src/app/models/Empresa';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Usuario } from 'src/app/models/Usuario';
 import { TranslateService } from '@ngx-translate/core';
+import { clearLogout } from 'src/app/core/Util';
 
 @Component({
   selector: 'app-nuevo-usuario',
@@ -271,21 +272,4 @@ export class NuevoUsuarioComponent implements OnInit {
       DEFAULT_DURATION
     );
   }
-}
-
-function clearLogout(){
-  delete USER_ACTIVE.activo;
-  delete USER_ACTIVE.correo;
-  delete USER_ACTIVE.id;
-  delete USER_ACTIVE.id_empresa;
-  delete USER_ACTIVE.id_rol;
-  delete USER_ACTIVE.nombre;
-  delete EMPRESA.correo;
-  delete EMPRESA.direccion;
-  delete EMPRESA.id;
-  delete EMPRESA.id_usuario;
-  delete EMPRESA.operacion;
-  delete EMPRESA.razon_social;
-  delete EMPRESA.rfc;
-  delete EMPRESA.telefono;
 }

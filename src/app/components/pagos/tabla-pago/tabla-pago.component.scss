@@ -1,7 +1,13 @@
 table {
     width: 80%;
     margin: 30px auto;
+    margin-bottom: 0px;
   }
+
+mat-paginator{
+    width: 80%;
+    margin: auto;
+}
 
 .column-price {
     text-align: right;

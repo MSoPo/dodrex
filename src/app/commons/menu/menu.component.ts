@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { USER_ACTIVE, DEFAULT_DURATION, EMPRESA } from 'src/app/core/Constantes';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { clearLogout } from 'src/app/core/Util';
 
 @Component({
   selector: 'app-menu',
@@ -12,6 +13,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class MenuComponent implements OnInit {
   username = USER_ACTIVE.nombre;
+  urlFile = EMPRESA.urlImage;
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -48,21 +50,4 @@ export class MenuComponent implements OnInit {
     );
   }
   
-}
-
-function clearLogout(){
-  delete USER_ACTIVE.activo;
-  delete USER_ACTIVE.correo;
-  delete USER_ACTIVE.id;
-  delete USER_ACTIVE.id_empresa;
-  delete USER_ACTIVE.id_rol;
-  delete USER_ACTIVE.nombre;
-  delete EMPRESA.correo;
-  delete EMPRESA.direccion;
-  delete EMPRESA.id;
-  delete EMPRESA.id_usuario;
-  delete EMPRESA.operacion;
-  delete EMPRESA.razon_social;
-  delete EMPRESA.rfc;
-  delete EMPRESA.telefono;
 }

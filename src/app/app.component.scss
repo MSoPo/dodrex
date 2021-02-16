@@ -1,7 +1,7 @@
 .bloqueo {
     position:fixed;
     z-index:9998;
-    opacity:0.20;
+    opacity:0.7;
     background:#999;
     min-height: 100%; 
     min-width: 100%;
@@ -10,4 +10,24 @@
 
 .front {
     z-index: 9999;
+}
+
+.img {
+    text-align: center;
+}
+
+img {
+    width: 250px;
+    height: 150px;
+}
+
+.text {
+    text-align: center;
+    margin: auto;
+    font-size: 25px;
+    font-weight: bolder;
+    margin-top: 150px;
+    color: #0a0a0a;
+    letter-spacing: 1px;
+    line-height: normal;
 }

@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
+import { DEFAULT_DURATION, ENTREGA } from 'src/app/core/Constantes';
+import { VentaService } from 'src/app/core/services/venta.service';
 import { Venta } from 'src/app/models/Venta';
 import { DetallesComponent } from '../detalles/detalles.component';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-tabla',
   templateUrl: './tabla.component.html',
   styleUrls: ['./tabla.component.scss'],
 })
-export class TablaComponent {
+export class TablaComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'fecha',
     'nombre_cliente',
@@ -22,14 +26,25 @@ export class TablaComponent {
   ];
   dataSource = new MatTableDataSource<Venta>([]);
   sortData!: Venta[];
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-  constructor(public dialog: MatDialog, public translate: TranslateService) {
+  constructor(public dialog: MatDialog, public translate: TranslateService, private ventaService: VentaService,
+    private snackBar: MatSnackBar) {
     translate.setDefaultLang('es');
+  }
+
+  ngAfterViewInit() {
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   handleVentaToList(ventas: Venta[]): void {
     console.log('ventas -> ', ventas);
     this.dataSource.data = ventas;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   openDialog(e: Venta): void {
@@ -40,6 +55,15 @@ export class TablaComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
+    });
+  }
+
+  entregar(e: Venta): void {
+    e.entrega = ENTREGA.ENTRAGADO;
+    this.ventaService.entrega(e).then(re => this.SNACK('ENTREGADO', ''))
+    .catch(er => {
+      e.entrega = ENTREGA.ENVIO;
+      this.SNACK('ERROR_GRAL', 'ACEPTAR')
     });
   }
 
@@ -73,6 +97,21 @@ export class TablaComponent {
       }
     });
     this.dataSource.data = this.sortData;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
+  TRANSLATE(str: string) {
+    return str ? this.translate.instant(str) : '';
+  }
+
+  SNACK(msj: string, btm: string) {
+    this.snackBar.open(
+      this.TRANSLATE(msj),
+      this.TRANSLATE(btm),
+      DEFAULT_DURATION
+    );
   }
 }
 

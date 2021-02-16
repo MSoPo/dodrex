@@ -1,16 +1,17 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Empresa } from 'src/app/models/Empresa';
 import { Usuario } from 'src/app/models/Usuario';
-import { EMPRESA } from '../Constantes';
+import { EMPRESA, URL_CARGA_INICIAL, USER_ACTIVE } from '../Constantes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private httpCliente: HttpClient) {
    }
 
   addUser(user: Partial<Usuario>): Promise<any> {
@@ -61,6 +62,15 @@ export class UsersService {
         id_rol : id_rol,
         operacion : 'update'
       }, { merge: true });
+  }
+
+  getCargaInicial(): Observable<any>{
+    const objPost = {
+      data: {
+          idUsuario: USER_ACTIVE.id
+      }
+    };
+    return this.httpCliente.post<any>(URL_CARGA_INICIAL, objPost);
   }
 
 }

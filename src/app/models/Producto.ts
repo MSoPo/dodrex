@@ -14,4 +14,6 @@ export interface Producto {
     fecha_creacion: Date;
     fecha_actualizacion: Date;
     usuario: string;
+    error?: any;
+    fraccion: boolean;
 }

@@ -1,5 +1,5 @@
 <div>
-    <div class="title"><span class="nobold">{{ 'FECHA' | translate }}</span> {{idVenta | date: 'short'}}</div>
+    <div class="title"><span class="nobold">{{ 'FECHA' | translate }}</span> {{idVenta | date: 'dd/MM/yyyy hh:mm aa' }}</div>
     <mat-dialog-content>
         <table>
             <tr>
@@ -8,7 +8,7 @@
             </tr>
 
             <tr *ngFor="let pago of pagos">
-                <td>{{pago.fecha.toDate() | date: 'short'}}</td>
+                <td>{{pago.fecha.toDate() | date: 'dd/MM/yyyy hh:mm aa' }}</td>
                 <td class="example-right-align">{{pago.pago | currency}}</td>
             </tr>
         </table>

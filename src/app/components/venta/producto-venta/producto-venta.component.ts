@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from 'src/app/core/services/product.service';
 import { VentaElement } from 'src/app/models/ElementoVenta';
 import { Producto } from 'src/app/models/Producto';
-import { ACTIVE_BLOCK, DEFAULT_DURATION } from '../../../core/Constantes';
+import { ACTIVE_BLOCK, DEFAULT_DURATION, PRODUCTOS } from '../../../core/Constantes';
 
 @Component({
   selector: 'app-producto-venta',
@@ -18,13 +18,12 @@ export class ProductoVentaComponent implements OnInit {
   products!: VentaElement[];
   clave = new FormControl('');
   nombre = new FormControl('');
-  options: string[] = ['One', 'Two', 'Three'];
+  options: string[] = [];
   filteredOptions!: string[];
   lastSearch = '';
   lstproductos = [];
 
   constructor(
-    private productService: ProductService,
     private snackBar: MatSnackBar,
     public translate: TranslateService
     ) {
@@ -33,9 +32,14 @@ export class ProductoVentaComponent implements OnInit {
 
   ngOnInit(): void {
     this.nombre.valueChanges.subscribe((value) => {
+      if(!this.options.length){
+        this.options = PRODUCTOS.map((m) => {
+          return m.clave + ' | ' + m.nombre;
+        });
+      }
       const val = value.trim();
       this.filter(val);
-      if (val.length !== 4 || this.lastSearch === val) {
+      /*if (val.length !== 4 || this.lastSearch === val) {
         return;
       } else {
         this.productService
@@ -51,26 +55,34 @@ export class ProductoVentaComponent implements OnInit {
           .catch((error) => {
             console.log(error.message);
           });
-      }
+      }*/
     });
   }
 
   private filter(value: string): void {
     this.filteredOptions = this.options.filter((option) =>
       option.toLowerCase().includes(value)
-    );
+    ).slice(0, 10);
   }
 
   agregarNombre(e: number): void {
     if (e === 13) {
       const val = this.nombre.value.split('|', 1)[0].trim();
       if (val) {
-        this.lstproductos.forEach((el: any) => {
+        const producto = PRODUCTOS.filter(p => p.clave === val).values().next().value;
+        console.log(producto);
+        if(!producto) {
+          this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+          return;
+        }
+        this.getProducto.emit(producto);
+        this.nombre.setValue('');
+        /*this.lstproductos.forEach((el: any) => {
           if (el && el.data().clave === val) {
             this.getProducto.emit(el.data());
             this.nombre.setValue('');
           }
-        });
+        });/*/
       }
     }
   }
@@ -90,8 +102,15 @@ export class ProductoVentaComponent implements OnInit {
       this.clave.setValue('');
       return;
     }
-    ACTIVE_BLOCK.value = true;
-    this.productService
+    const producto = PRODUCTOS.filter(p => p.clave === this.clave.value).values().next().value;
+    if(!producto) {
+      this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+      return;
+    }
+    console.log(producto);
+    this.getProducto.emit(producto);
+    this.clave.setValue('');
+    /*this.productService
       .getClave(this.clave.value)
       .then((querySnapshot) => {
         ACTIVE_BLOCK.value = false;
@@ -112,7 +131,7 @@ export class ProductoVentaComponent implements OnInit {
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
         this.SNACK('ERROR_GRAL', 'ACEPTAR');
-      });
+      });*/
   }
 
   TRANSLATE(str: string) {

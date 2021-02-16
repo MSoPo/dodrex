@@ -1,4 +1,6 @@
 <div class="bloqueo" *ngIf="active.value">
     <mat-progress-bar mode="query" class="front"></mat-progress-bar>
+    <div class="text" *ngIf="config.primeraCarga">Estamos preparando el sistema y descargando los datos necesarios. <br>Esto puede tomar varios segundo.</div>
+    <div class="img" *ngIf="config.primeraCarga"><img src="https://media.giphy.com/media/834kgMxTQptaHGvXwK/source.gif" ></div>
 </div>
 <router-outlet></router-outlet>

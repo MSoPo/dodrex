@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import {
   ACTIVE_BLOCK,
+  CONFIG,
   DEFAULT_DURATION,
+  PRODUCTOS,
 } from 'src/app/core/Constantes';
 import { CargaService } from 'src/app/core/services/carga.service';
 import { Carga } from 'src/app/models/Carga';
@@ -35,6 +37,15 @@ export class ResumenCargaComponent {
         ACTIVE_BLOCK.value = false;
         this.SNACK('CARGA_OK', '');
         this.dialogRef.close();
+        CONFIG.reload = true;
+        this.carga.productos.forEach(detalle => {
+          const prod = PRODUCTOS.find((p) => p.clave === detalle.id);
+          console.log(prod);
+          if(prod){
+            prod.cantidad = prod.cantidad + detalle.cantidad;
+          }
+          console.log(prod);
+        });
         this.router
           .navigateByUrl('/reload', { skipLocationChange: true })
           .then(() => {

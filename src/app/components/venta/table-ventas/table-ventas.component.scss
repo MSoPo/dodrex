@@ -27,3 +27,19 @@ tr.mat-footer-row {
 .center {
     text-align: center;
 }
+
+.autorenew {
+    position: absolute;
+    right: 0px;
+    top: -5px;
+   }
+
+.help {
+    font-size: 15px;
+    cursor: pointer;
+    color: rgba(0,0,0,.54);
+}
+
+.cantidad {
+    width: 80px;
+}

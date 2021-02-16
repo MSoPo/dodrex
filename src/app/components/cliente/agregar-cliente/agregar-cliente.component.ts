@@ -11,8 +11,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import {
-  ACTIVE_BLOCK,
+  CLIENTES,
+  CLIENTE_PENDIENTE,
   DEFAULT_DURATION,
+  ROL_ADMINISTRADO,
   SOLO_NUMERO_DECIMALES,
   SOLO_NUMERO_ENTERO,
   TELEFONO,
@@ -49,6 +51,8 @@ import { Cliente } from 'src/app/models/Cliente';
 })
 export class AgregarClienteComponent implements OnInit {
   form: FormGroup;
+  rol = USER_ACTIVE.id_rol;
+  rolAdmin = ROL_ADMINISTRADO.valor;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Partial<Cliente>,
@@ -61,12 +65,7 @@ export class AgregarClienteComponent implements OnInit {
     translate.setDefaultLang('es');
     this.form = fb.group({
       clave: [
-        data.clave ? data.clave : '',
-        [
-          Validators.required,
-          Validators.maxLength(30),
-          Validators.minLength(1),
-        ],
+        data.clave ? data.clave : new Date().getTime()
       ],
       nombre: [
         data.nombre ? data.nombre : '',
@@ -77,7 +76,7 @@ export class AgregarClienteComponent implements OnInit {
         ],
       ],
       direccion: [data.direccion ? data.direccion : '', [Validators.maxLength(250), Validators.minLength(3)]],
-      correo: [data.correo ? data.correo : '', [Validators.email, Validators.maxLength(50), Validators.minLength(10)]],
+      telefono: [data.telefono ? data.telefono : '', [Validators.pattern(TELEFONO)]],
       descuento: [
         data.descuento ? data.descuento : '',
         [
@@ -116,7 +115,7 @@ export class AgregarClienteComponent implements OnInit {
   }
 
   formToUser(): void {
-    const cliente: Partial<Cliente> = { ...this.form.value };
+    const cliente = { ...this.form.value };
     if (this.data.operacion === 'update') {
       cliente.fecha_actualizacion = new Date();
     } else {
@@ -125,38 +124,26 @@ export class AgregarClienteComponent implements OnInit {
     if(this.data.tipo_descuento !== TIPO_DESCUENTO.DESCUENTO) {
       this.data.descuento = 0;
     }
-    ACTIVE_BLOCK.value = true;
+    if(this.data.operacion === 'update') {
+      Object.assign(this.data, cliente)
+      this.SNACK('ACTUALIZACION_OK', '');
+    }else{
+      cliente.clave = cliente.clave.toString();
+      CLIENTES.push(cliente);
+      this.SNACK('REGISTRO_OK', '');
+    }
+    this.llamadaCliente(cliente);
+    this.dialogRef.close(cliente);
+  }
+
+  llamadaCliente(cliente: Cliente): void{
     this.clienteService
       .add(cliente)
-      .then((result) => {
-        ACTIVE_BLOCK.value = false;
-        if(this.data.operacion === 'update') {
-          this.cargarPantallaLista(cliente);
-          this.SNACK('ACTUALIZACION_OK', '');
-        }else{
-          this.SNACK('REGISTRO_OK', '');
-        }
-        this.dialogRef.close();
-      })
-      .catch(() => {
-        ACTIVE_BLOCK.value = false;
-        this.SNACK('ERROR_GRAL', '');
+      .catch((error) => {
+        cliente.error = error;
+        cliente.error.mensaje = error.message;
+        CLIENTE_PENDIENTE.push(cliente);
       });
-  }
-
-  generateClave(): void {
-    this.form.controls['clave'].setValue('DDR' + new Date().getTime());
-  }
-
-  cargarPantallaLista(prod: Partial<Cliente>){
-    this.data.activo = prod.activo;
-    this.data.clave = prod.clave;
-    this.data.descuento = prod.descuento;
-    this.data.direccion = prod.direccion;
-    this.data.favorito = prod.favorito;
-    this.data.nombre = prod.nombre;
-    this.data.tipo_descuento = prod.tipo_descuento;
-    this.data.usuario = prod.usuario;
   }
 
   TRANSLATE(str: string) {

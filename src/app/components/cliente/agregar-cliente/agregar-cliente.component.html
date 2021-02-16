@@ -1,16 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="add($event)">
   <div class="title">{{ 'DATOS_CLIENTE' | translate }}</div>
   <mat-dialog-content>
-    <mat-form-field *ngIf="!data.operacion" appearance="outline" class="inputs-withHin">
-      <mat-label>{{ 'CLAVE_CLIENTE' | translate }}</mat-label>
-      <input formControlName="clave" required maxlength="30" minlength="1" matInput
-        [placeholder]="'PLH_CLAVE' | translate" />
-      <button type="button" (click)="generateClave()" [matTooltip]="'CLAVE_AUTO' | translate" class="autorenew"
-        mat-button color="primary">
-        <mat-icon matSuffix>autorenew</mat-icon>
-      </button>
-    </mat-form-field>
-    <mat-form-field *ngIf="data.operacion === 'update'" appearance="outline" class="inputs-withHin">
+    <mat-form-field appearance="outline" class="inputs-withHin">
       <mat-label>{{ 'CLAVE_CLIENTE' | translate }}</mat-label>
       <input formControlName="clave" readonly matInput />
       <mat-hint>{{ 'CLAVE_NO_EDIT' | translate }}</mat-hint>
@@ -23,9 +14,9 @@
       <mat-hint>{{ 'NOMBRE_UPPERCASE' | translate }}</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>{{ 'CORREO_ELECTRONICO' | translate }}</mat-label>
-      <input formControlName="correo" maxlength="50" minlength="3" type="email" matInput
-        [placeholder]="'PLH_CORREO' | translate" />
+      <mat-label>{{ 'TELEFONO' | translate }}</mat-label>
+      <input maxlength="10" minlength="7" formControlName="telefono" matInput
+          [placeholder]="'PLH_TEL' | translate">
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
       <mat-label>{{ 'DIRECCION' | translate }}</mat-label>
@@ -36,11 +27,11 @@
       <mat-label>{{ 'TIPO_PRECIO' | translate}}</mat-label>
       <mat-select formControlName="tipo_descuento">
         <mat-option value="0">{{ 'SIN_DESCUENTO' | translate}}</mat-option>
-        <mat-option value="1">{{ 'PRECIO_ESPECIAL' | translate }}</mat-option>
-        <mat-option value="2">{{ 'DESCUENTO_EXCLUSIVO' | translate }}</mat-option>
+        <mat-option *ngIf="rol === rolAdmin" value="1">{{ 'PRECIO_ESPECIAL' | translate }}</mat-option>
+        <mat-option *ngIf="rol === rolAdmin" value="2">{{ 'DESCUENTO_EXCLUSIVO' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <div class="div_mayoreo" [@openClose]="form.value.tipo_descuento === '2' ? 'open' : 'closed'">
+    <div *ngIf="rol === rolAdmin" class="div_mayoreo" [@openClose]="form.value.tipo_descuento === '2' ? 'open' : 'closed'">
       <mat-form-field appearance="outline" class="inputs-withHin">
         <mat-label>{{ 'DESCUENTO' | translate }}</mat-label>
         <input matInput formControlName="descuento" type="number" min="0" max="100" class="example-right-align" />

@@ -1,7 +1,10 @@
 <mat-toolbar color="primary">
     <span class="example-spacer">{{ 'NOMBRE_APP' | translate}</span>
-    <span class="username cell_hidde">{{username}}</span>
+    <span class="username cell_hidde">
+        <span><img width="150px" height="150px" [src]="urlFile" alt="lOGO DE LA EMPRESA"></span>
+        {{username}}</span>
     <button (click)="logout()" mat-icon-button class="example-icon account-circle">
         <mat-icon matTooltip="Cerrar sesión">exit_to_app</mat-icon>
     </button>
 </mat-toolbar>
+{{urlFile}}

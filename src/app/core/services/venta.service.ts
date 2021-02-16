@@ -1,17 +1,26 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
+import { merge, Observable } from 'rxjs';
 import { Venta } from 'src/app/models/Venta';
-import { EMPRESA } from '../Constantes';
+import { EMPRESA, ENTREGA, URL_NUM_VENTA } from '../Constantes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VentaService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore, private httpCliente: HttpClient) { }
 
   add(venta: Venta): Promise<any>{
     return this.validVenta().add(venta);
+  }
+
+  entrega(venta: Venta): Promise<any>{
+    return this.validVenta().doc(venta.id).set({
+      operacion: 'entrega',
+      entrega: '1'
+    }, { merge: true });
   }
 
   validVenta(): CollectionReference{
@@ -54,13 +63,26 @@ export class VentaService {
     return filtros.get();
   }
 
+  getEntrega(): Promise<any>{
+    const ventas = this.afs.doc('empresa/' + EMPRESA.id).collection('ventas').ref;
+    //Se tiene que poner todo el filtro en una sola linea si no, no lo toma en cuenta
+    let filtros = ventas.
+      where('entrega', '>', ENTREGA.ENTRAGADO);
+      return filtros.get();
+  
+  }
+
   getAllCancelada(): Promise<any>{
     const ventas = this.afs.doc('empresa/' + EMPRESA.id).collection('ventaCancelada').ref;
     return ventas.get();
   }
 
-  getFolio(): Promise<any>{
-    const folio = this.afs.doc(`empresa/${EMPRESA.id}/folio/venta`).ref;
-    return folio.get();
+  getFolio(): Observable<any>{
+    const objPost = {
+      data: {
+          idEmpresa: EMPRESA.id
+      }
+    };
+    return this.httpCliente.post<any>(URL_NUM_VENTA, objPost);
   }
 }

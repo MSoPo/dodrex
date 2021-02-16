@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,14 +28,25 @@ export class TablaPagoComponent {
   ];
   dataSource = new MatTableDataSource<VentaPagos>([]);
   sortData!: VentaPagos[];
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   constructor(public dialog: MatDialog, public translate: TranslateService, private clienteServcie: ClienteService) {
     translate.setDefaultLang('es');
   }
 
+  ngAfterViewInit() {
+    console.log(this.sortData);
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
   handleVentaToList(ventas: VentaPagos[]): void {
     console.log('ventas -> ', ventas);
     this.dataSource.data = ventas;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   openDialogPago(e: VentaPagos): void {
@@ -101,6 +113,9 @@ export class TablaPagoComponent {
       }
     });
     this.dataSource.data = this.sortData;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
 }

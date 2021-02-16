@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import {
   ACTIVE_BLOCK,
+  CONFIG,
   DEFAULT_DURATION,
   VENTAACTUAL,
 } from 'src/app/core/Constantes';
@@ -38,7 +39,7 @@ export class ResumenCotizacionComponent {
   }
 
   onClickPedido(impresion: boolean): void {
-    ACTIVE_BLOCK.value = true;
+    /*ACTIVE_BLOCK.value = true;
     this.pedidoService
       .add(this.venta)
       .then((resp) => {
@@ -68,18 +69,20 @@ export class ResumenCotizacionComponent {
       .catch((err) => {
         ACTIVE_BLOCK.value = false;
         this.SNACK('ERROR_GRAL', 'ACEPTAR');
-      });
+      });*/
   }
 
   onCotizacion(): void {
     Object.assign(VENTAACTUAL, this.venta);
-    VENTAACTUAL.id = this.translate.instant('COTIZACION');
+    VENTAACTUAL.numero = this.translate.instant('COTIZACION');
+    delete VENTAACTUAL.formaPago;
+    delete VENTAACTUAL.entrega;
+    delete VENTAACTUAL.pagoInicial;
+    CONFIG.reload = true;
+    CONFIG.rutaRetorno = '/cotizacion';
+    CONFIG.impresion = true;
     this.dialogRef.close();
-    this.router
-      .navigateByUrl('/nota', { skipLocationChange: true })
-      .then(() => {
-        this.router.navigate(['/cotizacion']);
-      });
+    this.router.navigateByUrl('/nota', { skipLocationChange: true });
   }
 
   TRANSLATE(str: string) {

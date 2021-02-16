@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
+import { ACTIVE_BLOCK, CLIENTES, DEFAULT_DURATION } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { Cliente } from 'src/app/models/Cliente';
 import { AgregarClienteComponent } from '../agregar-cliente/agregar-cliente.component';
 import { EliminarClienteComponent } from '../eliminar-cliente/eliminar-cliente.component';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-lista-cliente',
   templateUrl: './lista-cliente.component.html',
   styleUrls: ['./lista-cliente.component.scss'],
 })
-export class ListaClienteComponent implements OnInit {
+export class ListaClienteComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'editar',
     'clave',
@@ -25,8 +26,9 @@ export class ListaClienteComponent implements OnInit {
     'direccion',
     'acciones',
   ];
-  dataSource = new MatTableDataSource<Cliente>([]);
+  dataSource = new MatTableDataSource<Cliente>(CLIENTES.slice(0,10));
   sortData!: Cliente[];
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   constructor(
     private clienteService: ClienteService,
@@ -37,18 +39,11 @@ export class ListaClienteComponent implements OnInit {
     translate.setDefaultLang('es');
   }
 
-  ngOnInit(): void {
-    this.clienteService
-      .getFavorite()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc: any) => {
-          console.log(doc.id, ' => ', doc.data());
-          this.dataSource.data.push(doc.data());
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  ngAfterViewInit() {
+    console.log(this.sortData);
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   delete(element: Cliente): void {
@@ -67,6 +62,9 @@ export class ListaClienteComponent implements OnInit {
   handleClienteAddToList(cliente: Cliente[]): void {
     console.log('cliente -> ', cliente);
     this.dataSource.data = cliente;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   fav(el: Cliente): void {
@@ -82,7 +80,7 @@ export class ListaClienteComponent implements OnInit {
   }
 
   sortDataMetod(sort: Sort) {
-    const data = this.dataSource.data.slice();
+    const data = this.dataSource.data;
     if (!sort.active || sort.direction == '') {
       this.sortData = data;
       return;
@@ -102,6 +100,9 @@ export class ListaClienteComponent implements OnInit {
       }
     });
     this.dataSource.data = this.sortData;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   TRANSLATE(str: string) {

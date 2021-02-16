@@ -6,10 +6,10 @@ import { FORMA_PAGO } from '../Constantes';
 })
 export class FormaPagoPipe implements PipeTransform {
 
-  transform(value: number): string {
+  transform(value: number | undefined): string {
     const val = Number(value);
     switch (val){
-      case FORMA_PAGO.EFECTIVO: return 'Efectivo';
+      case FORMA_PAGO.EFECTIVO: return 'Contado';
       case FORMA_PAGO.TRANSFERENCIA: return 'Transferencia';
       case FORMA_PAGO.ABONOS: return 'Venta en abonos';
       default: return '--';

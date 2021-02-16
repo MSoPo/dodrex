@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,13 +6,15 @@ import { TranslateService } from '@ngx-translate/core';
 import { Carga } from 'src/app/models/Carga';
 import { Venta } from 'src/app/models/Venta';
 import { DetallesReporteCargaComponent } from '../detalles-reporte-carga/detalles-reporte-carga.component';
+import {MatPaginator} from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-tabla-reporte-carga',
   templateUrl: './tabla-reporte-carga.component.html',
   styleUrls: ['./tabla-reporte-carga.component.scss'],
 })
-export class TablaReporteCargaComponent {
+export class TablaReporteCargaComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'fecha',
     'nombre_usuario',
@@ -21,14 +23,25 @@ export class TablaReporteCargaComponent {
   ];
   dataSource = new MatTableDataSource<Carga>([]);
   sortData!: Carga[];
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   constructor(public dialog: MatDialog, public translate: TranslateService) {
     translate.setDefaultLang('es');
   }
 
+  ngAfterViewInit() {
+    console.log(this.sortData);
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
   handleVentaToList(cargas: Carga[]): void {
     console.log('cargas -> ', cargas);
     this.dataSource.data = cargas;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   openDialog(e: Venta): void {
@@ -63,6 +76,9 @@ export class TablaReporteCargaComponent {
       }
     });
     this.dataSource.data = this.sortData;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 }
 

@@ -1,0 +1,10 @@
+<mat-card class="card-size">
+    <mat-card-title>{{ 'UNIRSE' | translate }}</mat-card-title>
+    <mat-card-content>
+        <mat-form-field appearance="outline" class="inputs-withHin">
+            <mat-label>{{ 'ID_EMPRESA' | translate}}</mat-label>
+            <input maxlength="100" [formControl]="id_empresa" required matInput>
+        </mat-form-field>
+      <button (click)="guardar()" mat-button color="primary">{{ 'SOLICITAR_EMPRESA' | translate }}</button>
+    </mat-card-content>
+  </mat-card>

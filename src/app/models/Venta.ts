@@ -14,4 +14,7 @@ export interface Venta{
     tipo_descuento?: number;
     numero?: number;
     formaPago?: number;
+    entrega?: number;
+    pagoInicial?: number;
+    error?: any;
 }

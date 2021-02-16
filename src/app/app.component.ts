@@ -1,5 +1,5 @@
 import { AfterViewChecked, ChangeDetectorRef, Component } from '@angular/core';
-import { ACTIVE_BLOCK } from './core/Constantes';
+import { ACTIVE_BLOCK, CONFIG } from './core/Constantes';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +9,7 @@ import { ACTIVE_BLOCK } from './core/Constantes';
 export class AppComponent implements AfterViewChecked{
   title = 'dodrex';
   active = ACTIVE_BLOCK;
+  config = CONFIG;
 
   constructor(
     private cdRef:ChangeDetectorRef

@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from 'src/app/core/services/product.service';
 import { CargaElement } from 'src/app/models/CargaElement';
 import { Producto } from 'src/app/models/Producto';
-import { ACTIVE_BLOCK, DEFAULT_DURATION } from '../../../core/Constantes';
+import { ACTIVE_BLOCK, DEFAULT_DURATION, PRODUCTOS } from '../../../core/Constantes';
 import { AgregarProductoComponent } from '../../inventario/agregar-producto/agregar-producto.component';
 
 @Component({
@@ -23,10 +23,8 @@ export class ProductoCargaComponent implements OnInit {
   options: string[] = [];
   filteredOptions!: string[];
   lastSearch = '';
-  lstproductos = [];
 
   constructor(
-    private productService: ProductService,
     private snackBar: MatSnackBar,
     public translate: TranslateService,
     public dialog: MatDialog,
@@ -36,44 +34,34 @@ export class ProductoCargaComponent implements OnInit {
 
   ngOnInit(): void {
     this.nombre.valueChanges.subscribe((value) => {
+      if(this.options.length < PRODUCTOS.length){
+        this.options = PRODUCTOS.map((m) => {
+          return m.clave + ' | ' + m.nombre;
+        });
+      }
       const val = value.trim();
       this.filter(val);
-      if (val.length !== 4 || this.lastSearch === val) {
-        return;
-      } else {
-        this.productService
-          .getNombre(value)
-          .then((res) => {
-            this.lastSearch = value;
-            this.lstproductos = res.docs;
-            this.options = res.docs.map((m: { data: () => Producto }) => {
-              return m.data().clave + ' | ' + m.data().nombre;
-            });
-            this.filter(value);
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-      }
     });
   }
 
   private filter(value: string): void {
     this.filteredOptions = this.options.filter((option) =>
       option.toLowerCase().includes(value)
-    );
+    ).slice(0, 10);
   }
 
   agregarNombre(e: number): void {
     if (e === 13) {
       const val = this.nombre.value.split('|', 1)[0].trim();
       if (val) {
-        this.lstproductos.forEach((el: any) => {
-          if (el && el.data().clave === val) {
-            this.getProducto.emit(el.data());
-            this.nombre.setValue('');
-          }
-        });
+        const producto = PRODUCTOS.filter(p => p.clave === val).values().next().value;
+        console.log(producto);
+        if(!producto) {
+          this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+          return;
+        }
+        this.getProducto.emit(producto);
+        this.nombre.setValue('');
       }
     }
   }
@@ -88,34 +76,18 @@ export class ProductoCargaComponent implements OnInit {
     const existe = this.products.find((val) => val.clave === this.clave.value);
     if (existe) {
       const prod = { ...existe };
-      prod.cantidad = prod.cantidad;
       this.getProducto.emit(prod);
       this.clave.setValue('');
       return;
     }
-    ACTIVE_BLOCK.value = true;
-    this.productService
-      .getClave(this.clave.value)
-      .then((querySnapshot) => {
-        ACTIVE_BLOCK.value = false;
-        switch (querySnapshot.size) {
-          case 0:
-            this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
-            return;
-          case 1:
-            this.getProducto.emit(querySnapshot.docs[0].data());
-            this.clave.setValue('');
-            console.log(querySnapshot.docs[0].data());
-            return;
-          default:
-            this.SNACK('ERROR_DATOS', 'ACEPTAR');
-            return;
-        }
-      })
-      .catch((err) => {
-        ACTIVE_BLOCK.value = false;
-        this.SNACK('ERROR_GRAL', 'ACEPTAR');
-      });
+    const producto = PRODUCTOS.filter(p => p.clave === this.clave.value).values().next().value;
+    if(!producto) {
+      this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+      return;
+    }
+    console.log(producto);
+    this.getProducto.emit(producto);
+    this.clave.setValue('');
   }
 
   openDialog(): void {
@@ -124,8 +96,8 @@ export class ProductoCargaComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed().subscribe((result: Producto) => {
+      PRODUCTOS.push(result);
     });
   }
 

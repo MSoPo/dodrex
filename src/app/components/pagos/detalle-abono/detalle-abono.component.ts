@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { DEFAULT_DURATION } from 'src/app/core/Constantes';
+import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { VentaPagos } from 'src/app/models/Pago';
 
@@ -36,15 +36,25 @@ export class DetalleAbonoComponent {
   ngOnInit(): void {
   }
 
+  liquidar(): void {
+    this.recibido.setValue(this.venta.deuda);
+    this.resto.setValue(0);
+    this.valid = true;
+    this.pagar();
+  }
+
   pagar(){
     if(this.valid){
+      ACTIVE_BLOCK.value = true;
       this.clienteService.addPago(this.venta.id, this.recibido.value).then(res => {
+        ACTIVE_BLOCK.value = false;
         this.dialogRef.close();
         this.SNACK('REGISTRO_OK', '');
         this.venta.deuda = this.resto.value;
-      }).catch(er =>
+      }).catch(er => {
+        ACTIVE_BLOCK.value = false;
         this.SNACK('ERROR_GRAL', 'ACEPTAR')
-      );
+      });
     }else{
       this.SNACK('ERROR_MONTO', 'ACEPTAR');
     }

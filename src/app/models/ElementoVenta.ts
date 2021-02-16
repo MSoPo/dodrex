@@ -1,5 +1,6 @@
 export interface VentaElement {
     nombre: string;
+    fraccion: boolean;
     cantidad: number;
     precio: number;
     subtotal: number;

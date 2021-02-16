@@ -4,12 +4,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
+import { ACTIVE_BLOCK, DEFAULT_DURATION, PRODUCTOS } from 'src/app/core/Constantes';
 import { ProductService } from 'src/app/core/services/product.service';
 import { Producto } from 'src/app/models/Producto';
 import { AgregarProductoComponent } from '../agregar-producto/agregar-producto.component';
 import { DatosProductoComponent } from '../datos-producto/datos-producto.component';
 import { EliminarProductoComponent } from '../eliminar-producto/eliminar-producto.component';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-lista-inventario',
@@ -19,10 +20,12 @@ import { EliminarProductoComponent } from '../eliminar-producto/eliminar-product
 export class ListaInventarioComponent implements OnInit, AfterViewInit {
   
   sortData!: Producto[];
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   ngAfterViewInit() {
-    console.log(this.sortData);
-    this.sortData = this.dataSource.data.slice();
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   displayedColumns: string[] = [
@@ -34,7 +37,7 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
     'precio_compra',
     'acciones',
   ];
-  dataSource = new MatTableDataSource<Producto>([]);
+  dataSource = new MatTableDataSource<Producto>(PRODUCTOS.slice(0, 10));
 
   constructor(
     public dialog: MatDialog,
@@ -42,10 +45,10 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
     public snackBar: MatSnackBar,
     public translate: TranslateService
     ) {
-      translate.setDefaultLang('es');}
+      translate.setDefaultLang('es');
+    }
 
   ngOnInit(): void {
-    this.getFavs();
   }
 
   delete(element: Producto): void {
@@ -56,8 +59,12 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
 
   edit(element: Producto): void {
     element.operacion = 'update';
-    this.dialog.open(AgregarProductoComponent, {
+    const dialogRef = this.dialog.open(AgregarProductoComponent, {
       data: element,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
     });
   }
 
@@ -69,6 +76,9 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
 
   handleProductAddToVenta(product: Producto[]): void {
     this.dataSource.data = product;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   fav(el: Producto): void {
@@ -79,21 +89,6 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
       console.log(err);
       ACTIVE_BLOCK.value = false;
     });
-  }
-
-  getFavs(): void {
-    this.productoService
-      .getFavorite()
-      .then((querySnapshot) => {
-        this.dataSource.data;
-        querySnapshot.forEach((doc: any) => {
-          console.log(doc.id, ' => ', doc.data());
-          this.dataSource.data.push(doc.data());
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   sortDataMetod(sort: Sort){
@@ -115,6 +110,9 @@ export class ListaInventarioComponent implements OnInit, AfterViewInit {
       }
     });
     this.dataSource.data = this.sortData;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
   
 }

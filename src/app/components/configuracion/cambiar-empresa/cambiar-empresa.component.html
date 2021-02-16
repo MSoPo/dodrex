@@ -23,13 +23,21 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
         <mat-label>{{ "TELEFONO" | translate }}</mat-label>
-        <input maxlength="10" minlength="7" formControlName="telefono" matInput [placeholder]="'PLH_TEL' | translate" />
+        <input formControlName="telefono" matInput [placeholder]="'PLH_TEL' | translate" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="inputs-withHin">
         <mat-label>{{ "CORREO_ELECTRONICO" | translate }}</mat-label>
         <input maxlength="50" minlength="3" type="email" formControlName="correo" matInput
           [placeholder]="'PLH_CORREO' | translate" />
       </mat-form-field>
+      <div class="inputs-withHin">
+        <mat-label>{{ "LOGO_EMREPSA" | translate }}</mat-label>
+        <input type="file" (change)="uploadChange($event)" />
+      </div>
+      <div *ngIf="urlFile">
+        <img width="80px" height="80px" [src]="urlFile" alt="lOGO DE LA EMPRESA">
+      </div>
+      <mat-card-title>{{ "CONFIGURACION_EMPRESA" | translate }}</mat-card-title>
       <mat-form-field appearance="outline" class="inputs-product">
         <mat-label>{{ 'IMPRESION_TIPO' | translate}}</mat-label>
         <mat-select formControlName="impresion">
@@ -42,13 +50,28 @@
         <textarea maxlength="200" formControlName="head" matInput
           [placeholder]="'PLH_HEAD' | translate" ></textarea>
       </mat-form-field>
-      <div class="inputs-withHin">
-        <mat-label>{{ "LOGO_EMREPSA" | translate }}</mat-label>
-        <input type="file" (change)="uploadChange($event)" />
-      </div>
-      <div *ngIf="urlFile">
-        <img width="150px" height="150px" [src]="urlFile" alt="lOGO DE LA EMPRESA">
-      </div>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ "PRECIO_SUGERIDO_UNI" | translate }}</mat-label>
+        <input class="example-right-align" type="number" formControlName="porc_unitario" matInput>
+        <mat-hint>{{ 'PLH_SEG' | translate}}</mat-hint>
+        <mat-icon matSuffix>%</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ "PRECIO_SUGERIDO_MAY" | translate }}</mat-label>
+        <input class="example-right-align" type="number" formControlName="porc_mayoreo" matInput>
+        <mat-hint>{{ 'PLH_SEG' | translate}}</mat-hint>
+        <mat-icon matSuffix>%</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ "PRECIO_SUGERIDO_ESP" | translate }}</mat-label>
+        <input class="example-right-align" type="number" formControlName="porc_especial" matInput>
+        <mat-hint>{{ 'PLH_SEG' | translate}}</mat-hint>
+        <mat-icon matSuffix>%</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ "CANT_MAY_SUGERIDA" | translate }}</mat-label>
+        <input class="example-right-align" type="number" formControlName="cant_mayoreo" matInput>
+      </mat-form-field>
       <button (click)="createEmpresa($event)" mat-button color="primary">
         {{ "ACTUALIZAR" | translate }}
       </button>

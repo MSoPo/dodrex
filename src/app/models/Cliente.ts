@@ -12,4 +12,5 @@ export interface Cliente {
     tipo_descuento: number;
     telefono?: string;
     correo?: string;
+    error?: any;
 }

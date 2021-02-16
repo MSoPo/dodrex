@@ -17,7 +17,7 @@
       <button (click)="quitar(element)" class="only_cell button_icon_cell" mat-icon-button [matTooltip]="'ELIMINAR' | translate">
         <mat-icon>remove_circle_outline</mat-icon>
       </button>
-      {{ element.nombre }}</td>
+      {{ element.nombre }} <mat-icon (click)="openDialogDatosProd(element)" class="help cell_hidde" color="primary" matTooltip="Cantidad en inventario: {{ element.stock }}">info</mat-icon> </td>
     <td mat-footer-cell *matFooterCellDef>
       <form class="example-form">
         <mat-form-field class="example-full-width nameCliente">
@@ -29,6 +29,9 @@
             [matAutocomplete]="auto"
             matInput
           />
+          <button type="button" (click)="openCliente()" class="autorenew" color="primary" mat-icon-button>
+            <mat-icon matSuffix >add_circle</mat-icon>
+          </button>
           <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option (click)="cambiarCliente()" class="nameClienteText" *ngFor="let option of filteredOptions" [value]="option">
               {{ option }}
@@ -46,6 +49,7 @@
       <input
         matInput
         type="number"
+        class="cantidad"
         (blur)="addCantidad($event, element)"
         value="{{ element.cantidad }}"
       />

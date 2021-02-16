@@ -95,6 +95,10 @@ import { TablaPagoComponent } from './components/pagos/tabla-pago/tabla-pago.com
 import { DetalleAbonoComponent } from './components/pagos/detalle-abono/detalle-abono.component';
 import { FormaPagoPipe } from './core/pipe/forma-pago.pipe';
 import { CargamasivaComponent } from './components/masivo/cargamasiva/cargamasiva.component';
+import { UnirseaempresaComponent } from './components/configuracion/unirseaempresa/unirseaempresa.component';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { LayoutLoginComponent } from './components/layout/layout-login/layout-login.component';
+import { EntregaPipe } from './core/pipe/entrega.pipe';
 
 export function TranslationLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -159,12 +163,16 @@ export function TranslationLoaderFactory(http: HttpClient) {
     TablaPagoComponent,
     DetalleAbonoComponent,
     FormaPagoPipe,
-    CargamasivaComponent
+    CargamasivaComponent,
+    UnirseaempresaComponent,
+    LayoutLoginComponent,
+    EntregaPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     BrowserAnimationsModule,
     MatToolbarModule,

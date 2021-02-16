@@ -7,15 +7,28 @@ import {
   DEFAULT_DURATION,
   EMPRESA,
   MENU,
+  PRODUCTOS,
+  CLIENTES,
   ROL_ADMINISTRADO,
   USER_ACTIVE,
+  CONFIG,
+  FOLIO_VENTA,
+  FOLIO_ANTETRIO,
+  PRODUCTOS_PENDIENTES,
+  CLIENTE_PENDIENTE,
+  VENTA_PENDIENTE,
 } from 'src/app/core/Constantes';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
 import { ProductService } from 'src/app/core/services/product.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Producto } from 'src/app/models/Producto';
+import { Usuario } from 'src/app/models/Usuario';
+import { clearLogout } from 'src/app/core/Util';
+import { ClienteService } from 'src/app/core/services/cliente.service';
+import { Cliente } from 'src/app/models/Cliente';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -24,10 +37,14 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class NavComponent {
   username = USER_ACTIVE.nombre;
-  rol = USER_ACTIVE.id_rol;
+  rol;
   rolAdmin = ROL_ADMINISTRADO.valor;
   id_empresa = USER_ACTIVE.id_empresa;
+  urlFile = EMPRESA.urlImage;
   rutaActual = '';
+  errorProducto = PRODUCTOS_PENDIENTES;
+  errorCliente = CLIENTE_PENDIENTE;
+  errorVenta = VENTA_PENDIENTE;
   menu;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
@@ -43,16 +60,22 @@ export class NavComponent {
     private router: Router,
     private snackBar: MatSnackBar,
     private userService: UsersService,
-    private cdRef:ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef,
     private translate: TranslateService,
-    private authService: AuthService
+    private productService: ProductService,
   ) {
+    console.log(this.id_empresa);
     this.rutaActual = this.router.url;
     this.menu = MENU;
-    this.cargarFavs();
+    this.rol = USER_ACTIVE;
+    if(CONFIG.reload){
+      CONFIG.reload = false;
+    }else {
+      this.cargarFavs();
+    }
   }
 
-  ngAfterViewChecked(): void{
+  ngAfterViewChecked(): void {
     this.cdRef.detectChanges();
   }
 
@@ -70,39 +93,116 @@ export class NavComponent {
   }
 
   cargarFavs(): void {
-    console.log(EMPRESA.id);
+    console.log("Cargar Nav =>",EMPRESA.id);
+    if (EMPRESA.id) {
+      this.productService.getAll();
+    }
     if (!EMPRESA.id) {
-      if(!USER_ACTIVE.id_rol){
-        this.router.navigate(['/user/user']);
-        return
-      }
       ACTIVE_BLOCK.value = true;
-      this.userService.getUser(USER_ACTIVE.id).subscribe((respuesta) => {
-        const usuario = respuesta.data();
-        USER_ACTIVE.id_rol = usuario.id_rol;
-          console.log(usuario);
-          USER_ACTIVE.id_empresa = usuario.id_empresa;
-          this.userService
-            .getEmpresa(usuario.id_empresa)
-            .subscribe((resp) => {
-              const dataEmpresa: any = resp.data();
-              if (!dataEmpresa) {
-                ACTIVE_BLOCK.value = false;
-                this.snackBar.open(
-                  '¡Error al iniciar sesión!',
-                  'Aceptar',
-                  DEFAULT_DURATION
-                );
-                return;
-              }
-              Object.assign(EMPRESA, dataEmpresa)
-              this.id_empresa = resp.id;
-              EMPRESA.id = resp.id;
-              ACTIVE_BLOCK.value = false;
-            });
+      this.userService.getCargaInicial().subscribe(respuesta => {
+        Object.assign(USER_ACTIVE, respuesta.usuario);
+        Object.assign(EMPRESA, respuesta.empresa);
+        FOLIO_VENTA.value = respuesta.folio;
+        FOLIO_ANTETRIO.value = respuesta.folio-1;
+        if(respuesta.productos && respuesta.productos.length > 0){
+          respuesta.productos.forEach((element: Producto) => {
+            PRODUCTOS.push(element);
+          });
+        }
+        if(respuesta.clientes && respuesta.clientes.length > 0){
+          respuesta.clientes.forEach((element: Cliente) => {
+            CLIENTES.push(element);
+          });
+        }
+        EMPRESA.id = USER_ACTIVE.id_empresa;
+        this.id_empresa = USER_ACTIVE.id_empresa;
+        this.urlFile = EMPRESA.urlImage;
+        ACTIVE_BLOCK.value = false;
+        CONFIG.primeraCarga = false;
+      }, err => {
+        ACTIVE_BLOCK.value = false;
+        this.SNACK('ERROR_SESION', 'ACEPTAR');
       });
+      //this.loadUsuario();
     }
   }
+
+  reportarError(): void{
+    ACTIVE_BLOCK.value = true;
+    this.productService.errorService()
+    .then(ero => {
+      ACTIVE_BLOCK.value = false;
+      location.reload()
+    })
+    .catch(er => {
+      console.log(er);
+      ACTIVE_BLOCK.value = false;
+      this.SNACK('ERROR_REINT','ACEPTAR')
+    });
+  }
+/*
+  loadUsuario(){
+    this.userService.getUser(USER_ACTIVE.id).subscribe((respuesta) => {
+      const usuario = respuesta.data();
+      console.log("Cargar usuario => ", usuario);
+      Object.assign(USER_ACTIVE, usuario);
+      this.loadEmpresa(usuario);
+    });
+  }
+
+  loadEmpresa(usuario: Usuario) {
+    this.userService.getEmpresa(usuario.id_empresa).subscribe((resp) => {
+      const dataEmpresa: any = resp.data();
+      console.log("Cargar empresa => ", dataEmpresa);
+      if (!dataEmpresa) {
+        ACTIVE_BLOCK.value = false;
+        this.SNACK('ERROR_SESION', 'ACEPTAR');
+        return;
+      }
+      Object.assign(EMPRESA, dataEmpresa);
+      this.id_empresa = resp.id;
+      EMPRESA.id = resp.id;
+      this.urlFile = EMPRESA.urlImage;
+      this.loadProductos();
+      ACTIVE_BLOCK.value = false;
+    });
+  }
+
+  loadProductos() {
+    console.log("Cargar Inicio");
+    this.productService
+      .getAll()
+      .then((r) => {
+        console.log("Cargar Productos");
+        r.forEach((e: any) => {
+          const pro: Producto = e.data();
+          PRODUCTOS.push(pro);
+          return;
+        });
+        this.loadCliente();
+      })
+      .catch((er) => {
+        ACTIVE_BLOCK.value = false;
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
+      });
+  }
+
+  loadCliente() {
+    console.log("Cargar Clientes");
+    this.clienteService.getAll().then(c => {
+      console.log("Cargado Clientes");
+      c.forEach((e: any) => {
+        const cliente: Cliente = e.data();
+        CLIENTES.push(cliente);
+        return;
+      });
+      ACTIVE_BLOCK.value = false;
+      CONFIG.primeraCarga = false;
+    }).catch(er => {
+      ACTIVE_BLOCK.value = false;
+      this.SNACK('ERROR_GRAL', 'ACEPTAR');
+    });
+  }*/
 
   TRANSLATE(str: string) {
     return str ? this.translate.instant(str) : '';
@@ -115,21 +215,4 @@ export class NavComponent {
       DEFAULT_DURATION
     );
   }
-}
-
-function clearLogout(){
-  delete USER_ACTIVE.activo;
-  delete USER_ACTIVE.correo;
-  delete USER_ACTIVE.id;
-  delete USER_ACTIVE.id_empresa;
-  delete USER_ACTIVE.id_rol;
-  delete USER_ACTIVE.nombre;
-  delete EMPRESA.correo;
-  delete EMPRESA.direccion;
-  delete EMPRESA.id;
-  delete EMPRESA.id_usuario;
-  delete EMPRESA.operacion;
-  delete EMPRESA.razon_social;
-  delete EMPRESA.rfc;
-  delete EMPRESA.telefono;
 }

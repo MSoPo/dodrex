@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
+import { ACTIVE_BLOCK, CLIENTES, DEFAULT_DURATION } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { Cliente } from 'src/app/models/Cliente';
 import { AgregarClienteComponent } from '../agregar-cliente/agregar-cliente.component';
@@ -43,29 +43,12 @@ export class FiltrosClienteComponent {
     if (e === 13) {
       this.nombre.setValue('');
       this.listas.setValue(0);
-      ACTIVE_BLOCK.value = true;
-      this.clienteService
-        .getClaveAll(this.clave.value)
-        .then((querySnapshot) => {
-          ACTIVE_BLOCK.value = false;
-          switch (querySnapshot.size) {
-            case 0:
-              this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
-              return;
-            case 1:
-              this.getCliente.emit([querySnapshot.docs[0].data()]);
-              this.clave.setValue('');
-              console.log(querySnapshot.docs[0].data());
-              return;
-            default:
-              this.SNACK('ERROR_DATOS', 'ACEPTAR');
-              return;
-          }
-        })
-        .catch((err) => {
-          ACTIVE_BLOCK.value = false;
-          this.SNACK('ERROR_GRAL', 'ACEPTAR');
-        });
+      const cliente = CLIENTES.filter(c => c.clave.includes(this.clave.value));
+      if (!cliente){
+        this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+      }else {
+        this.getCliente.emit(cliente);
+      }
     }
   }
 
@@ -73,34 +56,25 @@ export class FiltrosClienteComponent {
     if (e === 13) {
       this.clave.setValue('');
       this.listas.setValue(0);
-      ACTIVE_BLOCK.value = true;
-      this.clienteService
-        .getNombre(this.nombre.value)
-        .then((querySnapshot) => {
-          ACTIVE_BLOCK.value = false;
-          this.validarLista(querySnapshot);
-        })
-        .catch((err) => {
-          ACTIVE_BLOCK.value = false;
-          this.SNACK('ERROR_GRAL', 'ACEPTAR');
-        });
+      const nombre = this.nombre.value ? this.nombre.value.toUpperCase() : '';
+      const lstCleintes = CLIENTES.filter(c => c.nombre.includes(nombre));
+      if (lstCleintes.length > 0) {
+        this.getCliente.emit(lstCleintes);
+      } else {
+        this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+      }
     }
   }
 
   getFavs(): void {
-    ACTIVE_BLOCK.value = true;
     this.clave.setValue('');
     this.nombre.setValue('');
-    this.clienteService
-      .getFavorite()
-      .then((querySnapshot) => {
-        ACTIVE_BLOCK.value = false;
-        this.validarLista(querySnapshot);
-      })
-      .catch((err) => {
-        ACTIVE_BLOCK.value = false;
-        this.SNACK('ERROR_GRAL', 'ACEPTAR');
-      });
+    const lstCleintes  = CLIENTES.filter(c => c.favorito);
+    if (lstCleintes.length > 0) {
+      this.getCliente.emit(lstCleintes);
+    } else {
+      this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+    }
   }
 
   getCancelado(): void {

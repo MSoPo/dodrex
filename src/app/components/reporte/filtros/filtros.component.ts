@@ -6,7 +6,8 @@ import {
   ACTIVE_BLOCK,
   DEFAULT_DURATION,
   USER_ACTIVE,
-  FORMA_PAGO
+  FORMA_PAGO,
+  ENTREGA
 } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { UsersService } from 'src/app/core/services/users.service';
@@ -89,6 +90,11 @@ export class FiltrosComponent {
       return;
     }
 
+    if(this.especial.value == 5){
+      this.buscarNoEntregado();
+      return;
+    }
+
     if (!this.range.valid) {
       this.SNACK('ERROR_FECHAS', 'ACEPTAR');
       return;
@@ -122,6 +128,27 @@ export class FiltrosComponent {
     ACTIVE_BLOCK.value = true;
     this.ventaService
       .getAllCancelada()
+      .then((res) => {
+        const lstventas: Venta[] = [];
+        res.forEach((element: { data: () => any; id: string }) => {
+          lstventas.push({ ...element.data(), id: element.id });
+        });
+        this.getVentas.emit(lstventas);
+        if (lstventas.length < 1) {
+          this.SNACK('ERROR_NO_RESULT', 'ACEPTAR');
+        }
+        ACTIVE_BLOCK.value = false;
+      })
+      .catch((er) => {
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
+        ACTIVE_BLOCK.value = false;
+      });
+  }
+
+  buscarNoEntregado(): void {
+    ACTIVE_BLOCK.value = true;
+    this.ventaService
+      .getEntrega()
       .then((res) => {
         const lstventas: Venta[] = [];
         res.forEach((element: { data: () => any; id: string }) => {

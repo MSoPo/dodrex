@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import firebase from 'firebase/app';
 import { ACTIVE_BLOCK, EMPRESA, USER_ACTIVE } from '../Constantes';
+import { clearLogout } from '../Util';
 
 @Injectable({
   providedIn: 'root'
@@ -36,21 +37,4 @@ export class AuthService {
   restorePassword(email: string): Promise<void>{
     return this.afa.sendPasswordResetEmail(email, {url: 'http://localhost:4200/user/login'});
   }
-}
-
-function clearLogout(){
-  delete USER_ACTIVE.activo;
-  delete USER_ACTIVE.correo;
-  delete USER_ACTIVE.id;
-  delete USER_ACTIVE.id_empresa;
-  delete USER_ACTIVE.id_rol;
-  delete USER_ACTIVE.nombre;
-  delete EMPRESA.correo;
-  delete EMPRESA.direccion;
-  delete EMPRESA.id;
-  delete EMPRESA.id_usuario;
-  delete EMPRESA.operacion;
-  delete EMPRESA.razon_social;
-  delete EMPRESA.rfc;
-  delete EMPRESA.telefono;
 }

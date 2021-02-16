@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as print from 'print-js';
-import { CLIENTEACTUAL, EMPRESA, ESTILO_NOTA, ESTILO_TICKET, VENTAACTUAL } from 'src/app/core/Constantes';
+import { CLIENTEACTUAL, CONFIG, EMPRESA, PRODUCTOS, VENTAACTUAL } from 'src/app/core/Constantes';
+import { DetalleVenta } from '../../models/DetalleVenta';
 
 @Component({
   selector: 'app-impresion',
@@ -14,7 +16,7 @@ export class ImpresionComponent implements OnInit {
   cliente;
   fecha;
 
-  constructor() { 
+  constructor(private router: Router) { 
     this.venta = VENTAACTUAL;
     this.empresa = EMPRESA;
     this.cliente = CLIENTEACTUAL;
@@ -26,8 +28,12 @@ export class ImpresionComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    if(this.empresa.impresion == 1) { this.imprimir(); }
-    if(this.empresa.impresion == 2) { this.imprimirTicket(); }
+    if(CONFIG.impresion){
+      if(this.empresa.impresion == 1) { this.imprimir(); }
+      if(this.empresa.impresion == 2) { this.imprimirTicket(); }
+    }
+    CONFIG.impresion = false;
+    this.router.navigate([CONFIG.rutaRetorno]);
   }
 
   ngOnInit(): void {

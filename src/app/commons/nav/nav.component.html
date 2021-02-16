@@ -4,13 +4,13 @@
     <mat-toolbar>{{ 'NAV' | translate }}</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/ventas" routerLinkActive>{{ 'NAV_VENTA' | translate }}</a>
-      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/inventario" routerLinkActive>{{ 'NAV_INVENTARIO' | translate }}</a>
-      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/carga" routerLinkActive>{{ 'NAV_CARGA' | translate}}</a>
-      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/clientes" routerLinkActive>{{ 'NAV_CLIENTES' | translate }}</a>
+      <a mat-list-item *ngIf="rol.id_rol === rolAdmin" routerLink="/inventario" routerLinkActive>{{ 'NAV_INVENTARIO' | translate }}</a>
+      <a mat-list-item *ngIf="rol.id_rol === rolAdmin" routerLink="/carga" routerLinkActive>{{ 'NAV_CARGA' | translate}}</a>
+      <a mat-list-item *ngIf="rol.id_rol === rolAdmin" routerLink="/clientes" routerLinkActive>{{ 'NAV_CLIENTES' | translate }}</a>
       <a mat-list-item routerLink="/cotizacion" routerLinkActive>{{ 'NAV_COTIZACION' | translate }}</a>
-      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/reporte" routerLinkActive>{{ 'NAV_REPORTE' | translate }}</a>
-      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/pagos" routerLinkActive>{{ 'NAV_PAGO' | translate }}</a>
-      <a mat-list-item *ngIf="rol === rolAdmin" routerLink="/reporteCarga" routerLinkActive>{{ 'NAV_REPORTE_CARGA' | translate }}</a>
+      <a mat-list-item *ngIf="rol.id_rol === rolAdmin" routerLink="/reporte" routerLinkActive>{{ 'NAV_REPORTE' | translate }}</a>
+      <a mat-list-item *ngIf="rol.id_rol === rolAdmin" routerLink="/pagos" routerLinkActive>{{ 'NAV_PAGO' | translate }}</a>
+      <a mat-list-item *ngIf="rol.id_rol === rolAdmin" routerLink="/reporteCarga" routerLinkActive>{{ 'NAV_REPORTE_CARGA' | translate }}</a>
       <a mat-list-item routerLink="/configuracion" routerLinkActive>{{ 'NAV_CONF' | translate }}</a>
     </mat-nav-list>
   </mat-sidenav>
@@ -20,11 +20,14 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span class="example-spacer">{{ menu.value }}</span>
-      <span class="username cell_hidde">{{username}}</span>
+      <span class="username cell_hidde">{{username}}
+        <span *ngIf="urlFile && urlFile.length > 0" class="image"><img width="30px" height="30px" [src]="urlFile" alt="lOGO DE LA EMPRESA"></span>
+      </span>
       <button (click)="logout()" mat-icon-button class="example-icon account-circle">
         <mat-icon matTooltip="Cerrar sesión">exit_to_app</mat-icon>
       </button>
     </mat-toolbar>
+    <div *ngIf="errorProducto.length || errorCliente.length || errorVenta.length" class="error">{{ 'ERROR_SINC' | translate }}<button (click)="reportarError()" mat-button> Reportar </button></div>
     <router-outlet *ngIf="id_empresa"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

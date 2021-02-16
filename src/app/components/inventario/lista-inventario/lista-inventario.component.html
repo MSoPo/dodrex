@@ -1,6 +1,6 @@
 <app-filtros-inventario (getProducto)="handleProductAddToVenta($event)"></app-filtros-inventario>
 
-<table *ngIf="dataSource.data.length > 0" mat-table matSort (matSortChange)="sortDataMetod($event)"
+<table mat-table matSort (matSortChange)="sortDataMetod($event)"
     [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="editar">
         <th class="cell_hidde" mat-header-cell *matHeaderCellDef></th>
@@ -34,7 +34,10 @@
     </ng-container>
     <ng-container matColumnDef="existencia">
         <th mat-sort-header mat-header-cell *matHeaderCellDef> {{ 'EXISTENCIA' | translate }} </th>
-        <td mat-cell *matCellDef="let element" class="column-price"> {{ element.cantidad | number: '0.0-0' }} </td>
+        <td mat-cell *matCellDef="let element" class="column-price">
+            <span *ngIf="!element.fraccion" >{{ element.cantidad | number: '0.0-0' }}</span>
+            <span *ngIf="element.fraccion">{{ element.cantidad | number: '0.2-2' }}</span>
+        </td>
     </ng-container>
     <ng-container matColumnDef="precio_unitario">
         <th mat-sort-header mat-header-cell *matHeaderCellDef class="cell_hidde"> {{ 'PRECIO_UNITARIO' | translate }} </th>
@@ -57,3 +60,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>

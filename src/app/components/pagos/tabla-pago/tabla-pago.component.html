@@ -1,6 +1,6 @@
 <app-filtros-reporte-pagos (getVentas)="handleVentaToList($event)"></app-filtros-reporte-pagos>
 
-<table *ngIf="dataSource.data.length > 0" (matSortChange)="sortDataMetod($event)" matSort mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table (matSortChange)="sortDataMetod($event)" matSort mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="editar">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
@@ -17,7 +17,7 @@
     <ng-container matColumnDef="fecha">
       <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ 'FECHA_VENTA' | translate }}</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.fecha.toDate() | date: 'short' }}
+        {{ element.fecha.toDate() | date: 'dd/MM/yyyy' }}
       </td>
     </ng-container>
     <!-- Symbol Column -->
@@ -44,3 +44,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>

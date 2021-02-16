@@ -18,12 +18,16 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   ACTIVE_BLOCK,
   DEFAULT_DURATION,
+  EMPRESA,
+  PRODUCTOS,
+  PRODUCTOS_PENDIENTES,
   SOLO_NUMERO_DECIMALES,
   SOLO_NUMERO_ENTERO,
   USER_ACTIVE,
 } from 'src/app/core/Constantes';
 import { ProductService } from 'src/app/core/services/product.service';
 import { UsersService } from 'src/app/core/services/users.service';
+import { round10 } from 'src/app/core/Util';
 import { Producto } from 'src/app/models/Producto';
 
 @Component({
@@ -65,6 +69,7 @@ export class AgregarProductoComponent {
   ) {
     translate.setDefaultLang('es');
     console.log(data);
+    EMPRESA.cant_mayoreo = EMPRESA.cant_mayoreo ? EMPRESA.cant_mayoreo : 0;
     this.hideMayoreoControl.setValue(
       data.cantidad_mayoreo || data.precio_mayoreo || data.precio_especial
         ? true
@@ -72,6 +77,7 @@ export class AgregarProductoComponent {
     );
     this.form = fb.group({
       hideRequired: this.hideMayoreoControl,
+      fraccion: data.fraccion ? data.fraccion : 0,
       clave: [
         data.clave ? data.clave : '',
         [
@@ -120,7 +126,7 @@ export class AgregarProductoComponent {
         [Validators.minLength(3), Validators.maxLength(250)],
       ],
       cantidad_mayoreo: [
-        data.cantidad_mayoreo ? data.cantidad_mayoreo : '',
+        data.cantidad_mayoreo ? data.cantidad_mayoreo : EMPRESA.cant_mayoreo,
         [
           Validators.max(99999),
           Validators.min(0),
@@ -160,9 +166,14 @@ export class AgregarProductoComponent {
 
   formToUser(): void {
     const prod: Partial<Producto> = { ...this.form.value };
+    const existe = PRODUCTOS.find(p => p.clave === prod.clave);
     if (this.data.operacion === 'update') {
       prod.fecha_actualizacion = new Date();
     } else {
+      if(existe){
+        this.SNACK('CLAVE_REPETIDA', 'Aceptar');
+        return;
+      }
       prod.fecha_creacion = new Date();
     }
     if (!this.hideMayoreoControl.value) {
@@ -170,25 +181,33 @@ export class AgregarProductoComponent {
       prod.precio_mayoreo = 0;
       prod.cantidad_mayoreo = 0;
     }
-    console.log(prod);
-    ACTIVE_BLOCK.value = true;
-    this.productoService
-      .add(prod)
-      .then((result) => {
-        console.log(result);
-        if (prod.operacion === 'update') {
-          this.cargarPantallaLista(prod);
-          this.SNACK('ACTUALIZACION_OK', '');
-        } else {
-          this.SNACK('REGISTRO_OK','');
-        }
-        ACTIVE_BLOCK.value = false;
-        this.dialogRef.close();
-      })
-      .catch((error) => {
-        this.SNACK('ERROR_GRAL', 'ACEPTAR');
-        ACTIVE_BLOCK.value = false;
-      });
+    
+    if (prod.operacion === 'update') {
+      this.cargarPantallaLista(prod);
+      this.SNACK('ACTUALIZACION_OK', '');
+    } else {
+      this.SNACK('REGISTRO_OK','');
+    }
+    this.data = prod;
+    this.dialogRef.close(prod);
+    this.guardarProducto(prod);
+  }
+
+  segurirPrecion(): void {
+    const precio = this.form.value.precio_compra;
+    if(EMPRESA.porc_unitario && EMPRESA.porc_unitario > 0){
+      const porc = round10(precio * ((EMPRESA.porc_unitario / 100) + 1), -2);
+      this.form.value.precio_unitario = porc;
+    }
+    if(EMPRESA.porc_mayoreo && EMPRESA.porc_mayoreo > 0){
+      const porc = round10(precio * ((EMPRESA.porc_mayoreo / 100) + 1), -2);
+      this.form.value.precio_mayoreo = porc;
+    }
+    if(EMPRESA.porc_especial && EMPRESA.porc_especial > 0){
+      const porc = round10(precio * ((EMPRESA.porc_especial / 100) + 1), -2);
+      this.form.value.precio_especial = porc;
+    }
+    this.form.setValue({...this.form.value}); 
   }
 
   isFavo(): void {
@@ -209,6 +228,18 @@ export class AgregarProductoComponent {
     this.data.precio_especial = prod.precio_especial;
     this.data.precio_mayoreo = prod.precio_mayoreo;
     this.data.precio_unitario = prod.precio_unitario;
+    this.data.fraccion = prod.fraccion;
+  }
+
+  guardarProducto(prod: Partial<Producto>){
+    this.productoService
+      .add(prod)
+      .catch((error) => {
+        this.SNACK('ERROR_GRAL', 'ACEPTAR');
+        prod.error = error;
+        prod.error.mensaje = error.message;
+        PRODUCTOS_PENDIENTES.push(prod);
+      });
   }
 
   TRANSLATE(str: string) {

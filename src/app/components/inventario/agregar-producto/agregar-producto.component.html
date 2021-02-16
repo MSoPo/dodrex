@@ -21,6 +21,7 @@
       <input formControlName="nombre" required maxlength="100" minlength="3" matInput />
       <mat-hint>{{ 'NOMBRE_LOWERCASE' | translate}}</mat-hint>
     </mat-form-field>
+    <mat-checkbox formControlName="fraccion">{{ 'ACEPTARDEC' | translate }}</mat-checkbox>
     <mat-form-field appearance="outline" class="inputs-withHin">
       <mat-label>{{ 'CANTIDAD' | translate }}</mat-label>
       <input formControlName="cantidad" required max="999999" min="0" matInput type="number"
@@ -28,16 +29,16 @@
       <mat-hint>{{ 'CANTIDAD_STOCK' | translate }}</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>{{ 'PRECIO_UNITARIO' | translate }}</mat-label>
-      <input matInput formControlName="precio_unitario" required max="999999" min="0" type="number" placeholder="00.00"
-        class="example-right-align" />
+      <mat-label>{{ 'PRECIO_COMPRA' | translate }}</mat-label>
+      <input matInput (blur)="segurirPrecion()" formControlName="precio_compra" required max="999999" min="0"
+        [placeholder]="'PLH_PRECIO' | translate" type="number" class="example-right-align" />
       <span matPrefix>$&nbsp;</span>
       <mat-hint>{{ 'PRECIO_HINT' | translate }}</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" class="inputs-withHin">
-      <mat-label>{{ 'PRECIO_COMPRA' | translate }}</mat-label>
-      <input matInput formControlName="precio_compra" required max="999999" min="0"
-        [placeholder]="'PLH_PRECIO' | translate" type="number" class="example-right-align" />
+      <mat-label>{{ 'PRECIO_UNITARIO' | translate }}</mat-label>
+      <input matInput formControlName="precio_unitario" required max="999999" min="0" type="number" placeholder="00.00"
+        class="example-right-align" />
       <span matPrefix>$&nbsp;</span>
       <mat-hint>{{ 'PRECIO_HINT' | translate }}</mat-hint>
     </mat-form-field>

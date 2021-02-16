@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { CLIENTEACTUAL, DEFAULT_DURATION, VENTAACTUAL } from 'src/app/core/Constantes';
+import { CLIENTEACTUAL, CLIENTES, CONFIG, DEFAULT_DURATION, VENTAACTUAL } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { DetalleVenta } from 'src/app/models/DetalleVenta';
 import { Venta } from 'src/app/models/Venta';
@@ -44,23 +44,21 @@ export class DetallesComponent implements OnInit {
   }
 
   imprimir(){
+    CONFIG.reload = true;
+    CONFIG.impresion = true;
+    CONFIG.rutaRetorno = '/reporte';
     Object.assign(VENTAACTUAL, this.data);
     if(this.data.id_cliente){
-      this.clienteService.getClave(this.data.id_cliente).then(res => {
-        CLIENTEACTUAL.correo = '';
-        res.forEach((element: { data: () => any; }) => {
-          Object.assign(CLIENTEACTUAL, element.data());
-        });
-        
-        this.router.navigateByUrl('/nota', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/reporte']);});
-      }).catch();
+      const cliente = CLIENTES.find(cl => cl.clave == this.data.id_cliente);
+      Object.assign(CLIENTEACTUAL, cliente);
     }else{
       CLIENTEACTUAL.nombre = '';
       CLIENTEACTUAL.correo = '';
-      this.router.navigateByUrl('/nota', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/reporte']);});
+      CLIENTEACTUAL.direccion = '';
+      CLIENTEACTUAL.telefono = '';
     }
+            
+    this.router.navigateByUrl('/nota', { skipLocationChange: true });
     this.dialogRef.close();
   }
 

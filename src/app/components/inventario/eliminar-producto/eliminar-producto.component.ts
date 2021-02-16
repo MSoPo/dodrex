@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { ACTIVE_BLOCK, DEFAULT_DURATION } from 'src/app/core/Constantes';
+import { ACTIVE_BLOCK, DEFAULT_DURATION, PRODUCTOS } from 'src/app/core/Constantes';
 import { ProductService } from 'src/app/core/services/product.service';
 import { Producto } from 'src/app/models/Producto';
 
@@ -31,9 +31,14 @@ export class EliminarProductoComponent {
     this.dialogRef.close();
     this.productService.activate(this.data).then((resutl) => {
       ACTIVE_BLOCK.value = false;
-      !this.data.activo ? 
-      this.SNACK('BORRADO_OK', '')
-          : this.SNACK('ACTIVADO_OK', '')
+      if(!this.data.activo){
+        const idx = PRODUCTOS.findIndex(pr => pr.clave === this.data.clave);
+        PRODUCTOS.splice(idx, 1);
+        this.SNACK('BORRADO_OK', '');
+      }else{
+        PRODUCTOS.push(this.data);
+        this.SNACK('ACTIVADO_OK', '')
+      }
     }).catch((err) => {
       this.data.activo = !this.data.activo;
       ACTIVE_BLOCK.value = false;

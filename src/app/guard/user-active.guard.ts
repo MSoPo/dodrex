@@ -7,6 +7,7 @@ import { map, tap } from 'rxjs/operators';
 import { DEFAULT_DURATION, EMPRESA, USER_ACTIVE } from '../core/Constantes';
 import { AuthService } from '../core/services/auth.service';
 import { UsersService } from '../core/services/users.service';
+import { clearLogout } from '../core/Util';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,14 @@ import { UsersService } from '../core/services/users.service';
 export class UserActiveGuard implements CanActivate {
   constructor(private usersService: UsersService, private snackBar: MatSnackBar, private translate: TranslateService,
     private authService: AuthService, private router: Router){}
-  canActivate(
+    canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      console.log(USER_ACTIVE);
-    
+      console.log("USER_ACTIVE.GUARD =>",USER_ACTIVE);
       return this.usersService.getUser(USER_ACTIVE.id).pipe(tap(user => console.log(user.data())),
       map(user => {
         const usuario = user.data();
+        Object.assign(USER_ACTIVE, usuario);
         if(!usuario.activo) {
           this.SNACK('ERROR_BLOQ', 'ACEPTAR');
           clearLogout();
@@ -46,21 +47,4 @@ export class UserActiveGuard implements CanActivate {
     );
   }
   
-}
-
-function clearLogout(){
-  delete USER_ACTIVE.activo;
-  delete USER_ACTIVE.correo;
-  delete USER_ACTIVE.id;
-  delete USER_ACTIVE.id_empresa;
-  delete USER_ACTIVE.id_rol;
-  delete USER_ACTIVE.nombre;
-  delete EMPRESA.correo;
-  delete EMPRESA.direccion;
-  delete EMPRESA.id;
-  delete EMPRESA.id_usuario;
-  delete EMPRESA.operacion;
-  delete EMPRESA.razon_social;
-  delete EMPRESA.rfc;
-  delete EMPRESA.telefono;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { EMPRESA } from '../Constantes';
+import { CLIENTE_PENDIENTE, EMPRESA, PRODUCTOS_PENDIENTES, VENTA_PENDIENTE } from '../Constantes';
 import { Producto } from '../../models/Producto';
 
 @Injectable({
@@ -15,6 +15,12 @@ export class ProductService {
       .collection('productos')
       .doc(producto.clave)
       .set(producto, { merge: true });
+  }
+
+  delete(id: string): Promise<void>{
+    return this.afs.doc('empresa/' + EMPRESA.id)
+    .collection('productos')
+    .doc(id).delete();
   }
 
   activate(producto: Partial<Producto>): Promise<void> {
@@ -42,7 +48,7 @@ export class ProductService {
   getClave(clave: string): Promise<any> {
     const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
       .ref;
-    return ref.where('clave', '==', clave).where('activo', '==', true).get();
+    return ref.where('clave', '==', clave).where('activo', '==', true).get({ source: 'cache' });
   }
 
   getClaveAll(clave: string): Promise<any> {
@@ -57,7 +63,13 @@ export class ProductService {
     console.log('filtro' + nombre);
     const name = nombre ? nombre.toLowerCase() : ''; 
     return ref.where('nombre', '>=', name).
-    where('nombre', '<', name + '\uf8ff').where('activo', '==', true).get();
+    where('nombre', '<', name + '\uf8ff').where('activo', '==', true).get({ source: 'cache' });
+  }
+
+  getAll(): Promise<any> {
+    const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
+      .ref;
+    return ref.where('activo', '==', true).get();
   }
 
   getFavorite(): Promise<any> {
@@ -82,5 +94,16 @@ export class ProductService {
     const ref = this.afs.doc('empresa/' + EMPRESA.id).collection('productos')
       .ref;
     return ref.where('activo', '==', false).get();
+  }
+
+  errorService(): Promise<any> {
+    return this.afs.collection(`errores/${EMPRESA.id}/errores`).add(
+      {
+        fecha: new Date(),
+        productos: JSON.stringify(PRODUCTOS_PENDIENTES),
+        ventas: JSON.stringify(VENTA_PENDIENTE),
+        cliente: JSON.stringify(CLIENTE_PENDIENTE)
+      }
+    );
   }
 }

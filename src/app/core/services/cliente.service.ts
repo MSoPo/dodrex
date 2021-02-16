@@ -3,7 +3,7 @@ import { AngularFirestore, CollectionReference, QueryGroupFn } from '@angular/fi
 import { Observable } from 'rxjs';
 import { Cliente } from 'src/app/models/Cliente';
 import { Venta } from 'src/app/models/Venta';
-import { EMPRESA } from '../Constantes';
+import { CLIENTES, EMPRESA } from '../Constantes';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,7 @@ export class ClienteService {
   constructor(private afs: AngularFirestore) {}
 
   add(cliente: Partial<Cliente>): Promise<void> {
+    cliente.clave = cliente.clave?.toString();
     return this.afs.doc('empresa/' + EMPRESA.id).collection('clientes')
       .doc(cliente.clave).set(cliente, { merge: true });
   }
@@ -21,7 +22,7 @@ export class ClienteService {
     .doc(venta.id).set({
         'pagoInicial' : pagoInicial,
         'pagoTotal' : venta.total,
-        'deuda' : venta.total - pagoInicial,
+        'deuda' : venta.total,
         'fecha' : venta.fecha,
         'cliente' : venta.nombre_cliente,
         'id_cliente' : venta.id_cliente

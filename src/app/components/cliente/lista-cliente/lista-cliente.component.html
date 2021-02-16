@@ -3,7 +3,6 @@
 ></app-filtros-cliente>
 
 <table
-  *ngIf="dataSource.data.length > 0"
   (matSortChange)="sortDataMetod($event)"
   matSort
   mat-table
@@ -60,7 +59,7 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="direccion">
-    <th class="cell_hidde" mat-sort-header mat-header-cell *matHeaderCellDef>
+    <th class="cell_hidde" mat-header-cell *matHeaderCellDef>
       {{ "DIRECCION" | translate }}
     </th>
     <td class="cell_hidde" mat-cell *matCellDef="let element" class="direction">
@@ -68,10 +67,10 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="correo">
-    <th class="cell_hidde" mat-sort-header mat-header-cell *matHeaderCellDef>
-      {{ "CORREO_ELECTRONICO" | translate }}
+    <th class="cell_hidde" mat-header-cell *matHeaderCellDef>
+      {{ "TELEFONO" | translate }}
     </th>
-    <td class="cell_hidde" mat-cell *matCellDef="let element">{{ element.correo }}</td>
+    <td class="cell_hidde" mat-cell *matCellDef="let element">{{ element.telefono }}</td>
   </ng-container>
   <ng-container matColumnDef="acciones">
     <th mat-header-cell *matHeaderCellDef class="column-price cell_hidde"></th>
@@ -95,3 +94,5 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
+
+<mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>

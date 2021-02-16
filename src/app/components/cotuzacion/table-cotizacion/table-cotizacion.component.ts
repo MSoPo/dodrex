@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   CLIENTEACTUAL,
+  CLIENTES,
   DEFAULT_DURATION,
   TIPO_DESCUENTO,
   USER_ACTIVE,
@@ -38,7 +39,7 @@ export class TableCotizacionComponent implements OnInit {
   options: string[] = [];
   filteredOptions!: string[];
   lastSearch = '';
-  lstClientes = [];
+  lstClientes: Cliente[] = [];
   cliente: Partial<Cliente> = {};
 
   constructor(
@@ -51,24 +52,18 @@ export class TableCotizacionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.lstClientes = CLIENTES;
+    this.options = CLIENTES.map((m) => {
+      return `${m.nombre}(${m.clave})`;
+    });
     this.nombreCliente.valueChanges.subscribe((value) => {
-      const val = value.trim().toUpperCase();
-      this.filter(val);
-      if (val.length !== 4 || this.lastSearch === val) {
-        return;
-      } else {
-        this.clienteService
-          .getNombre(val)
-          .then((res) => {
-            this.lastSearch = val;
-            this.lstClientes = res.docs;
-            this.options = res.docs.map((m: { data: () => Producto }) => {
-              return m.data().nombre + '(' + m.data().clave + ')';
-            });
-            this.filter(value);
-          })
-          .catch((error) => console.log(error));
+      if(!this.options.length){
+        this.lstClientes = CLIENTES;
+        this.options = CLIENTES.map((m) => {
+          return `${m.nombre}(${m.clave})`;
+        });
       }
+      this.filter(value.toUpperCase());
     });
   }
 
@@ -87,7 +82,7 @@ export class TableCotizacionComponent implements OnInit {
       element.cantidad = 1;
     } else {
       valor = Number(valor);
-      if (Number.isInteger(valor) && valor > 0) {
+      if ((element.fraccion && valor > 0) || Number.isInteger(valor) && valor > 0) {
         element.cantidad = valor;
       } else {
         this.SNACK('ERROR_VAL_CANT', 'ACEPTAR');
@@ -119,6 +114,7 @@ export class TableCotizacionComponent implements OnInit {
       precio_mayoreo: product.precio_mayoreo,
       cantidad_mayoreo: product.cantidad_mayoreo,
       precio_unitario: product.precio_unitario,
+      fraccion: product.fraccion
     };
     this.ELEMENT_DATA.push(elemet);
     this.dataSource.data = this.ELEMENT_DATA;
@@ -141,10 +137,10 @@ export class TableCotizacionComponent implements OnInit {
       val = val[val.length - 1].split(')')[0];
       if (val) {
         this.lstClientes.forEach((el: any) => {
-          if (el && el.data().clave === val) {
-            console.log(el.data().clave + '...' + val);
-            this.cliente = el.data();
-            this.actualizarValores(el.data());
+          if (el && el.clave === val) {
+            console.log(el.clave + '...' + val);
+            this.cliente = el;
+            this.actualizarValores(el);
           }
         });
         if (this.cliente) { return; }
@@ -154,6 +150,7 @@ export class TableCotizacionComponent implements OnInit {
         clave: '',
         nombre: '',
         descuento: 0,
+        telefono: ''
       };
       this.cliente = sinCliente;
       this.actualizarValores(sinCliente);
@@ -222,6 +219,8 @@ export class TableCotizacionComponent implements OnInit {
     //Limpiamos esos valores que son los que se muestran por si venian cargados de otra venta
     CLIENTEACTUAL.correo = '';
     CLIENTEACTUAL.nombre = '';
+    CLIENTEACTUAL.direccion = '';
+    CLIENTEACTUAL.telefono = '';
     Object.assign(CLIENTEACTUAL, this.cliente);
     this.openDialog(venta, cot);
 

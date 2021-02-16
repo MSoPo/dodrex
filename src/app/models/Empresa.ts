@@ -12,4 +12,8 @@ export interface Empresa{
     impresion?: number;
     head?: string;
     urlImage?: string;
+    porc_unitario?: number,
+    porc_mayoreo?: number,
+    porc_especial?: number,
+    cant_mayoreo?: number
 }

@@ -26,6 +26,14 @@
       <input *ngIf="venta.tipo_descuento == 1" matInput readonly [value]="'PRECIO_ESPECIAL' | translate" />
     </mat-form-field>
 
+    <mat-form-field *ngIf="venta.id_cliente || venta.nombre_cliente" class="label-venta">
+      <mat-select [value]="1" [formControl]="entrega">
+          <mat-option [value]="1">{{ 'ENTREGADO' | translate }}</mat-option>
+          <mat-option [value]="2">{{ 'ENVIO' | translate }}</mat-option>
+          <mat-option [value]="3">{{ 'RECOGER' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field appearance="outline" class="inputs-withHin">
       <mat-label>{{ 'TOTAL' | translate }}: </mat-label>
       <input class="right" readonly matInput value="{{ venta.total | currency }}" />
@@ -50,7 +58,6 @@
         <span matPrefix>$&nbsp;</span>
       </mat-form-field>
     </div>
-    
   </div>
   <div class="center">
     <button mat-raised-button (click)="onNoClick(false)" color="primary">
