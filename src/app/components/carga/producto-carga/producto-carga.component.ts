@@ -97,7 +97,9 @@ export class ProductoCargaComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result: Producto) => {
-      PRODUCTOS.push(result);
+      if(result){
+        PRODUCTOS.push(result);
+      }
     });
   }
 

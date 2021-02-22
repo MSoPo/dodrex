@@ -81,6 +81,7 @@ export class TableCotizacionComponent implements OnInit {
       this.SNACK('ERROR_CANTIDAD', 'ACEPTAR');
       element.cantidad = 1;
     } else {
+      
       valor = Number(valor);
       if ((element.fraccion && valor > 0) || Number.isInteger(valor) && valor > 0) {
         element.cantidad = valor;
@@ -88,6 +89,7 @@ export class TableCotizacionComponent implements OnInit {
         this.SNACK('ERROR_VAL_CANT', 'ACEPTAR');
         element.cantidad = valor >= 1 ? Math.trunc(valor) : 1;
       }
+      this.actualizarValores(this.cliente);
       element.subtotal = element.precio * element.cantidad;
       this.dataSource.data = this.ELEMENT_DATA;
     }
@@ -177,7 +179,11 @@ export class TableCotizacionComponent implements OnInit {
       });
     } else {
       this.ELEMENT_DATA.forEach((val) => {
-        val.precio = val.precio_unitario;
+        if(val.cantidad_mayoreo > 0 && val.precio_mayoreo > 0 && val.cantidad_mayoreo <= val.cantidad){
+          val.precio = val.precio_mayoreo;
+        }else{
+          val.precio = val.precio_unitario;
+        }
         val.subtotal = val.precio * val.cantidad;
       });
     }
