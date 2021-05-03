@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="add($event)">
+    <div class="title">{{ 'DATOS_SUCURSAL' | translate }}</div>
+    <mat-dialog-content>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ 'NOMBRE' | translate }}</mat-label>
+        <input formControlName="nombre" required maxlength="50" minlength="3" matInput />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ 'TELEFONO' | translate }}</mat-label>
+        <input formControlName="telefono" matInput [placeholder]="'PLH_TEL' | translate" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="inputs-withHin">
+        <mat-label>{{ 'DIRECCION' | translate }}</mat-label>
+        <input formControlName="direccion" maxlength="250" minlength="3" matInput />
+        <textarea matInput></textarea>
+      </mat-form-field>
+    </mat-dialog-content>
+    <section>
+      <button type="submit" [matTooltip]="'AGREGAR' | translate" class="buton_actions" mat-mini-fab color="primary">
+        <mat-icon>save</mat-icon>
+      </button>
+    </section>
+  </form>

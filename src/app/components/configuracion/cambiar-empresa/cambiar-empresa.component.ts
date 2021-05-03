@@ -7,7 +7,6 @@ import {
   DEFAULT_DURATION,
   EMPRESA,
   RFC,
-  TELEFONO,
   USER_ACTIVE,
   SOLO_NUMERO_ENTERO
 } from 'src/app/core/Constantes';

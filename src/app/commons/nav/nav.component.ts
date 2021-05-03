@@ -17,6 +17,9 @@ import {
   PRODUCTOS_PENDIENTES,
   CLIENTE_PENDIENTE,
   VENTA_PENDIENTE,
+  SUCURSALES,
+  SUCURSAL,
+  CANT_SUC,
 } from 'src/app/core/Constantes';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -29,6 +32,7 @@ import { clearLogout } from 'src/app/core/Util';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { Cliente } from 'src/app/models/Cliente';
 import { Router } from '@angular/router';
+import { Sucursal } from 'src/app/models/Sucursal';
 
 @Component({
   selector: 'app-nav',
@@ -45,6 +49,8 @@ export class NavComponent {
   errorProducto = PRODUCTOS_PENDIENTES;
   errorCliente = CLIENTE_PENDIENTE;
   errorVenta = VENTA_PENDIENTE;
+  sucursales = SUCURSALES;
+  sucursal: Sucursal = SUCURSAL;
   menu;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
@@ -79,6 +85,26 @@ export class NavComponent {
     this.cdRef.detectChanges();
   }
 
+  selecSucusal(e: any): void {
+    if(e.value == 1){
+      SUCURSAL.clave = e.value;
+      return;
+    }
+    const sucSelec = SUCURSALES.find(s => e.value == s.clave);
+    if(sucSelec){
+      Object.assign(SUCURSAL, sucSelec);
+      PRODUCTOS.forEach(prod => {
+        switch(sucSelec.numero){
+          case 1: prod.cantidad = prod.sucursal1 ? prod.sucursal1 : 0; break;
+          case 2: prod.cantidad = prod.sucursal2 ? prod.sucursal2 : 0; break;
+          case 3: prod.cantidad = prod.sucursal3 ? prod.sucursal3 : 0; break;
+        }
+        const numsuc = '';
+        
+      });
+    }
+  }
+
   logout(): void {
     clearLogout();
     this.auth
@@ -104,6 +130,11 @@ export class NavComponent {
         Object.assign(EMPRESA, respuesta.empresa);
         FOLIO_VENTA.value = respuesta.folio;
         FOLIO_ANTETRIO.value = respuesta.folio-1;
+        if(respuesta.sucursales && respuesta.sucursales.length > 0){
+          respuesta.sucursales.forEach((element: Sucursal) => {
+            SUCURSALES.push(element);
+          });
+        }
         if(respuesta.productos && respuesta.productos.length > 0){
           respuesta.productos.forEach((element: Producto) => {
             PRODUCTOS.push(element);

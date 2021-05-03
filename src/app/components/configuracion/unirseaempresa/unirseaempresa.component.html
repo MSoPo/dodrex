@@ -1,10 +1,23 @@
 <mat-card class="card-size">
     <mat-card-title>{{ 'UNIRSE' | translate }}</mat-card-title>
     <mat-card-content>
-        <mat-form-field appearance="outline" class="inputs-withHin">
-            <mat-label>{{ 'ID_EMPRESA' | translate}}</mat-label>
-            <input maxlength="100" [formControl]="id_empresa" required matInput>
-        </mat-form-field>
-      <button (click)="guardar()" mat-button color="primary">{{ 'SOLICITAR_EMPRESA' | translate }}</button>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+        </ng-container>
+        <ng-container matColumnDef="direccion">
+          <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+          <td mat-cell *matCellDef="let element">{{ element.telefono }}</td>
+        </ng-container>
+        <ng-container matColumnDef="telefono">
+          <th mat-header-cell *matHeaderCellDef>Dirección</th>
+          <td mat-cell *matCellDef="let element">{{ element.direccion }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <br>
+      <button (click)="openDialog()" mat-button color="primary">{{ 'SOLICITAR_EMPRESA' | translate }}</button>
     </mat-card-content>
   </mat-card>

@@ -99,6 +99,8 @@ import { UnirseaempresaComponent } from './components/configuracion/unirseaempre
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { LayoutLoginComponent } from './components/layout/layout-login/layout-login.component';
 import { EntregaPipe } from './core/pipe/entrega.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { AgregarSucursalComponent } from './components/configuracion/agregar-sucursal/agregar-sucursal.component';
 
 export function TranslationLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -166,7 +168,8 @@ export function TranslationLoaderFactory(http: HttpClient) {
     CargamasivaComponent,
     UnirseaempresaComponent,
     LayoutLoginComponent,
-    EntregaPipe
+    EntregaPipe,
+    AgregarSucursalComponent
   ],
   imports: [
     BrowserModule,
@@ -205,7 +208,8 @@ export function TranslationLoaderFactory(http: HttpClient) {
     MatNativeDateModule,
     TranslateModule.forRoot({
       loader: {provide: TranslateLoader, useFactory: TranslationLoaderFactory, deps: [HttpClient]}
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

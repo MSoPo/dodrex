@@ -1,6 +1,7 @@
 import { Cliente } from '../models/Cliente';
 import { Empresa } from '../models/Empresa';
 import { Producto } from '../models/Producto';
+import { Sucursal } from '../models/Sucursal';
 import { Usuario } from '../models/Usuario';
 import { Venta } from '../models/Venta';
 
@@ -25,7 +26,8 @@ export let EMPRESA: Partial<Empresa> = {};
 export enum TIPO_DESCUENTO {
   SIN_DESCUENTO,
   PRECIO_ESPECIAL,
-  DESCUENTO
+  DESCUENTO,
+  PRECIO_MAYORE
 }
 
 // Entrega
@@ -50,7 +52,10 @@ export const ROL_VENTAS = {id:3, valor: 'e7vD2BtuFrg9J6iEKFff'};
 //Venta Actual
 export let VENTAACTUAL: Venta = {fecha: new Date(), total: 0, productos: []};
 export let CLIENTEACTUAL: Partial<Cliente> = {};
+export let SUCURSAL: Sucursal = {nombre: '', clave: '', numero: 0};
+export const CANT_SUC = { val: '' };
 export const PRODUCTOS: Producto[] = [];
+export const SUCURSALES: Sucursal[] = [];
 export const CLIENTES: Cliente[] = []; 
 export const PRODUCTOS_PENDIENTES: Partial<Producto>[] = [];
 export const VENTA_PENDIENTE: Venta[] = [];

@@ -1,7 +1,7 @@
 <div class="grid-container">
   <app-cambiar-usuario></app-cambiar-usuario>
   <app-cambiar-empresa *ngIf="user.id_rol === rol_admin" class="card-size datosempresa"></app-cambiar-empresa>
-  <!--<app-unirseaempresa></app-unirseaempresa> -->
+  <app-unirseaempresa></app-unirseaempresa>
   <app-usuario-empresa *ngIf="user.id === empresa.id_usuario"></app-usuario-empresa>
   <app-datos-empresa-config *ngIf="user.id_rol !== rol_admin" class="card-size datosempresa"></app-datos-empresa-config>
 </div>

@@ -28,6 +28,17 @@
       </button>
     </mat-toolbar>
     <div *ngIf="errorProducto.length || errorCliente.length || errorVenta.length" class="error">{{ 'ERROR_SINC' | translate }}<button (click)="reportarError()" mat-button> Reportar </button></div>
-    <router-outlet *ngIf="id_empresa"></router-outlet>
+
+    <div class="grapperSuc" *ngIf="sucursales.length > 0 && !sucursal.clave"> 
+      <mat-form-field appearance="fill">
+        <mat-label>Selecciona la sucursal</mat-label>
+        <mat-select (selectionChange)="selecSucusal($event)">
+          <mat-option [value]="1">Principal</mat-option>
+          <mat-option *ngFor="let suc of sucursales" [value]="suc.clave">{{suc.nombre}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <router-outlet *ngIf="id_empresa && (sucursales.length == 0 || sucursal.clave)">
+    </router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { CLIENTE_PENDIENTE, EMPRESA, PRODUCTOS_PENDIENTES, VENTA_PENDIENTE } from '../Constantes';
+import { CLIENTE_PENDIENTE, EMPRESA, PRODUCTOS_PENDIENTES, SUCURSAL, VENTA_PENDIENTE } from '../Constantes';
 import { Producto } from '../../models/Producto';
 
 @Injectable({
@@ -10,11 +10,33 @@ export class ProductService {
   constructor(private afs: AngularFirestore) {}
 
   add(producto: Partial<Producto>): Promise<void> {
-    return this.afs
+    let cantidad = producto.cantidad;
+    if(SUCURSAL.clave && SUCURSAL.clave != '1'){
+      if (producto.operacion === 'update'){
+        switch(SUCURSAL.numero){
+          case 1: producto.sucursal1 = producto.cantidad; break;
+          case 2: producto.sucursal2 = producto.cantidad; break;
+          case 3: producto.sucursal3 = producto.cantidad; break;
+        }
+      } else {
+        producto.cantidad = 0;
+        switch(SUCURSAL.numero){
+          case 1: producto.sucursal1 = producto.cantidad; break;
+          case 2: producto.sucursal2 = producto.cantidad; break;
+          case 3: producto.sucursal3 = producto.cantidad; break;
+        }
+      }
+      delete producto.cantidad;
+    }
+    const r = this.afs
       .doc('empresa/' + EMPRESA.id)
       .collection('productos')
       .doc(producto.clave)
       .set(producto, { merge: true });
+
+    producto.cantidad = cantidad;
+
+    return r;
   }
 
   delete(id: string): Promise<void>{

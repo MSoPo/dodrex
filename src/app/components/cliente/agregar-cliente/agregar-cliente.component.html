@@ -29,6 +29,7 @@
         <mat-option value="0">{{ 'SIN_DESCUENTO' | translate}}</mat-option>
         <mat-option *ngIf="rol === rolAdmin" value="1">{{ 'PRECIO_ESPECIAL' | translate }}</mat-option>
         <mat-option *ngIf="rol === rolAdmin" value="2">{{ 'DESCUENTO_EXCLUSIVO' | translate }}</mat-option>
+        <mat-option *ngIf="rol === rolAdmin" value="3">{{ 'PRECIO_MAYOREO' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
     <div *ngIf="rol === rolAdmin" class="div_mayoreo" [@openClose]="form.value.tipo_descuento === '2' ? 'open' : 'closed'">

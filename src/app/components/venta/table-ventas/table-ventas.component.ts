@@ -190,7 +190,15 @@ export class TableVentasComponent implements OnInit {
           val.subtotal = val.precio * val.cantidad;
         }
       });
-    } else {
+    } else if (Number(cliente.tipo_descuento) === TIPO_DESCUENTO.PRECIO_MAYORE) {
+      this.ELEMENT_DATA.forEach((val) => {
+        val.precio =
+          val.precio_mayoreo > 0
+            ? val.precio_mayoreo
+            : val.precio_unitario;
+        val.subtotal = val.precio * val.cantidad;
+      });
+    }else {
       this.ELEMENT_DATA.forEach((val) => {
         if(val.cantidad_mayoreo > 0 && val.precio_mayoreo > 0 && val.cantidad_mayoreo <= val.cantidad){
           val.precio = val.precio_mayoreo;

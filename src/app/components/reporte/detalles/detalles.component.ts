@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { CLIENTEACTUAL, CLIENTES, CONFIG, DEFAULT_DURATION, VENTAACTUAL } from 'src/app/core/Constantes';
+import { ACTIVE_BLOCK, CLIENTEACTUAL, CLIENTES, CONFIG, DEFAULT_DURATION, VENTAACTUAL } from 'src/app/core/Constantes';
 import { ClienteService } from 'src/app/core/services/cliente.service';
 import { DetalleVenta } from 'src/app/models/DetalleVenta';
 import { Venta } from 'src/app/models/Venta';
@@ -63,11 +63,14 @@ export class DetallesComponent implements OnInit {
   }
 
   borrar(){
+    ACTIVE_BLOCK.value = true;
     this.ventaService.cancelVenta(this.idVenta ? this.idVenta : '').then(res => {
       this.SNACK('VENTA_CANCELADA', '');
-      this.dialogRef.close();
+      this.dialogRef.close(this.idVenta);
+      ACTIVE_BLOCK.value = false;
     }).catch(er => {
       this.SNACK('ERROR_GRAL', 'ACEPTAR');
+      ACTIVE_BLOCK.value = false;
     });
   }
 

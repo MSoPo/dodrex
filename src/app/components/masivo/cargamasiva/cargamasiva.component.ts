@@ -52,30 +52,44 @@ export class CargamasivaComponent implements OnInit {
   }*/
 
   cargarProd(): void{
+    //copiar datos
+    EMPRESA.id = 'SclgVdWKATPkDgCZwCQv';
+    this.prodSer.getAll()
+    .then((r) => {
+      console.log("Cargar Productos");
+      r.forEach((e: any) => {
+        const p: Producto = e.data();
+        EMPRESA.id = 'SclgVdWKATPkDgCZwCQv';
+        p.cantidad = 10;
+        p.cantidad_mayoreo = 10;
+        this.prodSer.add(p);
+      });
+    })
+
+  }
+
+  /*cargarProd(): void{
     console.log(TereInventario);
     let carga = 0;
     TereInventario.forEach(pro => {
       /*if(carga > 20){
         return;
       }
-      carga++;*/
-      const cantidad = pro['cantidad'];
+      carga++;*//*
+      const cantidad = pro['Cantidad'];
       let cant = Math.round(Number(cantidad));
 
-      let clave:string = pro['CODIGO'] + '';
-      const nombre:string = pro['NOMBRE'] + '';
-      const precioUnitario:number = Number(pro['Precio unitario']);
-      const precioCompra:number = Number(pro['precio compra']);
-      const precioMayoreo:number = Number(pro['precio mayore']);
-      const precioEspecial:number = Number(pro['precio proveedor']);
-      const cant_mayorio: number = Number(pro['cantidad mayore']);
+      let clave:string = pro['codig'] + '';
+      const nombre:string = pro['nombre'] + '';
+      const precioUnitario:number = Number(pro['precioU']);
+      const precioCompra:number = Number(pro['PrecioC']);
+      const precioMayoreo:number = Number(pro['PrecioM']);
+      const precioEspecial:number = Number(pro['PrecioE']);
+      const cant_mayorio: number = Number(pro['CantidadM']);
 
       if(!clave || clave.length < 1){
         clave = new Date().getTime().toString();
       }
-
-      if(cant > 0) {
-
         const poducto: Producto  = {
           activo: true,
           cantidad: cant,
@@ -98,9 +112,9 @@ export class CargamasivaComponent implements OnInit {
         console.log(poducto.clave);
         this.prodSer.add(poducto);
 
-      }
+      
     });
-  }
+  }*/
   
  /*cargarProd(): void {
   console.log(PAGARE);

@@ -16,4 +16,9 @@ export interface Producto {
     usuario: string;
     error?: any;
     fraccion: boolean;
+    sucursal1?: number;
+    sucursal2?: number;
+    sucursal3?: number;
+    sucursal4?: number;
+    sucursal5?: number;
 }

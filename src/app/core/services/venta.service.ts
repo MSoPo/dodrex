@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
-import { merge, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Venta } from 'src/app/models/Venta';
-import { EMPRESA, ENTREGA, URL_NUM_VENTA } from '../Constantes';
+import { EMPRESA, ENTREGA, FOLIO_VENTA, SUCURSAL, URL_NUM_VENTA } from '../Constantes';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,10 @@ export class VentaService {
   constructor(private afs: AngularFirestore, private httpCliente: HttpClient) { }
 
   add(venta: Venta): Promise<any>{
+    if(SUCURSAL.clave && SUCURSAL.clave != '1'){
+      venta.sucursal = SUCURSAL.clave;
+      venta.numeroSucursal = SUCURSAL.numero;
+    }
     return this.validVenta().add(venta);
   }
 

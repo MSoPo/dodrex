@@ -17,4 +17,6 @@ export interface Venta{
     entrega?: number;
     pagoInicial?: number;
     error?: any;
+    sucursal?: string;
+    numeroSucursal?: number;
 }

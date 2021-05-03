@@ -55,6 +55,13 @@ export class TablaComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
+      if(result){
+        const ventas = this.dataSource.data.filter( venta => venta.id !== result )
+        this.dataSource.data = ventas;
+        if(this.paginator){
+          this.dataSource.paginator = this.paginator;
+        }
+      }
     });
   }
 
