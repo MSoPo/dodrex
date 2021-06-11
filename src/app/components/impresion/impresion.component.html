@@ -11,6 +11,9 @@
         <span *ngIf="empresa.direccion"><br>{{empresa.direccion}}</span>
         <span *ngIf="empresa.correo" ><br> {{empresa.correo}}</span>
         <span *ngIf="empresa.telefono"><br> Tel. {{empresa.telefono}}</span>
+        <span *ngIf="!empresa.rfc"><br></span>
+        <span *ngIf="!empresa.telefono"><br></span>
+        <span *ngIf="!empresa.head"><br></span>
     </div>
     <img width="125px" height="125px" [src]="empresa.urlImage" alt="lOGO DE LA EMPRESA">
     <div class="folio">
@@ -25,18 +28,20 @@
 
     <table>
         <tr>
+            <th class="nobold colPrecio">Cant.</th>
             <th class="textleft nobold">Producto</th>
-            <th class="nobold">Cantidad</th>
+            <th class="nobold">Precio</th>
             <th class="nobold">Subtotal</th>
         </tr>
         <tr *ngFor="let prod of venta.productos">
+            <td class="textrigth colPrecio colPadCant">{{prod.cantidad}}</td>
             <td>{{prod.nombre}}</td>
-            <td class="textrigth">{{prod.cantidad}}</td>
+            <td class="textrigth">{{prod.subtotal / prod.cantidad | currency}}</td>
             <td class="textrigth">{{prod.subtotal | currency}}</td>
         </tr>
         <tfoot>
-            <td class="textrigth" *ngIf="venta.formaPago">Pago: {{ venta.formaPago | formaPago }} <span *ngIf="venta.formaPago == 3 && venta.pagoInicial">(Abono {{venta.pagoInicial | currency}})</span> | Mercancia: {{ venta.entrega | entrega }}</td>
-            <td class="textrigth" *ngIf="!venta.formaPago">Precios sujetos a cambios.</td>
+            <td class="textrigth" colspan="2" *ngIf="venta.formaPago">Pago: {{ venta.formaPago | formaPago }} <span *ngIf="venta.formaPago == 3 && venta.pagoInicial">(Abono {{venta.pagoInicial | currency}})</span> | Mercancia: {{ venta.entrega | entrega }}</td>
+            <td class="textrigth" colspan="2" *ngIf="!venta.formaPago">Precios sujetos a cambios.</td>
             <td class="textrigth total">Total</td>
             <td class="textrigth total">{{venta.total | currency}}</td>
         </tfoot>

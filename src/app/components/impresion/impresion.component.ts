@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as print from 'print-js';
 import { CLIENTEACTUAL, CONFIG, EMPRESA, PRODUCTOS, VENTAACTUAL } from 'src/app/core/Constantes';
-import { DetalleVenta } from '../../models/DetalleVenta';
 
 @Component({
   selector: 'app-impresion',
